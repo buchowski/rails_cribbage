@@ -4,6 +4,10 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+# we're copying over the /ruby-cribbage files via utils.rake
+# these files should be updated within /ruby-cribbage
+/app/ruby-cribbage/
+
 # Ignore bundler config.
 /.bundle
 
