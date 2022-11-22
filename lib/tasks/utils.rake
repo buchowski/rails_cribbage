@@ -1,15 +1,20 @@
 desc "Copy cribbage game files from ruby-cribbage"
 
 task :copy_ruby_cribbage do
-  if not Dir.exist? './app/ruby-cribbage' 
-    Dir.mkdir('./app/ruby-cribbage')
+  if not Dir.exist? './lib/ruby-cribbage' 
+    Dir.mkdir('./lib/ruby-cribbage')
+  end
+  if not Dir.exist? './lib/ruby-cribbage/cribbage_game' 
+    Dir.mkdir('./lib/ruby-cribbage/cribbage_game')
   end
 
-  Dir.chdir('../ruby-cribbage')
+  FileUtils.copy('../ruby-cribbage/lib/cribbage_game.rb', './lib/ruby-cribbage')
+
+  Dir.chdir('../ruby-cribbage/lib/cribbage_game')
   files = Dir.glob('*.rb')
 
   files.each do |file|
     puts "copying #{file}..."  
-    FileUtils.copy(file, '../rails-cribbage/app/ruby-cribbage/')
+    FileUtils.copy(file, '../../../rails-cribbage/lib/ruby-cribbage/cribbage_game/')
   end
 end

@@ -6,7 +6,7 @@
 
 # we're copying over the /ruby-cribbage files via utils.rake
 # these files should be updated within /ruby-cribbage
-/app/ruby-cribbage/
+/lib/ruby-cribbage/
 
 # Ignore bundler config.
 /.bundle
