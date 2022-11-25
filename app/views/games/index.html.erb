@@ -1,2 +1,36 @@
 <h1>Games#index</h1>
-<p>Find me in app/views/games/index.html.erb</p>
+
+<%= form_with url: '/games' do |form| %>
+  <%= form.radio_button :creator_id, "hank" %>
+  <%= form.label :creator_id_hank, "Hank" %>
+  <%= form.radio_button :creator_id, "sally" %>
+  <%= form.label :creator_id_sally, "Sally" %>
+  <%= form.submit %>
+<% end %>
+  
+
+
+<table>
+  <thead>
+    <tr>
+      <th>game_id</th>
+      <th>creator_id</th>
+      <th>created_at</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @games.each do |game| %>
+      <tr>
+        <th><%= game.id %></th>
+        <th><%= game.player_one_id %></th>
+        <th><%= game.created_at %></th>
+        <th>
+          <button>join</button> 
+        </th>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+  
+
