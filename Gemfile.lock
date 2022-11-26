@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/buchowski/ruby-cribbage.git
-  revision: 82ca1044c0d349187df0df465474549bec99607e
+  revision: 806ed575c3758fbae4d49e48eb1c3b651951566c
   branch: master
   specs:
     cribbage_game (0.1.0)
