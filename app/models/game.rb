@@ -4,20 +4,21 @@ class Game < ApplicationRecord
   serialize :pile_cards, Array
   serialize :crib_cards, Array
 
-  def initialize params
-    p "duffy", params
+  def initialize(creator_id)
     cribbage_game = CribbageGame::Game.new
+    adapted_game = adaptCribbageGame(cribbage_game)
 
-    super(adaptCribbageGame(cribbage_game));
+    adapted_game[:player_one_id] = creator_id
+    adapted_game[:player_two_id] = nil
+    adapted_game[:current_fsm_state] = "waiting_for_player_two"
+
+    super(adapted_game);
   end
 
   private
 
   def safelyGetPlayerId player
-    if !player
-      return nil
-    end
-    player.id
+    player ? player.id : nil
   end
 
   def adaptCribbageGame game

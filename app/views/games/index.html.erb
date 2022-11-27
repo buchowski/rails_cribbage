@@ -1,14 +1,12 @@
 <h1>Games#index</h1>
 
 <%= form_with url: '/games' do |form| %>
-  <%= form.radio_button :creator_id, "hank" %>
+  <%= form.radio_button :creator_id, "hank", :checked => true %>
   <%= form.label :creator_id_hank, "Hank" %>
   <%= form.radio_button :creator_id, "sally" %>
   <%= form.label :creator_id_sally, "Sally" %>
   <%= form.submit %>
 <% end %>
-  
-
 
 <table>
   <thead>
@@ -16,6 +14,7 @@
       <th>game_id</th>
       <th>creator_id</th>
       <th>created_at</th>
+      <th></th>
       <th></th>
     </tr>
   </thead>
@@ -26,11 +25,14 @@
         <th><%= game.player_one_id %></th>
         <th><%= game.created_at %></th>
         <th>
-          <button>join</button> 
+          <button>join</button>
+        </th>
+        <th>
+          <%= button_to "delete", game_path(game), method: :delete  %>
         </th>
       </tr>
     <% end %>
   </tbody>
 </table>
-  
+
 
