@@ -16,11 +16,15 @@ class GamesController < ApplicationController
     game_id = params[:id]
     type_of_update = params[:type_of_update]
 
-    case type_of_update
-    when "join_game" then join_game(game_id)
+    begin
+      case type_of_update
+      when "join_game" then join_game(game_id)
+      end
+    rescue => exception
+      flash[:error_msg] = exception
+    ensure
+      redirect_to games_path
     end
-
-    redirect_to games_path
   end
 
   def destroy

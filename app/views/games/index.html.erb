@@ -1,5 +1,11 @@
 <h1>Games#index</h1>
 
+<% flash.each do |name, msg| %>
+  <div class="error_msg">
+    <%= msg %>
+  </div>
+<% end %>
+
 <%= form_with url: '/games' do |form| %>
   <%= form.radio_button :creator_id, "hank", :checked => true %>
   <%= form.label :creator_id_hank, "Hank" %>
@@ -27,7 +33,7 @@
         <th><%= game.player_two_id %></th>
         <th><%= game.created_at.strftime("%m-%d-%Y %T") %></th>
         <th>
-          <%= button_to "join", game_path(game), { disabled: !game.player_two_id.nil?, method: :patch, params: {type_of_update: 'join_game'} } %>
+          <%= button_to "join", game_path(game), { method: :patch, params: {type_of_update: 'join_game'} } %>
         </th>
         <th>
           <%= button_to "delete", game_path(game), method: :delete  %>
