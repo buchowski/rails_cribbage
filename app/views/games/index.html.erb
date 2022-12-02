@@ -25,7 +25,7 @@
         <th><%= game.id %></th>
         <th><%= game.player_one_id %></th>
         <th><%= game.player_two_id %></th>
-        <th><%= game.created_at %></th>
+        <th><%= game.created_at.strftime("%m-%d-%Y %T") %></th>
         <th>
           <%= button_to "join", game_path(game), { disabled: !game.player_two_id.nil?, method: :patch, params: {type_of_update: 'join_game'} } %>
         </th>
