@@ -1,0 +1,29 @@
+
+<table>
+  <thead>
+    <tr>
+      <th>game_id</th>
+      <th>creator_id</th>
+      <th>guest_id</th>
+      <th>created_at</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @games.each do |game| %>
+      <tr>
+        <th><%= game.id %></th>
+        <th><%= game.player_one_id %></th>
+        <th><%= game.player_two_id %></th>
+        <th><%= game.created_at.strftime("%m-%d-%Y %T") %></th>
+        <th>
+          <%= button_to "join", game_path(game), { method: :patch, params: {type_of_update: 'join_game'} } %>
+        </th>
+        <th>
+          <%= button_to "delete", game_path(game), method: :delete  %>
+        </th>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
