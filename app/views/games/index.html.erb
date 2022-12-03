@@ -1,11 +1,5 @@
 <h1>Games#index</h1>
 
-<% flash.each do |name, msg| %>
-  <div class="error_msg">
-    <%= msg %>
-  </div>
-<% end %>
-
 <%= form_with url: '/games' do |form| %>
   <%= form.radio_button :creator_id, "hank", :checked => true %>
   <%= form.label :creator_id_hank, "Hank" %>
