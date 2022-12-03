@@ -1,0 +1,9 @@
+<h1><%= "Game #{@game.id}" %></h1>
+
+<% @game.attributes.each do |att| %>
+  <div>
+    <%= att %>
+  </div>
+<% end %>
+
+<%= button_to 'join', game_path(@game), { method: :patch, params: {type_of_update: 'join_game' } } %>
