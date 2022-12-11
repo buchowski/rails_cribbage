@@ -4,8 +4,6 @@ class GamesController < ApplicationController
   end
   def show
     @game = get_game()
-    @does_game_have_two_players = !@game.player_one_id.nil? && !@game.player_two_id.nil?
-    @is_game_in_progress = !["waiting_to_start", "waiting_for_player_two"].include?(@game.current_fsm_state)
   end
   def create
     creator_id = params[:creator_id]
@@ -54,7 +52,7 @@ class GamesController < ApplicationController
     if game.player_two_id.nil?
       was_created_by_sally = game.player_one_id == 'sally'
       game.player_two_id = was_created_by_sally ? 'hank' : 'sally'
-      game.current_fsm_state = 'waiting_to_start'
+      game.current_fsm_state = :waiting_to_start
 
       if !game.save then throw "failed to join game" end
     else
@@ -65,7 +63,7 @@ class GamesController < ApplicationController
   def start_game(game)
     game.current_fsm_state = Game.getFsmStartState()
 
-    if game.current_fsm_state != "waiting_to_start"
+    if game.current_fsm_state != :waiting_to_start
       throw "this game is either not ready to start or has been started already"
     end
 

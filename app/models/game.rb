@@ -10,7 +10,7 @@ class Game < ApplicationRecord
 
     adapted_game[:player_one_id] = creator_id
     adapted_game[:player_two_id] = nil
-    adapted_game[:current_fsm_state] = "waiting_for_player_two"
+    adapted_game[:current_fsm_state] = :waiting_for_player_two
 
     super(adapted_game);
   end
