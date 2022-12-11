@@ -4,6 +4,8 @@ class GamesController < ApplicationController
   end
   def show
     @game = get_game()
+    @does_game_have_two_players = !@game.player_one_id.nil? && !@game.player_two_id.nil?
+    @is_game_in_progress = !["waiting_to_start", "waiting_for_player_two"].include?(@game.current_fsm_state)
   end
   def create
     creator_id = params[:creator_id]
@@ -22,6 +24,7 @@ class GamesController < ApplicationController
     begin
       case type_of_update
       when "join_game" then join_game(game)
+      when "start_game" then start_game(game)
       end
     rescue => exception
       flash[:error_msg] = exception
@@ -57,5 +60,15 @@ class GamesController < ApplicationController
     else
       throw "you're not allowed to join. too many players already"
     end
+  end
+
+  def start_game(game)
+    game.current_fsm_state = Game.getFsmStartState()
+
+    if game.current_fsm_state != "waiting_to_start"
+      throw "this game is either not ready to start or has been started already"
+    end
+
+    if !game.save then throw "unable to start game" end
   end
 end
