@@ -15,6 +15,10 @@ class Game < ApplicationRecord
     super(adapted_game);
   end
 
+  def self.getFsmStartState
+    CribbageGame::Game.new.fsm.aasm.current_state
+  end
+
   private
 
   def safelyGetPlayerId player

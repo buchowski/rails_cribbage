@@ -1,13 +1,13 @@
 class GamesController < ApplicationController
   def index
-    @games = GameService.all
+    @games = Game.all
   end
   def show
     @game = get_game()
   end
   def create
     creator_id = params[:creator_id]
-    @game = GameService.new(creator_id)
+    @game = Game.new(creator_id)
 
     if @game.save
       redirect_to games_path
@@ -23,7 +23,6 @@ class GamesController < ApplicationController
       case type_of_update
       when "join_game" then join_game(game)
       when "start_game" then start_game(game)
-      when "cut_for_deal" then cut_for_deal(game)
       end
     rescue => exception
       flash[:error_msg] = exception
@@ -46,7 +45,7 @@ class GamesController < ApplicationController
 
   def get_game
     game_id = params[:id]
-    GameService.find(game_id)
+    Game.find(game_id)
   end
 
   def join_game(game)
@@ -62,16 +61,12 @@ class GamesController < ApplicationController
   end
 
   def start_game(game)
-    game.current_fsm_state = GameService.getFsmStartState()
+    game.current_fsm_state = Game.getFsmStartState()
 
     if game.current_fsm_state != :waiting_to_start
       throw "this game is either not ready to start or has been started already"
     end
 
     if !game.save then throw "unable to start game" end
-  end
-
-  def cut_for_deal(game)
-    p "bobby", game
   end
 end
