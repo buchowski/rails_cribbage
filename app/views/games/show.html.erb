@@ -6,5 +6,6 @@
   </div>
 <% end %>
 
-<%= button_to 'start', game_path(@game), { method: :patch, params: {type_of_update: 'start_game' } } %>
-<%= button_to 'join', game_path(@game), { method: :patch, params: {type_of_update: 'join_game' } } %>
+<%= button_to 'start', game_path(@game.id), { method: :patch, params: {type_of_update: 'start_game' } } %>
+<%= button_to 'join', game_path(@game.id), { method: :patch, params: {type_of_update: 'join_game' } } %>
+<%= button_to 'cut for deal', game_path(@game.id), { method: :patch, params: {type_of_update: 'cut_for_deal' } } %>

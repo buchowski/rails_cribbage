@@ -21,10 +21,10 @@
         <th><%= game.current_fsm_state %></th>
         <th><%= game.created_at.strftime("%m-%d-%Y %T") %></th>
         <th>
-          <%= button_to "delete", game_path(game), method: :delete  %>
+          <%= button_to "delete", game_path(game.id), method: :delete  %>
         </th>
         <th>
-          <%= link_to 'open', game_path(game) %>
+          <%= link_to 'open', game_path(game.id) %>
         </th>
       </tr>
     <% end %>
