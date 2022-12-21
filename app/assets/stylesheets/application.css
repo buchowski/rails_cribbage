@@ -17,3 +17,10 @@
  .error_msg {
   background-color: red;
  }
+
+ .card {
+  display: flex;
+  border: 1px solid gray;
+  padding: 6px;
+  width: 6rem;
+ }

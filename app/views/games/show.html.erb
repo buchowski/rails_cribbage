@@ -6,6 +6,14 @@
   </div>
 <% end %>
 
+<%= form_with(url: game_path, method: "patch") do |form| %>
+  <% @cards.keys.each do |card| %>
+    <%= render partial: 'card', locals: { card: card } %>
+  <% end %>
+  <%= form.submit "Discard" %>
+  <%= form.hidden_field :type_of_update, value: 'discard' %>
+<% end %>
+
 <%= button_to 'start', game_path(@game), { method: :patch, params: {type_of_update: 'start_game' } } %>
 <%= button_to 'join', game_path(@game), { method: :patch, params: {type_of_update: 'join_game' } } %>
 <%= button_to 'cut_for_deal', game_path(@game), { method: :patch, params: {type_of_update: 'cut_for_deal' } } %>

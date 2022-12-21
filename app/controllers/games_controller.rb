@@ -3,7 +3,10 @@ class GamesController < ApplicationController
     @games = Game.all
   end
   def show
-    @game = get_game()
+    game_model = get_game()
+    cribbage_game = get_cribbage_game(game_model)
+    @cards = cribbage_game.players[0].hand
+    @game = game_model
   end
   def create
     creator_id = params[:creator_id]

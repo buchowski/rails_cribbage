@@ -1,0 +1,28 @@
+<span class="card">
+  <input type="checkbox" name="cards[]" id="<%= card %>" value="<%= card %>">
+  <label for="<%= card %>">
+    <% case card.last %>
+    <% when "d" %>
+      <span>&diams;</span>
+    <% when "h" %>
+      <span>&hearts;</span>
+    <% when "c" %>
+      <span>&clubs;</span>
+    <% when "s" %>
+      <span>&spades;</span>
+    <% end %>
+
+    <% case card.first %>
+    <% when "a" %>
+      <span>Ace</span>
+    <% when "k" %>
+      <span>King</span>
+    <% when "q" %>
+      <span>Queen</span>
+    <% when "j" %>
+      <span>Jack</span>
+    <% else %>
+      <span><%= card.first %></span>
+    <% end %>
+  </label>
+</span>
