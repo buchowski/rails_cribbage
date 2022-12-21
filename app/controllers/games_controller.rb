@@ -91,6 +91,22 @@ class GamesController < ApplicationController
   end
 
   def discard(game)
-    p "discarding", game
+    cards = params[:cards] || []
+    # todo remove hardcoded player
+    player = game.players[0]
+    discarded_cards = player.hand.values
+    num_of_cards_to_discard = discarded_cards.size - 4
+
+    if num_of_cards_to_discard <= 0
+      throw "You may not discard any more cards"
+    elsif num_of_cards_to_discard == 1 && cards.size != 1
+      throw "You may only discard one more card"
+    elsif cards.size > 2
+      throw "You may only discard two cards"
+    elsif cards.size == 0
+      throw "You must select one or two cards to discard"
+    end
+
+    cards.each { |card_id| game.discard(player, card_id) }
   end
 end
