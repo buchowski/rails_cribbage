@@ -1,12 +1,4 @@
 <h1>Games#index</h1>
 
-<%= form_with url: '/games' do |form| %>
-  <%= form.radio_button :creator_id, "hank", :checked => true %>
-  <%= form.label :creator_id_hank, "Hank" %>
-  <%= form.radio_button :creator_id, "sally" %>
-  <%= form.label :creator_id_sally, "Sally" %>
-  <%= form.submit %>
-<% end %>
-
 <%= render "table" %>
 

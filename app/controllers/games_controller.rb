@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+  before_action :get_player, except: [:index]
+
   def index
     @games = Game.all
   end
@@ -9,8 +11,7 @@ class GamesController < ApplicationController
     @game = game_model
   end
   def create
-    creator_id = params[:creator_id]
-    @game = Game.new(creator_id)
+    @game = Game.new(@player_name)
 
     if !@game.save
       flash[:error_msg] = "error: failed to save game"
@@ -49,6 +50,7 @@ class GamesController < ApplicationController
   end
 
   def destroy
+    # todo only creator can delete game
     game = get_game_model()
 
     if !game.destroy
@@ -64,10 +66,25 @@ class GamesController < ApplicationController
     Game.find(game_id)
   end
 
+  def get_player
+    @player_name = cookies[:player_name] || (params[:player_name] || "").strip
+
+    throw "you must include your player_name in the request" if @player_name.empty? || @player_name.nil?
+
+    cookies[:player_name] = @player_name
+    @player_name
+  end
+
   def join_game(game_model)
-    if game_model.player_two_id.nil?
-      was_created_by_sally = game_model.player_one_id == 'sally'
-      game_model.player_two_id = was_created_by_sally ? 'hank' : 'sally'
+    player_one_name = game_model.player_one_id
+    player_two_name = game_model.player_two_id
+
+    if @player_name == player_one_name || @player_name == player_two_name
+      throw "you already joined this game"
+    end
+
+    if player_two_name.nil?
+      game_model.player_two_id = @player_name
       game_model.current_fsm_state = :waiting_to_start
 
       if !game_model.save then throw "failed to join game" end
