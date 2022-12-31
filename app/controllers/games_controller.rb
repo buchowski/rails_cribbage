@@ -8,7 +8,7 @@ class GamesController < ApplicationController
 
   def show
     @game = @game_model
-    @cards = @player.hand
+    @cards = @player.nil? ? {} : @player.hand
   end
 
   def create
@@ -26,20 +26,22 @@ class GamesController < ApplicationController
     begin
       if type_of_update == "join_game"
         join_game()
-      elsif type_of_update == "start_game"
-        start_game()
       else
-        case type_of_update
-        when "cut_for_deal"
-          @game.cut_for_deal()
-        when "deal"
-          @game.deal()
-        when "discard"
-          discard()
-        end
-
-        @game_model.update(Game.adapt_to_active_record(@game))
+        check_membership()
       end
+
+      case type_of_update
+      when "start_game"
+        start_game()
+      when "cut_for_deal"
+        @game.cut_for_deal()
+      when "deal"
+        @game.deal()
+      when "discard"
+        discard()
+      end
+
+      @game_model.update(Game.adapt_to_active_record(@game))
     rescue => exception
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
@@ -49,11 +51,17 @@ class GamesController < ApplicationController
   end
 
   def destroy
-    # todo only creator can delete game
-    if !@game_model.destroy
-      flash[:error_msg] = "error: failed to delete game"
+    begin
+      check_membership()
+      # todo only creator can delete game
+      if !@game_model.destroy
+        flash[:error_msg] = "error: failed to delete game"
+      end
+    rescue => exception
+        flash[:error_msg] = exception.message[0, 100]
+    ensure
+      redirect_to games_path
     end
-    redirect_to games_path
   end
 
   private
@@ -70,6 +78,16 @@ class GamesController < ApplicationController
 
   def get_cribbage_game(game_model)
     Game.adapt_to_cribbage_game(game_model)
+  end
+
+  def check_membership
+    is_player_one = @player_name == @game_model.player_one_id
+    is_player_two = @player_name == @game_model.player_two_id
+    is_member = is_player_one || is_player_two
+
+    if !is_member
+      throw "You are not a member of this game"
+    end
   end
 
   def get_player_name
@@ -89,14 +107,9 @@ class GamesController < ApplicationController
     get_player_name()
     is_player_one = @player_name == @game_model.player_one_id
     is_player_two = @player_name == @game_model.player_two_id
-    is_member = is_player_one || is_player_two
 
-    throw "you are not a member of this game" if !is_member
-
-    player_one = @game.players[0]
-    player_two = @game.players[1]
-
-    @player = is_player_one ? player_one : player_two
+    @player = @game.players[0] if is_player_one
+    @player = @game.players[1] if is_player_two
   end
 
   def join_game()
