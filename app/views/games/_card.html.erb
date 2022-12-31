@@ -22,7 +22,7 @@
     <% when "j" %>
       <span>Jack</span>
     <% else %>
-      <span><%= card.first %></span>
+      <span><%= card[0...-1] %></span>
     <% end %>
   </label>
 </span>
