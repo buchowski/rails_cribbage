@@ -1,4 +1,5 @@
 class Game < ApplicationRecord
+  validates :player_one_id, presence: true
   serialize :player_one_cards, Hash
   serialize :player_two_cards, Hash
   serialize :pile_cards, Array

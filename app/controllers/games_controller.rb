@@ -1,6 +1,7 @@
 class GamesController < ApplicationController
   before_action :get_game, except: [:index, :create]
-  before_action :get_player, except: [:index]
+  before_action :get_player, except: [:index ]
+  before_action :require_player_name, except: [:index, :show]
 
   def index
     @games = Game.all
@@ -12,12 +13,17 @@ class GamesController < ApplicationController
   end
 
   def create
-    Game.new(@player_name)
+    begin
+      new_game = Game.new(@player_name)
 
-    if !@game.save
-      flash[:error_msg] = "error: failed to save game"
+      if !new_game.save
+        flash[:error_msg] = "error: failed to save game"
+      end
+    rescue => exception
+      flash[:error_msg] = exception.message[0, 100]
+    ensure
+      redirect_to games_path
     end
-    redirect_to games_path
   end
 
   def update
@@ -28,20 +34,20 @@ class GamesController < ApplicationController
         join_game()
       else
         check_membership()
-      end
 
-      case type_of_update
-      when "start_game"
-        start_game()
-      when "cut_for_deal"
-        @game.cut_for_deal()
-      when "deal"
-        @game.deal()
-      when "discard"
-        discard()
-      end
+        case type_of_update
+        when "start_game"
+          start_game()
+        when "cut_for_deal"
+          @game.cut_for_deal()
+        when "deal"
+          @game.deal()
+        when "discard"
+          discard()
+        end
 
-      @game_model.update(Game.adapt_to_active_record(@game))
+        @game_model.update(Game.adapt_to_active_record(@game))
+      end
     rescue => exception
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
@@ -99,12 +105,21 @@ class GamesController < ApplicationController
     end
 
     @player_name = cookies[:player_name]
+  end
 
-    throw "you must include your player_name in the request" if @player_name.nil? || @player_name.empty?
+  def require_player_name
+    if @player_name.nil? || @player_name.empty?
+      flash[:error_msg] = "you must include your player_name in the request"
+      redirect_to request.env['HTTP_REFERER']
+      return
+    end
   end
 
   def get_player
     get_player_name()
+
+    return if @game_model.nil?
+
     is_player_one = @player_name == @game_model.player_one_id
     is_player_two = @player_name == @game_model.player_two_id
 
