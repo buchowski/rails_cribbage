@@ -21,8 +21,14 @@
 
 <%= form_with(url: game_path, method: "patch") do |form| %>
   <% @cards.keys.each do |card| %>
-    <%= render partial: 'card_radio', locals: { card: card } %>
+    <% if @cards[card] == true %>
+      <%= render partial: 'card_radio', locals: { card: card } %>
+    <% end %>
   <% end %>
   <%= form.submit "Play card" %>
   <%= form.hidden_field :type_of_update, value: 'play_card' %>
 <% end %>
+
+<div>
+  pile_score: <%= @pile_score %>
+</div>
