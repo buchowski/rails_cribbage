@@ -44,6 +44,8 @@ class GamesController < ApplicationController
           @game.deal()
         when "discard"
           discard()
+        when "play_card"
+          play_card()
         end
 
         @game_model.update(Game.adapt_to_active_record(@game))
@@ -176,5 +178,14 @@ class GamesController < ApplicationController
 
     # automatically flip the top card. no need for manual user action
     @game.flip_top_card if @game.fsm.flipping_top_card?
+  end
+
+  def play_card()
+    card = params[:card_to_play]
+
+    if card.nil? || card.empty?
+      throw "you must select a card to play"
+    end
+
   end
 end

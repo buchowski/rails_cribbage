@@ -1,0 +1,6 @@
+<span class="card">
+  <input type="checkbox" name="cards[]" id="<%= "#{card}_checkbox" %>" value="<%= card %>">
+  <label for="<%= "#{card}_checkbox" %>">
+    <%= render partial: 'card', locals: { card: card } %>
+  </label>
+</span>
