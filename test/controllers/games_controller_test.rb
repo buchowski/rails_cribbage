@@ -40,7 +40,9 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     patch game_path(Game.last.id), params: { player_name: "bobby", type_of_update: "join_game" }
 
+    assert_response :redirect
     assert_equal cookies[:player_name], "bobby"
+    assert_nil flash[:error_msg]
   end
 
   test "should not allow user to join if they're already a member" do
