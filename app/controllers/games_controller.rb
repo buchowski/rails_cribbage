@@ -173,5 +173,8 @@ class GamesController < ApplicationController
     end
 
     cards.each { |card_id| @game.discard(@player, card_id) }
+
+    # automatically flip the top card. no need for manual user action
+    @game.flip_top_card if @game.fsm.flipping_top_card?
   end
 end
