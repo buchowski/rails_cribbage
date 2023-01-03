@@ -181,11 +181,12 @@ class GamesController < ApplicationController
   end
 
   def play_card()
-    card = params[:card_to_play]
+    card_id = params[:card_to_play]
 
-    if card.nil? || card.empty?
+    if card_id.nil? || card_id.empty?
       throw "you must select a card to play"
     end
 
+    @game.play_card(@player, card_id)
   end
 end
