@@ -48,6 +48,10 @@ class GamesController < ApplicationController
           discard()
         when "play_card"
           play_card()
+          # if all cards have been played then we score the hands and crib
+          if @game.fsm.scoring_opponent_hand?
+            score_hands_and_crib()
+          end
         end
 
         @game_model.update(Game.adapt_to_active_record(@game))
@@ -190,5 +194,15 @@ class GamesController < ApplicationController
     end
 
     @game.play_card(@player, card_id)
+  end
+
+  def score_hands_and_crib()
+    begin
+      @game.submit_hand_scores(@game.opponent)
+      @game.submit_hand_scores(@game.dealer)
+      @game.submit_crib_scores()
+    rescue => exception
+      throw exception unless @game.fsm.game_over?
+    end
   end
 end
