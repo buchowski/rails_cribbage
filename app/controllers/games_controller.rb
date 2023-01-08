@@ -8,10 +8,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    @pile_score = @game.pile_score
-    # todo don't reassign @game. use different var name
-    @game = @game_model
-    @cards = @player.nil? ? {} : @player.hand
+    @game = GamePresenter.new(@game_model, @player_name)
   end
 
   def create
