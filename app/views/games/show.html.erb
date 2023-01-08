@@ -1,4 +1,5 @@
 <h1><%= "Game #{@game.id}" %></h1>
+<h2><%= "Player #{@player_name}" %></h2>
 
 <% @game.attributes.each do |att| %>
   <div>
@@ -6,29 +7,54 @@
   </div>
 <% end %>
 
-<%= form_with(url: game_path, method: "patch") do |form| %>
-  <% @cards.keys.each do |card| %>
-    <%= render partial: 'card_checkbox', locals: { card: card } %>
-  <% end %>
-  <%= form.submit "Discard" %>
-  <%= form.hidden_field :type_of_update, value: 'discard' %>
-<% end %>
-
-<%= button_to 'start', game_path(@game), { method: :patch, params: {type_of_update: 'start_game' } } %>
-<%= button_to 'join', game_path(@game), { method: :patch, params: {type_of_update: 'join_game' } } %>
-<%= button_to 'cut_for_deal', game_path(@game), { method: :patch, params: {type_of_update: 'cut_for_deal' } } %>
-<%= button_to 'deal', game_path(@game), { method: :patch, params: {type_of_update: 'deal' } } %>
-
-<%= form_with(url: game_path, method: "patch") do |form| %>
-  <% @cards.keys.each do |card| %>
-    <% if @cards[card] == true %>
-      <%= render partial: 'card_radio', locals: { card: card } %>
-    <% end %>
-  <% end %>
-  <%= form.submit "Play card" %>
-  <%= form.hidden_field :type_of_update, value: 'play_card' %>
-<% end %>
-
-<div>
-  pile_score: <%= @pile_score %>
+<div class="row">
+  <%= button_to 'start', game_path(@game), { method: :patch, params: {type_of_update: 'start_game' } } %>
+  <%= button_to 'join', game_path(@game), { method: :patch, params: {type_of_update: 'join_game' } } %>
+  <%= button_to 'cut_for_deal', game_path(@game), { method: :patch, params: {type_of_update: 'cut_for_deal' } } %>
+  <%= button_to 'deal', game_path(@game), { method: :patch, params: {type_of_update: 'deal' } } %>
 </div>
+
+
+  <div>
+    <h3>Your cards:</h3>
+    <h4>Your score: <%= @pile_score %></h4>
+    <div class="row">
+      <%= form_with(url: game_path, method: "patch") do |form| %>
+        <% @cards.keys.each do |card| %>
+          <%= render partial: 'card_checkbox', locals: { card: card } %>
+        <% end %>
+        <%= form.submit "Discard" %>
+        <%= form.hidden_field :type_of_update, value: 'discard' %>
+      <% end %>
+
+      <%= form_with(url: game_path, method: "patch") do |form| %>
+        <% @cards.keys.each do |card| %>
+          <% if @cards[card] == true %>
+            <%= render partial: 'card_radio', locals: { card: card } %>
+          <% end %>
+        <% end %>
+        <%= form.submit "Play card" %>
+        <%= form.hidden_field :type_of_update, value: 'play_card' %>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <h3>Opponent's cards:</h3>
+    <h4>Opponent's score: <%= @pile_score %></h4>
+    <% @cards.keys.each do |card| %>
+      <div class="card">
+        <%= render partial: 'card', locals: { card: card } %>
+      </div>
+    <% end %>
+  </div>
+
+  <div>
+    <h3>Pile cards:</h3>
+    <h4>Pile score: <%= @pile_score %></h4>
+    <% @cards.keys.each do |card| %>
+      <div class="card">
+        <%= render partial: 'card', locals: { card: card } %>
+      </div>
+    <% end %>
+  </div>

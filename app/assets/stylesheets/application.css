@@ -14,13 +14,17 @@
  *= require_self
  */
 
- .error_msg {
+.error_msg {
   background-color: red;
- }
+}
 
- .card {
+.card {
   display: flex;
   border: 1px solid gray;
   padding: 6px;
   width: 6rem;
- }
+}
+
+.row {
+  display: flex;
+}
