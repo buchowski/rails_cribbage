@@ -24,18 +24,34 @@ class GamePresenter < SimpleDelegator
   end
 
   def player_cards
-    return [] if player.nil?
-
-    player.hand
+    player.nil? ? [] : get_unplayed_cards(player.hand)
   end
 
   def opponent_cards
-    return [] if opponent.nil?
+    opponent.nil? ? [] : get_unplayed_cards(opponent.hand)
+  end
 
-    opponent.hand
+  def player_total_score
+    player.nil? ? 0 : player.total_score
+  end
+
+  def opponent_total_score
+    opponent.nil? ? 0 : opponent.total_score
   end
 
   def pile_score
     @game.pile_score
+  end
+
+  private
+
+  def get_unplayed_cards(cards)
+    unplayed = []
+
+    cards.each_pair { |card, is_unplayed|
+      unplayed << card if is_unplayed
+    }
+
+    unplayed
   end
 end

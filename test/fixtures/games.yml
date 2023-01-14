@@ -1,33 +1,33 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  player_one_id: MyString
-  player_two_id: MyString
-  player_one_cards: MyString
-  player_two_cards: MyString
-  pile_cards: MyString
-  cut_card: MyString
-  dealer_id: MyString
-  whose_turn_id: MyString
-  current_fsm_state: MyString
-  player_one_points: 1
-  player_two_points: 1
+  player_one_id: bill
+  player_two_id:
+  player_one_cards: {}
+  player_two_cards: {}
+  pile_cards: []
+  cut_card:
+  dealer_id:
+  whose_turn_id:
+  current_fsm_state: waiting_for_player_two
+  player_one_points: 0
+  player_two_points: 0
   round: 1
-  points_to_win: 1
-  winner_id: MyString
+  points_to_win: 121
+  winner_id:
 
 two:
-  player_one_id: MyString
-  player_two_id: MyString
-  player_one_cards: MyString
-  player_two_cards: MyString
-  pile_cards: MyString
-  cut_card: MyString
-  dealer_id: MyString
-  whose_turn_id: MyString
-  current_fsm_state: MyString
-  player_one_points: 1
-  player_two_points: 1
-  round: 1
-  points_to_win: 1
-  winner_id: MyString
+  player_one_id: barbara
+  player_two_id: cindy
+  player_one_cards: '{"5c"=>true, "4h"=>true, "jh"=>true, "6h"=>true, "3h"=>true, "2h"=>true}'
+  player_two_cards: '{"6c"=>true, "6s"=>true, "8h"=>true, "9c"=>true, "as"=>true}'
+  pile_cards: []
+  cut_card:
+  dealer_id: cindy
+  whose_turn_id: barbara
+  current_fsm_state: discarding
+  player_one_points: 5
+  player_two_points: 12
+  round: 3
+  points_to_win: 55
+  winner_id:
