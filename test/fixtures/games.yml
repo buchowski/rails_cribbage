@@ -2,7 +2,7 @@
 
 one:
   player_one_id: bill
-  player_two_id: nancy
+  player_two_id:
   player_one_cards: {}
   player_two_cards: {}
   pile_cards: []
