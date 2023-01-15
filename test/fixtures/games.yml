@@ -2,7 +2,7 @@
 
 one:
   player_one_id: bill
-  player_two_id:
+  player_two_id: nancy
   player_one_cards: {}
   player_two_cards: {}
   pile_cards: []
@@ -26,8 +26,8 @@ two:
   dealer_id: cindy
   whose_turn_id: barbara
   current_fsm_state: discarding
-  player_one_points: 5
-  player_two_points: 12
-  round: 3
-  points_to_win: 55
+  player_one_points: 0
+  player_two_points: 0
+  round: 1
+  points_to_win: 5
   winner_id:
