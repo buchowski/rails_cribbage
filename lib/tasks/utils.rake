@@ -1,10 +1,10 @@
 desc "Copy cribbage game files from ruby-cribbage"
 
 task :copy_ruby_cribbage do
-  if not Dir.exist? './lib/ruby-cribbage' 
+  if not Dir.exist? './lib/ruby-cribbage'
     Dir.mkdir('./lib/ruby-cribbage')
   end
-  if not Dir.exist? './lib/ruby-cribbage/cribbage_game' 
+  if not Dir.exist? './lib/ruby-cribbage/cribbage_game'
     Dir.mkdir('./lib/ruby-cribbage/cribbage_game')
   end
 
@@ -14,7 +14,44 @@ task :copy_ruby_cribbage do
   files = Dir.glob('*.rb')
 
   files.each do |file|
-    puts "copying #{file}..."  
+    puts "copying #{file}..."
     FileUtils.copy(file, '../../../rails-cribbage/lib/ruby-cribbage/cribbage_game/')
+  end
+end
+
+desc "create a partial view for each card in the cards svg spritesheet"
+task :create_card_svgs do
+  width = 360
+  height = 539
+  x_gap = 30
+  y_gap = 30
+  card_positions = [
+    ["ah", "2h", "3h", "4h", "5h", "6h", "7h", "8h", "9h", "10h", "jh", "qh", "kh"],
+    ["ad", "2d", "3d", "4d", "5d", "6d", "7d", "8d", "9d", "10d", "jd", "qd", "kd"],
+    ["ac", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "10c", "jc", "qc", "kc"],
+    ["as", "2s", "3s", "4s", "5s", "6s", "7s", "8s", "9s", "10s", "js", "qs", "ks"],
+  ]
+
+  preview_cards_file = File.open("app/views/cards/cards_preview.html.erb", "w+")
+  preview_cards_file.write("<h1>Preview of generated svg elements</h1>\n")
+
+  card_positions.each_with_index do |row, i|
+    row.each_with_index do |card, j|
+      top = i * height + (i + 1) * y_gap + i
+      left = j * width + (j + 1) * x_gap
+
+      filename = "app/views/cards/_#{card}.html.erb"
+      p "generating " + filename
+
+      File.open(filename, "w+") do |file|
+        file.write(%{
+<svg width="#{width}" height="#{height}" viewBox="#{left} #{top} #{width} #{height}" class="svg_card">
+  <use href="/assets/Atlasnye_playing_cards_deck.svg##{card}" />
+</svg>
+        })
+      end
+
+      preview_cards_file.write("<%= render \"cards/#{card}\" %>\n")
+    end
   end
 end

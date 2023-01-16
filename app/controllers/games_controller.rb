@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
-  before_action :get_game, except: [:index, :create]
-  before_action :get_player, except: [:index ]
-  before_action :require_player_name, except: [:index, :show]
+  before_action :get_game, except: [:index, :create, :cards]
+  before_action :get_player, except: [:index, :cards ]
+  before_action :require_player_name, except: [:index, :show, :cards]
 
   def index
     @games = Game.all
@@ -73,6 +73,10 @@ class GamesController < ApplicationController
     ensure
       redirect_to games_path
     end
+  end
+
+  def cards
+    render "cards/cards_preview"
   end
 
   private
