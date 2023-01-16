@@ -1,6 +1,6 @@
 <span class="card">
   <input type="radio" name="card_to_play" id="<%= "#{card}_radio" %>" value="<%= card %>">
   <label for="<%= "#{card}_radio" %>">
-    <%= render partial: 'card', locals: { card: card } %>
+    <%= render partial: "cards/#{card}" %>
   </label>
 </span>

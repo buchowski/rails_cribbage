@@ -17,41 +17,47 @@
 <div>
   <h3>Your cards:</h3>
   <h4>Your score: <%= @game.player_total_score %></h4>
-  <div class="row">
-    <%= form_with(url: game_path, method: "patch") do |form| %>
+  <%= form_with(url: game_path, method: "patch") do |form| %>
+    <div class="row">
       <% @game.player_cards.each do |card| %>
         <%= render partial: 'card_checkbox', locals: { card: card } %>
       <% end %>
-      <%= form.submit "Discard" %>
-      <%= form.hidden_field :type_of_update, value: 'discard' %>
-    <% end %>
+    </div>
+    <%= form.submit "Discard" %>
+    <%= form.hidden_field :type_of_update, value: 'discard' %>
+  <% end %>
 
-    <%= form_with(url: game_path, method: "patch") do |form| %>
+  <%= form_with(url: game_path, method: "patch") do |form| %>
+    <div class="row">
       <% @game.player_cards.each do |card| %>
         <%= render partial: 'card_radio', locals: { card: card } %>
       <% end %>
-      <%= form.submit "Play card" %>
-      <%= form.hidden_field :type_of_update, value: 'play_card' %>
-    <% end %>
-  </div>
+    </div>
+    <%= form.submit "Play card" %>
+    <%= form.hidden_field :type_of_update, value: 'play_card' %>
+  <% end %>
 </div>
 
 <div>
   <h3>Opponent's cards:</h3>
   <h4>Opponent's score: <%= @game.opponent_total_score %></h4>
-  <% @game.opponent_cards.each do |card| %>
-    <div class="card">
-      <%= render partial: 'card', locals: { card: card } %>
-    </div>
-  <% end %>
+  <div class="row">
+    <% @game.opponent_cards.each do |card| %>
+      <div class="card">
+        <%= render partial: "cards/#{card}" %>
+      </div>
+    <% end %>
+  </div>
 </div>
 
 <div>
   <h3>Pile cards:</h3>
   <h4>Pile score: <%= @game.pile_score %></h4>
-  <% @game.pile_cards.each do |card| %>
-    <div class="card">
-      <%= render partial: 'card', locals: { card: card } %>
-    </div>
-  <% end %>
+  <div class="row">
+    <% @game.pile_cards.each do |card| %>
+      <div class="card">
+        <%= render partial: "cards/#{card}" %>
+      </div>
+    <% end %>
+  </div>
 </div>
