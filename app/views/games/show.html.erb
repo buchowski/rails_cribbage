@@ -61,3 +61,23 @@
     <% end %>
   </div>
 </div>
+
+<div>
+  <h3>Crib cards:</h3>
+  <div class="row">
+    <% @game.crib_cards.each do |card| %>
+      <div class="card">
+        <%= render partial: "cards/#{card}" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div>
+  <h3>Cut card:</h3>
+  <div class="card">
+    <% if !@game.cut_card.nil? %>
+      <%= render partial: "cards/#{@game.cut_card}" %>
+    <% end %>
+  </div>
+</div>
