@@ -32,26 +32,28 @@ task :create_card_svgs do
     ["as", "2s", "3s", "4s", "5s", "6s", "7s", "8s", "9s", "10s", "js", "qs", "ks"],
   ]
 
+  card_dimensions_file = File.open("app/presenters/card_svg_dimensions.rb", "w+")
   preview_cards_file = File.open("app/views/cards/cards_preview.html.erb", "w+")
   preview_cards_file.write("<h1>Preview of generated svg elements</h1>\n")
+  card_dimensions = {}
 
   card_positions.each_with_index do |row, i|
     row.each_with_index do |card, j|
       top = i * height + (i + 1) * y_gap + i
       left = j * width + (j + 1) * x_gap
 
-      filename = "app/views/cards/_#{card}.html.erb"
-      p "generating " + filename
+      dimensions = {
+        id: card,
+        width: width,
+        height: height,
+        viewBox: "#{left} #{top} #{width} #{height}"
+      }
+      card_dimensions[card] = dimensions
 
-      File.open(filename, "w+") do |file|
-        file.write(%{
-<svg width="#{width}" height="#{height}" viewBox="#{left} #{top} #{width} #{height}" class="svg_card">
-  <use href="/assets/Atlasnye_playing_cards_deck.svg##{card}" />
-</svg>
-        })
-      end
-
-      preview_cards_file.write("<%= render \"cards/#{card}\" %>\n")
+      preview_cards_file.write("<%= render partial: 'card_svg', locals: { card: '#{card}' } %>\n")
     end
   end
+
+  card_dimensions_file.write("CardSvgDimensions =\n")
+  card_dimensions_file.write(card_dimensions.pretty_inspect)
 end
