@@ -20,7 +20,7 @@
   <%= form_with(url: game_path, method: "patch") do |form| %>
     <div class="row">
       <% @game.player_cards.each do |card| %>
-        <%= render partial: 'card_checkbox', locals: { card: card } %>
+        <%= render partial: 'cards/card_checkbox', locals: { card: card } %>
       <% end %>
     </div>
     <%= form.submit "Discard" %>
@@ -30,7 +30,7 @@
   <%= form_with(url: game_path, method: "patch") do |form| %>
     <div class="row">
       <% @game.player_cards.each do |card| %>
-        <%= render partial: 'card_radio', locals: { card: card } %>
+        <%= render partial: 'cards/card_radio', locals: { card: card } %>
       <% end %>
     </div>
     <%= form.submit "Play card" %>
@@ -44,7 +44,7 @@
   <div class="row">
     <% @game.opponent_cards.each do |card| %>
       <div class="card">
-        <%= render partial: "card_svg", locals: { card: card } %>
+        <%= render partial: "cards/card_svg", locals: { card: card } %>
       </div>
     <% end %>
   </div>
@@ -56,7 +56,7 @@
   <div class="row">
     <% @game.pile_cards.each do |card| %>
       <div class="card">
-        <%= render partial: "card_svg", locals: { card: card } %>
+        <%= render partial: "cards/card_svg", locals: { card: card } %>
       </div>
     <% end %>
   </div>
@@ -67,7 +67,7 @@
   <div class="row">
     <% @game.crib_cards.each do |card| %>
       <div class="card">
-        <%= render partial: "card_svg", locals: { card: card } %>
+        <%= render partial: "cards/card_svg", locals: { card: card } %>
       </div>
     <% end %>
   </div>
@@ -77,7 +77,7 @@
   <h3>Cut card:</h3>
   <div class="card">
     <% if !@game.cut_card.nil? %>
-      <%= render partial: "card_svg", locals: { card: @game.cut_card } %>
+      <%= render partial: "cards/card_svg", locals: { card: @game.cut_card } %>
     <% end %>
   </div>
 </div>

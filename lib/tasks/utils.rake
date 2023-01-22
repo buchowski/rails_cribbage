@@ -50,7 +50,7 @@ task :create_card_svgs do
       }
       card_dimensions[card] = dimensions
 
-      preview_cards_file.write("<%= render partial: 'card_svg', locals: { card: '#{card}' } %>\n")
+      preview_cards_file.write("<%= render partial: 'cards/card_svg', locals: { card: '#{card}' } %>\n")
     end
   end
 

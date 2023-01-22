@@ -1,6 +1,6 @@
 <span class="card">
   <input type="checkbox" name="cards[]" id="<%= "#{card}_checkbox" %>" value="<%= card %>">
   <label for="<%= "#{card}_checkbox" %>">
-    <%= render partial: "card_svg", locals: { card: card } %>
+    <%= render partial: "cards/card_svg", locals: { card: card } %>
   </label>
 </span>
