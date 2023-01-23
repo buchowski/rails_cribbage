@@ -19,8 +19,8 @@ one:
 two:
   player_one_id: barbara
   player_two_id: cindy
-  player_one_cards: '{"5c"=>true, "4h"=>true, "jh"=>true, "6h"=>true, "3h"=>true, "2h"=>true}'
-  player_two_cards: '{"6c"=>true, "6s"=>true, "8h"=>true, "9c"=>true, "as"=>true}'
+  player_one_cards: {5c: true, 4h: true, jh: true, 6h: true, 3h: true, 2h: true}
+  player_two_cards: {6c: true, 6s: true, 8h: true, 9c: true, as: true}
   pile_cards: []
   cut_card:
   dealer_id: cindy
