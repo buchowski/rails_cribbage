@@ -9,6 +9,8 @@ RSpec.describe "Games", type: :system do
   last_row = "tbody tr:last-child"
 
   describe "index page" do
+    fixtures :games
+
     it "should display all games in the table" do
       visit games_path
 
@@ -34,6 +36,29 @@ RSpec.describe "Games", type: :system do
       open_link.click
 
       expect(page).to have_current_path(show_page)
+    end
+  end
+
+  describe "show page" do
+    fixtures :games
+
+    it "should set current player to player_name param" do
+      page.driver.browser.set_cookie("player_name=barbara")
+      visit games_path
+
+      open_link = page.find("#{first_row} td:nth-child(7) a")
+      open_link.click
+
+      barbaras_cards = %{5c 4h jh 6h 3h 2h}.split()
+
+      barbaras_cards.each do |card|
+        card_el = page.find("##{card}_checkbox")
+        expect(card_el).to_not be_nil
+      end
+
+      cindys_cards = page.find("#opponent_cards_section .card")
+
+      expect(cindys_cards.size).to equal(6)
     end
   end
 end

@@ -38,7 +38,7 @@
   <% end %>
 </div>
 
-<div>
+<div id="opponent_cards_section">
   <h3>Opponent's cards:</h3>
   <h4>Opponent's score: <%= @game.opponent_total_score %></h4>
   <div class="row">
@@ -50,7 +50,7 @@
   </div>
 </div>
 
-<div>
+<div id="pile_cards_section">
   <h3>Pile cards:</h3>
   <h4>Pile score: <%= @game.pile_score %></h4>
   <div class="row">
@@ -62,7 +62,7 @@
   </div>
 </div>
 
-<div>
+<div id="crib_cards_section">
   <h3>Crib cards:</h3>
   <div class="row">
     <% @game.crib_cards.each do |card| %>
@@ -73,7 +73,7 @@
   </div>
 </div>
 
-<div>
+<div id="cut_card_section">
   <h3>Cut card:</h3>
   <div class="card">
     <% if !@game.cut_card.nil? %>
