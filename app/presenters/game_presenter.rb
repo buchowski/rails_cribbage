@@ -43,6 +43,14 @@ class GamePresenter < SimpleDelegator
     @game.pile_score
   end
 
+  def should_show_play_card_radios
+    @game.fsm.aasm.current_state == :playing
+  end
+
+  def should_show_discard_checkboxes
+    @game.fsm.aasm.current_state == :discarding
+  end
+
   private
 
   def get_unplayed_cards(cards)

@@ -42,7 +42,7 @@ RSpec.describe "Games", type: :system do
   describe "show page" do
     fixtures :games
 
-    it "should set current player to player_name param" do
+    it "should show the player's cards and hide the opponent's cards" do
       page.driver.browser.set_cookie("player_name=barbara")
       visit games_path
 
@@ -50,15 +50,27 @@ RSpec.describe "Games", type: :system do
       open_link.click
 
       barbaras_cards = %{5c 4h jh 6h 3h 2h}.split()
+      cindys_cards = %{6c 6s 8h 9c as}.split()
 
+      # we're logged in as barbara so we can see all her cards
       barbaras_cards.each do |card|
-        card_el = page.find("##{card}_checkbox")
-        expect(card_el).to_not be_nil
+        expect(page).to have_selector("##{card}_checkbox")
+        expect(page).not_to have_selector("##{card}_radio")
       end
 
-      cindys_cards = page.find("#opponent_cards_section .card")
+      # cindy is the opponent so her cards are hidden (but we know how many cards she has)
+      cindys_cards.each do |card|
+        expect(page).not_to have_selector("##{card}_checkbox")
+        expect(page).not_to have_selector("##{card}_radio")
+      end
 
-      expect(cindys_cards.size).to equal(6)
+      cindys_hidden_cards = page.find_all("#opponent_cards_section .card")
+      crib_cards = page.find_all("#crib_cards_section .card")
+      cut_card = page.find_all("#cut_cards_section .card")
+
+      expect(cindys_hidden_cards.size).to equal(5)
+      expect(crib_cards.size).to equal(1)
+      expect(cut_card.size).to equal(0)
     end
   end
 end

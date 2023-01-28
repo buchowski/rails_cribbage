@@ -17,24 +17,29 @@
 <div>
   <h3>Your cards:</h3>
   <h4>Your score: <%= @game.player_total_score %></h4>
-  <%= form_with(url: game_path, method: "patch") do |form| %>
-    <div class="row">
-      <% @game.player_cards.each do |card| %>
-        <%= render partial: 'cards/card_checkbox', locals: { card: card } %>
-      <% end %>
-    </div>
-    <%= form.submit "Discard" %>
-    <%= form.hidden_field :type_of_update, value: 'discard' %>
+
+  <% if @game.should_show_discard_checkboxes %>
+    <%= form_with(url: game_path, method: "patch") do |form| %>
+      <div class="row">
+        <% @game.player_cards.each do |card| %>
+          <%= render partial: 'cards/card_checkbox', locals: { card: card } %>
+        <% end %>
+      </div>
+      <%= form.submit "Discard" %>
+      <%= form.hidden_field :type_of_update, value: 'discard' %>
+    <% end %>
   <% end %>
 
-  <%= form_with(url: game_path, method: "patch") do |form| %>
-    <div class="row">
-      <% @game.player_cards.each do |card| %>
-        <%= render partial: 'cards/card_radio', locals: { card: card } %>
-      <% end %>
-    </div>
-    <%= form.submit "Play card" %>
-    <%= form.hidden_field :type_of_update, value: 'play_card' %>
+  <% if @game.should_show_play_card_radios %>
+    <%= form_with(url: game_path, method: "patch") do |form| %>
+      <div class="row">
+        <% @game.player_cards.each do |card| %>
+          <%= render partial: 'cards/card_radio', locals: { card: card } %>
+        <% end %>
+      </div>
+      <%= form.submit "Play card" %>
+      <%= form.hidden_field :type_of_update, value: 'play_card' %>
+    <% end %>
   <% end %>
 </div>
 
