@@ -1,4 +1,4 @@
 <% svg = card_svg_dimensions(card) %>
-<svg width="<%= svg[:width] %>" height="<%= svg[:height] %>" viewBox="<%= svg[:viewBox] %>" class="svg_card">
+<svg id="<%= "#{card}_card" %>" width="<%= svg[:width] %>" height="<%= svg[:height] %>" viewBox="<%= svg[:viewBox] %>" class="svg_card">
   <use href="/assets/Atlasnye_playing_cards_deck.svg#<%= svg[:id] %>" />
 </svg>

@@ -41,25 +41,26 @@ RSpec.describe "Games", type: :system do
 
   describe "show page" do
     fixtures :games
+    barbaras_cards = %{5c 4h jh 6h 3h 2h}.split()
+    cindys_cards = %{6c 6s 8h 9c as}.split()
 
-    it "should show the player's cards and hide the opponent's cards" do
+    before(:each) do
       page.driver.browser.set_cookie("player_name=barbara")
       visit games_path
 
       open_link = page.find("#{first_row} td:nth-child(7) a")
       open_link.click
+    end
 
-      barbaras_cards = %{5c 4h jh 6h 3h 2h}.split()
-      cindys_cards = %{6c 6s 8h 9c as}.split()
-
-      # we're logged in as barbara so we can see all her cards
+    it "should show the player's cards and hide the opponent's cards" do
       barbaras_cards.each do |card|
+        expect(page).to have_selector("##{card}_card")
         expect(page).to have_selector("##{card}_checkbox")
         expect(page).not_to have_selector("##{card}_radio")
       end
 
-      # cindy is the opponent so her cards are hidden (but we know how many cards she has)
       cindys_cards.each do |card|
+        expect(page).not_to have_selector("##{card}_card")
         expect(page).not_to have_selector("##{card}_checkbox")
         expect(page).not_to have_selector("##{card}_radio")
       end
