@@ -31,12 +31,12 @@ class GamesController < ApplicationController
     begin
       if type_of_update == "join_game"
         join_game()
+      elsif type_of_update == "start_game"
+        start_game()
       else
         check_membership()
 
         case type_of_update
-        when "start_game"
-          start_game()
         when "cut_for_deal"
           @game.cut_for_deal()
         when "deal"
