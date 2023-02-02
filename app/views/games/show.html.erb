@@ -14,6 +14,27 @@
   <%= button_to 'deal', game_path(@game), { method: :patch, params: {type_of_update: 'deal' } } %>
 </div>
 
+<div id="cut_card_section">
+  <h3>Cut card:</h3>
+  <div class="card">
+    <% if !@game.cut_card.nil? %>
+      <%= render partial: "cards/card_svg", locals: { card: @game.cut_card } %>
+    <% end %>
+  </div>
+</div>
+
+<div id="pile_cards_section">
+  <h3>Pile cards:</h3>
+  <h4>Pile score: <%= @game.pile_score %></h4>
+  <div class="row">
+    <% @game.pile_cards.each do |card| %>
+      <div class="card">
+        <%= render partial: "cards/card_svg", locals: { card: card } %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
 <div>
   <h3>Your cards:</h3>
   <h4>Your score: <%= @game.player_total_score %></h4>
@@ -55,18 +76,6 @@
   </div>
 </div>
 
-<div id="pile_cards_section">
-  <h3>Pile cards:</h3>
-  <h4>Pile score: <%= @game.pile_score %></h4>
-  <div class="row">
-    <% @game.pile_cards.each do |card| %>
-      <div class="card">
-        <%= render partial: "cards/card_svg", locals: { card: card } %>
-      </div>
-    <% end %>
-  </div>
-</div>
-
 <div id="crib_cards_section">
   <h3>Crib cards:</h3>
   <div class="row">
@@ -78,11 +87,3 @@
   </div>
 </div>
 
-<div id="cut_card_section">
-  <h3>Cut card:</h3>
-  <div class="card">
-    <% if !@game.cut_card.nil? %>
-      <%= render partial: "cards/card_svg", locals: { card: @game.cut_card } %>
-    <% end %>
-  </div>
-</div>
