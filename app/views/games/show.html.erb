@@ -46,7 +46,7 @@
           <%= render partial: 'cards/card_checkbox', locals: { card: card } %>
         <% end %>
       </div>
-      <%= form.submit "Discard" %>
+      <%= form.submit "Discard", id: "discard_btn" %>
       <%= form.hidden_field :type_of_update, value: 'discard' %>
     <% end %>
   <% end %>

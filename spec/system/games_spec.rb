@@ -73,5 +73,32 @@ RSpec.describe "Games", type: :system do
       expect(crib_cards.size).to equal(1)
       expect(cut_card.size).to equal(0)
     end
+
+    it "should let the players play until there's a winner" do
+      # barbara selects two cards and then discards
+      page.find("#3h_checkbox").click
+      page.find("#2h_checkbox").click
+      page.find("#discard_btn").click
+
+      barbaras_cards.without("3h", "2h").each do |card|
+        expect(page).to have_selector("##{card}_checkbox")
+      end
+
+      # access the game as cindy
+      Capybara.reset_sessions!
+      page.driver.browser.set_cookie("player_name=cindy")
+      visit games_path
+      open_link = page.find("#{first_row} td:nth-child(7) a")
+      open_link.click
+
+      # cindy has already discarded one card (games.yml) so she discards one additional card
+      page.find("#as_checkbox").click
+      page.find("#discard_btn").click
+
+      cindys_cards.without("as").each do |card|
+        expect(page).not_to have_selector("##{card}_checkbox")
+        expect(page).to have_selector("##{card}_radio")
+      end
+    end
   end
 end
