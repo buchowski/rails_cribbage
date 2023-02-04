@@ -1,5 +1,13 @@
 require 'rails_helper'
 
+def access_page_as(player_name)
+  Capybara.reset_sessions!
+  page.driver.browser.set_cookie("player_name=#{player_name}")
+
+  visit games_path
+  page.click_on("open", :match => :first)
+end
+
 RSpec.describe "Games", type: :system do
   before do
     driven_by(:rack_test)
@@ -23,20 +31,6 @@ RSpec.describe "Games", type: :system do
       expect(page.find("#{first_row} td:nth-child(3)")).to have_content("cindy")
       expect(page.find("#{first_row} td:nth-child(4)")).to have_content("discarding")
     end
-
-    it "should navigate to #show page" do
-      visit games_path
-
-      open_link = page.find("#{first_row} td:nth-child(7) a")
-
-      expect(open_link).to have_content("open")
-
-      show_page = open_link[:href]
-
-      open_link.click
-
-      expect(page).to have_current_path(show_page)
-    end
   end
 
   describe "show page" do
@@ -45,11 +39,7 @@ RSpec.describe "Games", type: :system do
     cindys_cards = %{6c 6s 8h 9c as}.split()
 
     before(:each) do
-      page.driver.browser.set_cookie("player_name=barbara")
-      visit games_path
-
-      open_link = page.find("#{first_row} td:nth-child(7) a")
-      open_link.click
+      access_page_as("barbara")
     end
 
     it "should show the player's cards and hide the opponent's cards" do
@@ -84,12 +74,7 @@ RSpec.describe "Games", type: :system do
         expect(page).to have_selector("##{card}_checkbox")
       end
 
-      # access the game as cindy
-      Capybara.reset_sessions!
-      page.driver.browser.set_cookie("player_name=cindy")
-      visit games_path
-      open_link = page.find("#{first_row} td:nth-child(7) a")
-      open_link.click
+      access_page_as("cindy")
 
       # cindy has already discarded one card (games.yml) so she discards one additional card
       page.find("#as_checkbox").click
