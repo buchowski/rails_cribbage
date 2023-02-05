@@ -8,6 +8,15 @@ class GamePresenter < SimpleDelegator
     super(@game_model)
   end
 
+  def game_play_message
+    is_your_turn = @game.whose_turn.id == @player_name
+
+    case @game.fsm.aasm.current_state
+    when :playing
+        is_your_turn ? Translations.dig(:en, :playing, :you) : Translations.dig(:en, :playing, :opponent)
+    end
+  end
+
   def player
     is_player_one = @player_name == @game_model.player_one_id
     is_player_two = @player_name == @game_model.player_two_id

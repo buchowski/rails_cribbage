@@ -59,9 +59,9 @@ RSpec.describe "Games", type: :system do
       crib_cards = page.find_all("#crib_cards_section .card")
       cut_card = page.find_all("#cut_cards_section .card")
 
-      expect(cindys_hidden_cards.size).to equal(5)
-      expect(crib_cards.size).to equal(1)
-      expect(cut_card.size).to equal(0)
+      expect(cindys_hidden_cards.size).to eq(5)
+      expect(crib_cards.size).to eq(1)
+      expect(cut_card.size).to eq(0)
     end
 
     it "should let the players play until there's a winner" do
@@ -84,6 +84,8 @@ RSpec.describe "Games", type: :system do
         expect(page).not_to have_selector("##{card}_checkbox")
         expect(page).to have_selector("##{card}_radio")
       end
+
+      expect(page.find_by_id("game_play_message").text).to eq(Translations.dig(:en, :playing, :opponent))
     end
   end
 end

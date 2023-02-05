@@ -7,6 +7,10 @@
   </div>
 <% end %>
 
+<h3 id="game_play_message">
+  <%= @game.game_play_message %>
+</h3>
+
 <div class="row">
   <%= button_to 'start', game_path(@game), { method: :patch, params: {type_of_update: 'start_game' } } %>
   <%= button_to 'join', game_path(@game), { method: :patch, params: {type_of_update: 'join_game' } } %>
