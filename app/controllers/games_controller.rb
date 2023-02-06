@@ -8,7 +8,9 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = GamePresenter.new(@game_model, @player_name)
+    your_previous_score = params[:your_score]
+    opponents_previous_score = params[:opponents_score]
+    @game = GamePresenter.new(@game_model, @player_name, your_previous_score, opponents_previous_score)
   end
 
   def create

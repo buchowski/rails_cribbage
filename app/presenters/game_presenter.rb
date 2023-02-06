@@ -1,10 +1,14 @@
 class GamePresenter < SimpleDelegator
   attr_reader :player_name
 
-  def initialize(game_model, player_name)
+  def initialize(game_model, player_name, your_previous_score, opponents_previous_score)
     @game_model = game_model
     @game = Game.adapt_to_cribbage_game(game_model)
     @player_name = player_name
+    # the previous scores are what the user last saw in the UI.
+    # we diff against these to determine if we should alert the user that points were scored
+    @your_previous_score = your_previous_score.nil? ? 0 : your_previous_score
+    @opponents_previous_score = opponents_previous_score.nil? ? 0 : opponents_previous_score
     super(@game_model)
   end
 
@@ -15,6 +19,17 @@ class GamePresenter < SimpleDelegator
     when :playing
         is_your_turn ? Translations.dig(:en, :playing, :you) : Translations.dig(:en, :playing, :opponent)
     end
+  end
+
+  def game_play_alert
+    alert = ""
+    points_you_scored = player.total_score - @your_previous_score
+    points_opponent_scored = opponent.total_score - @opponents_previous_score
+
+    alert += "You scored #{points_you_scored} points! " if points_you_scored > 0
+    alert += "Your opponent scored #{points_opponent_scored} points." if points_opponent_scored > 0
+
+    alert
   end
 
   def player

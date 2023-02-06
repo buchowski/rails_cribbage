@@ -11,6 +11,10 @@
   <%= @game.game_play_message %>
 </h3>
 
+<h3 id="game_play_alert">
+  <%= @game.game_play_alert %>
+</h3>
+
 <div class="row">
   <%= button_to 'start', game_path(@game), { method: :patch, params: {type_of_update: 'start_game' } } %>
   <%= button_to 'join', game_path(@game), { method: :patch, params: {type_of_update: 'join_game' } } %>
@@ -41,7 +45,7 @@
 
 <div>
   <h3>Your cards:</h3>
-  <h4>Your score: <%= @game.player_total_score %></h4>
+  <h4 id="your_score">Your score: <%= @game.player_total_score %></h4>
 
   <% if @game.should_show_discard_checkboxes %>
     <%= form_with(url: game_path, method: "patch") do |form| %>
@@ -64,13 +68,15 @@
       </div>
       <%= form.submit "Play card", id: "play_btn" %>
       <%= form.hidden_field :type_of_update, value: 'play_card' %>
+      <%= form.hidden_field :your_score, value: @game.player_total_score %>
+      <%= form.hidden_field :opponents_score, value: @game.opponent_total_score %>
     <% end %>
   <% end %>
 </div>
 
 <div id="opponent_cards_section">
   <h3>Opponent's cards:</h3>
-  <h4>Opponent's score: <%= @game.opponent_total_score %></h4>
+  <h4 id="opponents_score">Opponent's score: <%= @game.opponent_total_score %></h4>
   <div class="row">
     <% @game.opponent_cards.each do |card| %>
       <div class="card">
