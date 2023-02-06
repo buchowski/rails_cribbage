@@ -62,7 +62,7 @@
           <%= render partial: 'cards/card_radio', locals: { card: card } %>
         <% end %>
       </div>
-      <%= form.submit "Play card" %>
+      <%= form.submit "Play card", id: "play_btn" %>
       <%= form.hidden_field :type_of_update, value: 'play_card' %>
     <% end %>
   <% end %>

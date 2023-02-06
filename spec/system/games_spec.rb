@@ -85,7 +85,17 @@ RSpec.describe "Games", type: :system do
         expect(page).to have_selector("##{card}_radio")
       end
 
-      expect(page.find_by_id("game_play_message").text).to eq(Translations.dig(:en, :playing, :opponent))
+      expect(page.find("#game_play_message").text).to eq(Translations.dig(:en, :playing, :opponent))
+
+      access_page_as("barbara")
+      expect(page.find("#game_play_message").text).to eq(Translations.dig(:en, :playing, :you))
+
+      page.find("#6h_radio").click
+      page.find("#play_btn").click
+      expect(page.find("#game_play_message").text).to eq(Translations.dig(:en, :playing, :opponent))
+
+      access_page_as("cindy")
+      expect(page.find("#game_play_message").text).to eq(Translations.dig(:en, :playing, :you))
     end
   end
 end
