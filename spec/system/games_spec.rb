@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+t = Proc.new do |key, data| Translations.en(key, data) end
+
 def access_page_as(player_name)
   Capybara.reset_sessions!
   page.driver.browser.set_cookie("player_name=#{player_name}")
@@ -85,21 +87,21 @@ RSpec.describe "Games", type: :system do
         expect(page).to have_selector("##{card}_radio")
       end
 
-      expect(page.find("#game_play_message").text).to eq(Translations.dig(:en, :playing, :opponent))
+      expect(page.find("#game_play_message").text).to eq("Waiting for opponent to play a card")
 
       access_page_as("barbara")
-      expect(page.find("#game_play_message").text).to eq(Translations.dig(:en, :playing, :you))
+      expect(page.find("#game_play_message").text).to eq("Select a card to play")
 
       page.find("#6h_radio").click
       page.find("#play_btn").click
-      expect(page.find("#game_play_message").text).to eq(Translations.dig(:en, :playing, :opponent))
+      expect(page.find("#game_play_message").text).to eq(t.call("playing.opponent"))
 
       access_page_as("cindy")
-      expect(page.find("#game_play_message").text).to eq(Translations.dig(:en, :playing, :you))
+      expect(page.find("#game_play_message").text).to eq(t.call("playing.you"))
 
       page.find("#9c_radio").click
       page.find("#play_btn").click
-      expect(page.find("#game_play_message").text).to eq(Translations.dig(:en, :playing, :opponent))
+      expect(page.find("#game_play_message").text).to eq(t.call("playing.opponent"))
       expect(page.find("#game_play_alert").text).to eq("You scored 2 points!")
       expect(page.find("#your_score").text).to eq("Your score: 2")
       expect(page.find("#opponents_score").text).to eq("Opponent's score: 0")

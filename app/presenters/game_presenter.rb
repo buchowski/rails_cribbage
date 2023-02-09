@@ -2,6 +2,7 @@ class GamePresenter < SimpleDelegator
   attr_reader :player_name
 
   def initialize(game_model, player_name, your_previous_score, opponents_previous_score)
+    @t = Proc.new do |key, data| Translations.en(key, data) end
     @game_model = game_model
     @game = Game.adapt_to_cribbage_game(game_model)
     @player_name = player_name
@@ -17,7 +18,7 @@ class GamePresenter < SimpleDelegator
 
     case @game.fsm.aasm.current_state
     when :playing
-        is_your_turn ? Translations.dig(:en, :playing, :you) : Translations.dig(:en, :playing, :opponent)
+        is_your_turn ? @t.call("playing.you") : @t.call("playing.opponent")
     end
   end
 
@@ -26,8 +27,8 @@ class GamePresenter < SimpleDelegator
     points_you_scored = player.total_score - @your_previous_score
     points_opponent_scored = opponent.total_score - @opponents_previous_score
 
-    alert += "You scored #{points_you_scored} points! " if points_you_scored > 0
-    alert += "Your opponent scored #{points_opponent_scored} points." if points_opponent_scored > 0
+    alert += @t.call("you.scored", {points: points_you_scored}) if points_you_scored > 0
+    alert += @t.call("opponent.scored", {points: points_opponent_scored}) if points_opponent_scored > 0
 
     alert
   end
