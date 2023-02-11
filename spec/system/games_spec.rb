@@ -10,6 +10,15 @@ def access_page_as(player_name)
   page.click_on("open", :match => :first)
 end
 
+def play_card_as(player_name, card_id)
+  access_page_as(player_name)
+  expect(page.find("#game_play_message").text).to eq("Select a card to play")
+
+  page.find("##{card_id}_radio").click
+  page.find("#play_btn").click
+  expect(page.find("#game_play_message").text).to eq("Waiting for opponent to play a card")
+end
+
 RSpec.describe "Games", type: :system do
   before do
     driven_by(:rack_test)
@@ -89,21 +98,18 @@ RSpec.describe "Games", type: :system do
 
       expect(page.find("#game_play_message").text).to eq("Waiting for opponent to play a card")
 
-      access_page_as("barbara")
-      expect(page.find("#game_play_message").text).to eq("Select a card to play")
+      play_card_as("barbara", "6h")
+      play_card_as("cindy", "9c")
 
-      page.find("#6h_radio").click
-      page.find("#play_btn").click
-      expect(page.find("#game_play_message").text).to eq(t.call("playing.opponent"))
-
-      access_page_as("cindy")
-      expect(page.find("#game_play_message").text).to eq(t.call("playing.you"))
-
-      page.find("#9c_radio").click
-      page.find("#play_btn").click
-      expect(page.find("#game_play_message").text).to eq(t.call("playing.opponent"))
       expect(page.find("#game_play_alert").text).to eq("You scored 2 points!")
       expect(page.find("#your_score").text).to eq("Your score: 2")
+      expect(page.find("#opponents_score").text).to eq("Opponent's score: 0")
+
+      play_card_as("barbara", "jh")
+      play_card_as("cindy", "6s")
+
+      expect(page.find("#game_play_alert").text).to eq("You scored 2 points!")
+      expect(page.find("#your_score").text).to eq("Your score: 4")
       expect(page.find("#opponents_score").text).to eq("Opponent's score: 0")
     end
   end
