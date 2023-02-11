@@ -1,5 +1,5 @@
-<% flash.each do |name, msg| %>
+<% if !flash[:error_msg].nil? %>
   <div class="error_msg">
-    <%= msg %>
+    <%= flash[:error_msg] %>
   </div>
 <% end %>
