@@ -8,9 +8,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    your_previous_score = params[:your_score]
-    opponents_previous_score = params[:opponents_score]
-    @game = GamePresenter.new(@game_model, @player_name, your_previous_score, opponents_previous_score)
+    @game = GamePresenter.new(@game_model, @player_name, flash[:your_score], flash[:opponents_score])
   end
 
   def create
@@ -29,6 +27,8 @@ class GamesController < ApplicationController
 
   def update
     type_of_update = params[:type_of_update]
+    your_score = @player && @player.total_score
+    opponents_score = opponent && opponent.total_score
 
     begin
       if type_of_update == "join_game"
@@ -59,7 +59,7 @@ class GamesController < ApplicationController
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
     ensure
-      redirect_to game_path
+      redirect_to game_path, flash: { your_score: your_score, opponents_score: opponents_score }
     end
   end
 
@@ -136,6 +136,12 @@ class GamesController < ApplicationController
 
     @player = @game.players[0] if is_player_one
     @player = @game.players[1] if is_player_two
+  end
+
+  def opponent
+    return nil if !@player
+
+    @game.players.find{ |p| p.id != @player.id }
   end
 
   def join_game()

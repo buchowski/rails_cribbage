@@ -68,8 +68,6 @@
       </div>
       <%= form.submit "Play card", id: "play_btn" %>
       <%= form.hidden_field :type_of_update, value: 'play_card' %>
-      <%= form.hidden_field :your_score, value: @game.player_total_score %>
-      <%= form.hidden_field :opponents_score, value: @game.opponent_total_score %>
     <% end %>
   <% end %>
 </div>
