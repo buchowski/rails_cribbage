@@ -14,7 +14,7 @@
  *= require_self
  */
 
-.error_msg {
+#error_msg {
   background-color: red;
 }
 
