@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   before_action :get_game, except: [:index, :create, :cards]
-  before_action :get_player, except: [:index, :cards ]
+  before_action :get_player_name
   before_action :require_player_name, except: [:index, :show, :cards]
 
   def index
@@ -27,7 +27,7 @@ class GamesController < ApplicationController
 
   def update
     type_of_update = params[:type_of_update]
-    your_score = @player && @player.total_score
+    your_score = player && player.total_score
     opponents_score = opponent && opponent.total_score
 
     begin
@@ -126,22 +126,20 @@ class GamesController < ApplicationController
     end
   end
 
-  def get_player
-    get_player_name()
-
-    return if @game_model.nil?
+  def player
+    return if @game_model.nil? || @player_name.nil?
 
     is_player_one = @player_name == @game_model.player_one_id
     is_player_two = @player_name == @game_model.player_two_id
 
-    @player = @game.players[0] if is_player_one
-    @player = @game.players[1] if is_player_two
+    return @game.players[0] if is_player_one
+    return @game.players[1] if is_player_two
   end
 
   def opponent
-    return nil if !@player
+    return nil if !player
 
-    @game.players.find{ |p| p.id != @player.id }
+    @game.players.find{ |p| p.id != player.id }
   end
 
   def join_game()
@@ -174,7 +172,7 @@ class GamesController < ApplicationController
 
   def discard()
     cards = params[:cards] || []
-    cards_in_hand = @player.hand.keys
+    cards_in_hand = player.hand.keys
     num_of_cards_to_discard = cards_in_hand.size - 4
 
     if num_of_cards_to_discard <= 0
@@ -189,7 +187,7 @@ class GamesController < ApplicationController
       throw "You may only discard two cards"
     end
 
-    cards.each { |card_id| @game.discard(@player, card_id) }
+    cards.each { |card_id| @game.discard(player, card_id) }
 
     # automatically flip the top card. no need for manual user action
     @game.flip_top_card if @game.fsm.flipping_top_card?
@@ -202,7 +200,7 @@ class GamesController < ApplicationController
       throw "you must select a card to play"
     end
 
-    @game.play_card(@player, card_id)
+    @game.play_card(player, card_id)
   end
 
   def score_hands_and_crib()
