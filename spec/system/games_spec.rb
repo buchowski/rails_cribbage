@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-t = Proc.new do |key, data| Translations.en(key, data) end
 
 def access_page_as(player_name)
   Capybara.reset_sessions!
@@ -11,12 +10,21 @@ def access_page_as(player_name)
 end
 
 def play_card_as(player_name, card_id)
+  t = Proc.new do |key, data| Translations.en(key, data) end
   access_page_as(player_name)
   expect(page.find("#game_play_message").text).to eq("Select a card to play")
+  expect(page.find("#game_play_message").text).to eq(t.call("playing.you"))
 
   page.find("##{card_id}_radio").click
   page.find("#play_btn").click
   expect(page.find("#game_play_message").text).to eq("Waiting for opponent to play a card")
+  expect(page.find("#game_play_message").text).to eq(t.call("playing.opponent"))
+end
+
+def expect_scores_to_be(your_score, opponents_score, score_msg)
+  expect(page.find("#your_score").text).to eq("Your score: #{your_score}")
+  expect(page.find("#opponents_score").text).to eq("Opponent's score: #{opponents_score}")
+  expect(page.find("#game_play_alert").text).to eq(score_msg)
 end
 
 RSpec.describe "Games", type: :system do
@@ -101,16 +109,12 @@ RSpec.describe "Games", type: :system do
       play_card_as("barbara", "6h")
       play_card_as("cindy", "9c")
 
-      expect(page.find("#game_play_alert").text).to eq("You scored 2 points!")
-      expect(page.find("#your_score").text).to eq("Your score: 2")
-      expect(page.find("#opponents_score").text).to eq("Opponent's score: 0")
+      expect_scores_to_be(2, 0, "You scored 2 points!")
 
       play_card_as("barbara", "jh")
       play_card_as("cindy", "6s")
 
-      expect(page.find("#game_play_alert").text).to eq("You scored 2 points!")
-      expect(page.find("#your_score").text).to eq("Your score: 4")
-      expect(page.find("#opponents_score").text).to eq("Opponent's score: 0")
+      expect_scores_to_be(4, 0, "You scored 2 points!")
     end
   end
 end
