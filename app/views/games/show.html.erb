@@ -33,7 +33,7 @@
 
 <div id="pile_cards_section">
   <h3>Pile cards:</h3>
-  <h4>Pile score: <%= @game.pile_score %></h4>
+  <h4 id="pile_score">Pile score: <%= @game.pile_score %></h4>
   <div class="row">
     <% @game.pile_cards.each do |card| %>
       <div class="card">

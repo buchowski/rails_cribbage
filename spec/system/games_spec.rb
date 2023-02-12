@@ -27,6 +27,10 @@ def expect_scores_to_be(your_score, opponents_score, score_msg)
   expect(page.find("#game_play_alert").text).to eq(score_msg)
 end
 
+def expect_pile_score_to_be(pile_score)
+  expect(page.find("#pile_score").text).to eq("Pile score: #{pile_score}")
+end
+
 RSpec.describe "Games", type: :system do
   before do
     driven_by(:rack_test)
@@ -107,14 +111,24 @@ RSpec.describe "Games", type: :system do
       expect(page.find("#game_play_message").text).to eq("Waiting for opponent to play a card")
 
       play_card_as("barbara", "6h")
+      expect_pile_score_to_be(6)
       play_card_as("cindy", "9c")
-
+      expect_pile_score_to_be(15)
       expect_scores_to_be(2, 0, "You scored 2 points!")
 
       play_card_as("barbara", "jh")
+      expect_pile_score_to_be(25)
       play_card_as("cindy", "6s")
-
+      expect_pile_score_to_be(0)
       expect_scores_to_be(4, 0, "You scored 2 points!")
+
+      play_card_as("barbara", "5c")
+      expect_pile_score_to_be(5)
+      play_card_as("cindy", "6c")
+      expect_pile_score_to_be(11)
+      # play_card_as("barbara", "4h")
+      # expect_scores_to_be(4, 2, "You scored 2 points!")
+
     end
   end
 end
