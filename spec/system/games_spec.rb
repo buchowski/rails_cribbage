@@ -143,6 +143,7 @@ RSpec.describe "Games", type: :system do
 
       play_card_as("barbara", "4h") #15 & 3-card run (4h, 5c, 6c) gives us 5 points
       expect_scores_to_be(5, 4, "You scored 5 points! You won the game!")
+      expect(page.find("#game_play_message").text).to eq("Game over")
     end
   end
 end

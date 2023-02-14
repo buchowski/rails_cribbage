@@ -19,6 +19,8 @@ class GamePresenter < SimpleDelegator
     case @game.fsm.aasm.current_state
     when :playing
         is_your_turn ? @t.call("playing.you") : @t.call("playing.opponent")
+    when :game_over
+        @t.call("game.over")
     end
   end
 
@@ -29,6 +31,8 @@ class GamePresenter < SimpleDelegator
 
     alert += @t.call("you.scored", {points: points_you_scored}) if points_you_scored > 0
     alert += @t.call("opponent.scored", {points: points_opponent_scored}) if points_opponent_scored > 0
+    alert += @t.call("you.won") if you_won()
+    alert += @t.call("opponent.won") if opponent_won()
 
     alert
   end
@@ -77,6 +81,23 @@ class GamePresenter < SimpleDelegator
   end
 
   private
+
+  def is_game_over
+    @game.fsm.aasm.current_state == :game_over
+  end
+
+  def is_the_winner(player_id)
+    winner_id = @game.winner && @game.winner.id
+    is_game_over && winner_id == player_id
+  end
+
+  def you_won
+    is_the_winner(player.id)
+  end
+
+  def opponent_won
+    is_the_winner(opponent.id)
+  end
 
   def get_unplayed_cards(cards)
     unplayed = []

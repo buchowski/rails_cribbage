@@ -11,6 +11,12 @@ module Translations
       "You scored #{data[:points]} points!"
     when "opponent.scored"
       "Your opponent scored #{data[:points]} points."
+    when "you.won"
+      "You won the game!"
+    when "opponent.won"
+      "Your opponent won the game."
+    when "game.over"
+      "Game over"
     else
       # todo only throw in dev env
       throw "no translation key #{key}"

@@ -45,6 +45,12 @@ class Game < ApplicationRecord
     }
   end
 
+  def self.get_winner(winner_id, player_one, player_two)
+    return nil if winner_id.nil? || winner_id.empty?
+
+    return winner_id == player_one.id ? player_one : player_two
+  end
+
   def self.adapt_to_cribbage_game(game_model)
     game = CribbageGame::Game.new
     player_one = game.players[0]
@@ -61,8 +67,7 @@ class Game < ApplicationRecord
     game.dealer = is_player_one_dealer ? player_one : player_two
     is_player_one_turn = game_model.whose_turn_id == game_model.player_one_id
     game.whose_turn = is_player_one_turn ? player_one : player_two
-    # is_player_one_winner = game_model.winner_id == game_model.player_one_id
-    # game.winner = is_player_one_winner ? player_one : player_two
+    game.winner = self.get_winner(game_model.winner_id, player_one, player_two)
 
     game.fsm.aasm.current_state = game_model.current_fsm_state.to_sym
     game.round = game_model.round
