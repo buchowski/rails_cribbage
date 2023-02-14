@@ -17,6 +17,11 @@ def play_card_as(player_name, card_id)
 
   page.find("##{card_id}_radio").click
   page.find("#play_btn").click
+  expect(page.has_css?("#error_msg")).to be false
+end
+
+def should_be_opponents_turn
+  t = Proc.new do |key, data| Translations.en(key, data) end
   expect(page.find("#game_play_message").text).to eq("Waiting for opponent to play a card")
   expect(page.find("#game_play_message").text).to eq(t.call("playing.opponent"))
 end
@@ -111,24 +116,33 @@ RSpec.describe "Games", type: :system do
       expect(page.find("#game_play_message").text).to eq("Waiting for opponent to play a card")
 
       play_card_as("barbara", "6h")
+      should_be_opponents_turn()
       expect_pile_score_to_be(6)
+
       play_card_as("cindy", "9c")
+      should_be_opponents_turn()
       expect_pile_score_to_be(15)
       expect_scores_to_be(2, 0, "You scored 2 points!")
 
       play_card_as("barbara", "jh")
+      should_be_opponents_turn()
       expect_pile_score_to_be(25)
-      play_card_as("cindy", "6s")
+
+      play_card_as("cindy", "6s") #31
+      should_be_opponents_turn()
       expect_pile_score_to_be(0)
       expect_scores_to_be(4, 0, "You scored 2 points!")
 
       play_card_as("barbara", "5c")
+      should_be_opponents_turn()
       expect_pile_score_to_be(5)
-      play_card_as("cindy", "6c")
-      expect_pile_score_to_be(11)
-      # play_card_as("barbara", "4h")
-      # expect_scores_to_be(4, 2, "You scored 2 points!")
 
+      play_card_as("cindy", "6c")
+      should_be_opponents_turn()
+      expect_pile_score_to_be(11)
+
+      play_card_as("barbara", "4h") #15 & 3-card run (4h, 5c, 6c) gives us 5 points
+      expect_scores_to_be(5, 4, "You scored 5 points! You won the game!")
     end
   end
 end
