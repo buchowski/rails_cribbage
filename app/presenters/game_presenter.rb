@@ -8,8 +8,8 @@ class GamePresenter < SimpleDelegator
     @player_name = player_name
     # the previous scores are what the user last saw in the UI.
     # we diff against these to determine if we should alert the user that points were scored
-    @your_previous_score = your_previous_score.nil? ? 0 : your_previous_score
-    @opponents_previous_score = opponents_previous_score.nil? ? 0 : opponents_previous_score
+    @your_previous_score = your_previous_score
+    @opponents_previous_score = opponents_previous_score
     super(@game_model)
   end
 
@@ -25,16 +25,22 @@ class GamePresenter < SimpleDelegator
   end
 
   def game_play_alert
-    alert = ""
-    points_you_scored = player.total_score - @your_previous_score
-    points_opponent_scored = opponent.total_score - @opponents_previous_score
+    alerts = []
 
-    alert += @t.call("you.scored", {points: points_you_scored}) if points_you_scored > 0
-    alert += @t.call("opponent.scored", {points: points_opponent_scored}) if points_opponent_scored > 0
-    alert += @t.call("you.won") if you_won()
-    alert += @t.call("opponent.won") if opponent_won()
+    unless @your_previous_score.nil?
+      points_you_scored = player.total_score - @your_previous_score
+      alerts << @t.call("you.scored", {points: points_you_scored}) if points_you_scored > 0
+    end
 
-    alert
+    unless @opponents_previous_score.nil?
+      points_opponent_scored = opponent.total_score - @opponents_previous_score
+      alerts << @t.call("opponent.scored", {points: points_opponent_scored}) if points_opponent_scored > 0
+    end
+
+    alerts << @t.call("you.won") if you_won()
+    alerts << @t.call("opponent.won") if opponent_won()
+
+    alerts.join(" ")
   end
 
   def player
