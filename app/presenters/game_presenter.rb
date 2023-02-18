@@ -17,10 +17,15 @@ class GamePresenter < SimpleDelegator
     is_your_turn = @game.whose_turn.id == @player_name
 
     case @game.fsm.aasm.current_state
+    when :discarding
+      hand_count = player.hand.values.size
+      left_to_discard_count = hand_count - 4
+      are_you_done_discarding = left_to_discard_count <= 0
+      are_you_done_discarding ? @t.call("discarding.opponent") : @t.call("discarding.you", {card_count: left_to_discard_count})
     when :playing
-        is_your_turn ? @t.call("playing.you") : @t.call("playing.opponent")
+      is_your_turn ? @t.call("playing.you") : @t.call("playing.opponent")
     when :game_over
-        @t.call("game.over")
+      @t.call("game.over")
     end
   end
 

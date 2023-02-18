@@ -94,15 +94,18 @@ RSpec.describe "Games", type: :system do
 
     it "should let the players play until there's a winner" do
       # barbara selects two cards and then discards
+      expect(page.find("#game_play_message").text).to eq("Select two cards to discard")
       page.find("#3h_checkbox").click
       page.find("#2h_checkbox").click
       page.find("#discard_btn").click
+      expect(page.find("#game_play_message").text).to eq("Waiting for opponent to discard")
 
       barbaras_cards.without("3h", "2h").each do |card|
         expect(page).to have_selector("##{card}_checkbox")
       end
 
       access_page_as("cindy")
+      expect(page.find("#game_play_message").text).to eq("Select one card to discard")
 
       # cindy has already discarded one card (games.yml) so she discards one additional card
       page.find("#as_checkbox").click

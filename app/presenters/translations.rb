@@ -3,6 +3,10 @@ module Translations
 
   def en(key, data)
     case key
+    when "discarding.you"
+      data[:card_count] == 1 ? "Select one card to discard" : "Select two cards to discard"
+    when "discarding.opponent"
+      "Waiting for opponent to discard"
     when "playing.you"
       "Select a card to play"
     when "playing.opponent"
