@@ -48,6 +48,14 @@ class GamePresenter < SimpleDelegator
     alerts.join(" ")
   end
 
+  def you_have_n_points
+    @t.call("you_have_n_points", {points: player.total_score})
+  end
+
+  def opponent_has_n_points
+    @t.call("opponent_has_n_points", {points: opponent.total_score})
+  end
+
   def player
     is_player_one = @player_name == @game_model.player_one_id
     is_player_two = @player_name == @game_model.player_two_id

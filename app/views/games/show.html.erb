@@ -7,24 +7,30 @@
   </div>
 <% end %>
 
-<h3 id="game_play_message">
+<div id="game_play_message" class="notification is-primary is-light">
   <%= @game.game_play_message %>
-</h3>
+</div>
 
-<h3 id="game_play_alert">
+<div id="game_play_alert" class="notification is-secondary">
   <%= @game.game_play_alert %>
-</h3>
+</div>
+
+<div><%= @game.you_have_n_points %></div>
+<progress class="progress is-success" value="60" max="100">60%</progress>
+
+<div><%= @game.opponent_has_n_points %></div>
+<progress class="progress is-danger" value="90" max="100">90%</progress>
 
 <div class="row">
-  <%= button_to 'start', game_path(@game), { method: :patch, params: {type_of_update: 'start_game' } } %>
-  <%= button_to 'join', game_path(@game), { method: :patch, params: {type_of_update: 'join_game' } } %>
-  <%= button_to 'cut_for_deal', game_path(@game), { method: :patch, params: {type_of_update: 'cut_for_deal' } } %>
-  <%= button_to 'deal', game_path(@game), { method: :patch, params: {type_of_update: 'deal' } } %>
+  <%= render partial: "update_btn", locals: {label: 'Start game', type_of_update: 'start_game' } %>
+  <%= render partial: "update_btn", locals: {label: 'Join game', type_of_update: 'join_game' } %>
+  <%= render partial: "update_btn", locals: {label: 'Cut for deal', type_of_update: 'cut_for_deal' } %>
+  <%= render partial: "update_btn", locals: {label: 'Deal cards', type_of_update: 'deal' } %>
 </div>
 
 <div id="cut_card_section">
   <h3>Cut card:</h3>
-  <div class="card">
+  <div class="box">
     <% if !@game.cut_card.nil? %>
       <%= render partial: "cards/card_svg", locals: { card: @game.cut_card } %>
     <% end %>
@@ -54,7 +60,7 @@
           <%= render partial: 'cards/card_checkbox', locals: { card: card } %>
         <% end %>
       </div>
-      <%= form.submit "Discard", id: "discard_btn" %>
+      <%= form.submit "Discard", id: "discard_btn", class: "button is-primary" %>
       <%= form.hidden_field :type_of_update, value: 'discard' %>
     <% end %>
   <% end %>
@@ -66,7 +72,7 @@
           <%= render partial: 'cards/card_radio', locals: { card: card } %>
         <% end %>
       </div>
-      <%= form.submit "Play card", id: "play_btn" %>
+      <%= form.submit "Play card", id: "play_btn", class: "button is-primary" %>
       <%= form.hidden_field :type_of_update, value: 'play_card' %>
     <% end %>
   <% end %>
