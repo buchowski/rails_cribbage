@@ -7,13 +7,17 @@
   </div>
 <% end %>
 
-<div id="game_play_message" class="notification is-primary is-light">
-  <%= @game.game_play_message %>
-</div>
+<% if !@game.game_play_message.blank? %>
+  <div id="game_play_message" class="notification is-primary is-light">
+    <%= @game.game_play_message %>
+  </div>
+<% end %>
 
-<div id="game_play_alert" class="notification is-secondary">
-  <%= @game.game_play_alert %>
-</div>
+<% if !@game.game_play_alert.blank? %>
+  <div id="game_play_alert" class="notification is-secondary">
+    <%= @game.game_play_alert %>
+  </div>
+<% end %>
 
 <div><%= @game.you_have_n_points %></div>
 <progress class="progress is-success" value="60" max="100">60%</progress>
