@@ -65,11 +65,13 @@ class GamePresenter < SimpleDelegator
   end
 
   def opponent_name
-    opponent.nil? ? "" : opponent.id.capitalize
+    name = opponent && opponent.id || ""
+    name.capitalize
   end
 
   def player_name
-    player.nil? ? "" : player.id.capitalize
+    name = player && player.id || ""
+    name.capitalize
   end
 
   def player_cards
