@@ -83,9 +83,9 @@ RSpec.describe "Games", type: :system do
         expect(page).not_to have_selector("##{card}_radio")
       end
 
-      cindys_hidden_cards = page.find_all("#opponent_cards_section .card")
-      crib_cards = page.find_all("#crib_cards_section .card")
-      cut_card = page.find_all("#cut_cards_section .card")
+      cindys_hidden_cards = page.find_all("#opponent_cards_section [data-role='card']")
+      crib_cards = page.find_all("#crib_cards_section [data-role='card']")
+      cut_card = page.find_all("#cut_cards_section [data-role='card']")
 
       expect(cindys_hidden_cards.size).to eq(5)
       expect(crib_cards.size).to eq(1)

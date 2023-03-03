@@ -44,7 +44,7 @@
   <h4 id="pile_score">Pile score: <%= @game.pile_score %></h4>
   <div class="row">
     <% @game.pile_cards.each do |card| %>
-      <div>
+      <div data-role="card">
         <%= render partial: "cards/card_svg", locals: { card: card } %>
       </div>
     <% end %>
@@ -85,7 +85,7 @@
   <h4 id="opponents_score">Opponent's score: <%= @game.opponent_total_score %></h4>
   <div class="row">
     <% @game.opponent_cards.each do |card| %>
-      <div>
+      <div data-role="card">
         <%= render partial: "cards/card_anonymous" %>
       </div>
     <% end %>
@@ -96,7 +96,7 @@
   <h3>Crib cards:</h3>
   <div class="row">
     <% @game.crib_cards.each do |card| %>
-      <div>
+      <div data-role="card">
         <%= render partial: "cards/card_anonymous" %>
       </div>
     <% end %>
