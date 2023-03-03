@@ -20,15 +20,15 @@ def play_card_as(player_name, card_id)
   expect(page.has_css?("#error_msg")).to be false
 end
 
-def should_be_opponents_turn
+def should_be_opponents_turn(opponent_name)
   t = Proc.new do |key, data| Translations.en(key, data) end
-  expect(page.find("#game_play_message").text).to eq("Waiting for opponent to play a card")
-  expect(page.find("#game_play_message").text).to eq(t.call("playing.opponent"))
+  expect(page.find("#game_play_message").text).to eq("Waiting for #{opponent_name} to play a card")
+  expect(page.find("#game_play_message").text).to eq(t.call("playing.opponent", {opponent_name: opponent_name}))
 end
 
-def expect_scores_to_be(your_score, opponents_score, score_msg)
-  expect(page.find("#your_score").text).to eq("Your score: #{your_score}")
-  expect(page.find("#opponents_score").text).to eq("Opponent's score: #{opponents_score}")
+def expect_scores_to_be(your_score, opponent_score, opponent_name, score_msg)
+  expect(page.find("#your_score").text).to eq("You have #{your_score} points")
+  expect(page.find("#opponent_score").text).to eq("#{opponent_name} has #{opponent_score} points")
   expect(page.find("#game_play_alert").text).to eq(score_msg)
 end
 
@@ -98,7 +98,7 @@ RSpec.describe "Games", type: :system do
       page.find("#3h_checkbox").click
       page.find("#2h_checkbox").click
       page.find("#discard_btn").click
-      expect(page.find("#game_play_message").text).to eq("Waiting for opponent to discard")
+      expect(page.find("#game_play_message").text).to eq("Waiting for Cindy to discard")
 
       barbaras_cards.without("3h", "2h").each do |card|
         expect(page).to have_selector("##{card}_checkbox")
@@ -116,41 +116,41 @@ RSpec.describe "Games", type: :system do
         expect(page).to have_selector("##{card}_radio")
       end
 
-      expect(page.find("#game_play_message").text).to eq("Waiting for opponent to play a card")
+      expect(page.find("#game_play_message").text).to eq("Waiting for Barbara to play a card")
 
       play_card_as("barbara", "6h")
-      should_be_opponents_turn()
+      should_be_opponents_turn("Cindy")
       expect_pile_score_to_be(6)
 
       play_card_as("cindy", "9c")
-      should_be_opponents_turn()
+      should_be_opponents_turn("Barbara")
       expect_pile_score_to_be(15)
-      expect_scores_to_be(2, 0, "You scored 2 points!")
+      expect_scores_to_be(2, 0, "Barbara", "You scored 2 points!")
 
       play_card_as("barbara", "jh")
-      should_be_opponents_turn()
+      should_be_opponents_turn("Cindy")
       expect_pile_score_to_be(25)
 
       play_card_as("cindy", "6s") #31
-      should_be_opponents_turn()
+      should_be_opponents_turn("Barbara")
       expect_pile_score_to_be(0)
-      expect_scores_to_be(4, 0, "You scored 2 points!")
+      expect_scores_to_be(4, 0, "Barbara", "You scored 2 points!")
 
       play_card_as("barbara", "5c")
-      should_be_opponents_turn()
+      should_be_opponents_turn("Cindy")
       expect_pile_score_to_be(5)
 
       play_card_as("cindy", "6c")
-      should_be_opponents_turn()
+      should_be_opponents_turn("Barbara")
       expect_pile_score_to_be(11)
 
       play_card_as("barbara", "4h") #15 & 3-card run (4h, 5c, 6c) gives us 5 points
-      expect_scores_to_be(5, 4, "You scored 5 points! You won the game!")
+      expect_scores_to_be(5, 4, "Cindy", "You scored 5 points! You won the game!")
       expect(page.find("#game_play_message").text).to eq("Game over")
 
       access_page_as("cindy")
       expect(page.find("#game_play_message").text).to eq("Game over")
-      expect(page.find("#game_play_alert").text).to eq("Your opponent won the game.")
+      expect(page.find("#game_play_alert").text).to eq("Barbara won the game.")
     end
   end
 end

@@ -21,9 +21,9 @@ class GamePresenter < SimpleDelegator
       hand_count = player.hand.values.size
       left_to_discard_count = hand_count - 4
       are_you_done_discarding = left_to_discard_count <= 0
-      are_you_done_discarding ? @t.call("discarding.opponent") : @t.call("discarding.you", {card_count: left_to_discard_count})
+      are_you_done_discarding ? @t.call("discarding.opponent", {opponent_name: opponent_name}) : @t.call("discarding.you", {card_count: left_to_discard_count})
     when :playing
-      is_your_turn ? @t.call("playing.you") : @t.call("playing.opponent")
+      is_your_turn ? @t.call("playing.you") : @t.call("playing.opponent", {opponent_name: opponent_name})
     when :game_over
       @t.call("game.over")
     end
@@ -43,18 +43,11 @@ class GamePresenter < SimpleDelegator
     end
 
     alerts << @t.call("you.won") if you_won()
-    alerts << @t.call("opponent.won") if opponent_won()
+    alerts << @t.call("opponent.won", {opponent_name: opponent_name}) if opponent_won()
 
     alerts.join(" ")
   end
 
-  def you_have_n_points
-    @t.call("you_have_n_points", {points: player.total_score})
-  end
-
-  def opponent_has_n_points
-    @t.call("opponent_has_n_points", {points: opponent.total_score})
-  end
 
   def player
     is_player_one = @player_name == @game_model.player_one_id
@@ -69,6 +62,14 @@ class GamePresenter < SimpleDelegator
 
     is_player_one = @player_name == @game_model.player_one_id
     is_player_one ? @game.players[1] : @game.players[0]
+  end
+
+  def opponent_name
+    opponent.nil? ? "" : opponent.id.capitalize
+  end
+
+  def player_name
+    player.nil? ? "" : player.id.capitalize
   end
 
   def player_cards
@@ -97,6 +98,15 @@ class GamePresenter < SimpleDelegator
 
   def should_show_discard_checkboxes
     @game.fsm.aasm.current_state == :discarding
+  end
+
+  def labels
+    return {
+      welcome: @t.call("welcome", {player_name: player_name}),
+      opponents_cards: @t.call("opponents.cards", {opponent_name: opponent_name}),
+      you_have_n_points: @t.call("you_have_n_points", {points: player.total_score}),
+      opponent_has_n_points: @t.call("opponent_has_n_points", {opponent_name: opponent_name, points: opponent.total_score})
+    }
   end
 
   private

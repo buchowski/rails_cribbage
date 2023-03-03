@@ -1,5 +1,4 @@
-<h1><%= "Game #{@game.id}" %></h1>
-<h2><%= "Player #{@game.player_name}" %></h2>
+<div class="is-size-1"><%= @game.labels[:welcome] %></div>
 
 <% @game.attributes.each do |att| %>
   <div>
@@ -19,10 +18,10 @@
   </div>
 <% end %>
 
-<div><%= @game.you_have_n_points %></div>
+<div id="your_score"><%= @game.labels[:you_have_n_points] %></div>
 <progress class="progress is-success" value="60" max="100">60%</progress>
 
-<div><%= @game.opponent_has_n_points %></div>
+<div id="opponent_score"><%= @game.labels[:opponent_has_n_points] %></div>
 <progress class="progress is-danger" value="90" max="100">90%</progress>
 
 <%= render partial: "update_btn", locals: {label: 'Start game', type_of_update: 'start_game' } %>
@@ -53,7 +52,6 @@
 
 <div>
   <h3>Your cards:</h3>
-  <h4 id="your_score">Your score: <%= @game.player_total_score %></h4>
 
   <% if @game.should_show_discard_checkboxes %>
     <%= form_with(url: game_path, method: "patch") do |form| %>
@@ -81,8 +79,7 @@
 </div>
 
 <div id="opponent_cards_section">
-  <h3>Opponent's cards:</h3>
-  <h4 id="opponents_score">Opponent's score: <%= @game.opponent_total_score %></h4>
+  <h3><%= @game.labels[:opponents_cards] %></h3>
   <div class="row">
     <% @game.opponent_cards.each do |card| %>
       <div data-role="card">
