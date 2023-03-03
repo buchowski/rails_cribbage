@@ -13,10 +13,10 @@
 <% end %>
 
 <div id="your_score"><%= @game.labels[:you_have_n_points] %></div>
-<progress class="progress is-success" value="60" max="100">60%</progress>
+<progress class="progress is-success" value="<%= @game.player_total_score_percent %>" max="100"><%= @game.player_total_score_percent %></progress>
 
 <div id="opponent_score"><%= @game.labels[:opponent_has_n_points] %></div>
-<progress class="progress is-danger" value="90" max="100">90%</progress>
+<progress class="progress is-danger" value="<%= @game.opponent_total_score_percent %>" max="100"><%= @game.opponent_total_score_percent %></progress>
 
 <%= render partial: "update_btn", locals: {label: 'Start game', type_of_update: 'start_game' } %>
 <%= render partial: "update_btn", locals: {label: 'Join game', type_of_update: 'join_game' } %>

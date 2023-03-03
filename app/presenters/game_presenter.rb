@@ -90,6 +90,14 @@ class GamePresenter < SimpleDelegator
     opponent.nil? ? 0 : opponent.total_score
   end
 
+  def player_total_score_percent
+    player_total_score.to_f / @game.points_to_win * 100
+  end
+
+  def opponent_total_score_percent
+    opponent_total_score.to_f / @game.points_to_win * 100
+  end
+
   def pile_score
     @game.pile_score
   end
