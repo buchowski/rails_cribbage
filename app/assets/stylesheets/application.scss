@@ -1,0 +1,25 @@
+@charset "utf-8";
+@import "../../../node_modules/bulma/bulma.sass";
+
+.row {
+  display: flex;
+}
+
+.svg_card {
+  width: 90px;
+  height: 135px;
+}
+
+input[type="radio"] {
+  border: none;
+}
+
+input[type="radio"] ~ label {
+  display: flex;
+  border: 5px solid white;
+  border-radius: 12px;
+}
+
+input[type="radio"]:checked ~ label {
+  border: 5px solid red;
+}
