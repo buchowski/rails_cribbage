@@ -5,6 +5,15 @@
   display: flex;
 }
 
+#game_play_message {
+  display: flex;
+  justify-content: space-between;
+
+  h1 {
+    margin: 0;
+  }
+}
+
 .svg_card {
   width: 90px;
   height: 135px;
