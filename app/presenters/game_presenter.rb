@@ -45,7 +45,7 @@ class GamePresenter < SimpleDelegator
 
     case @game.fsm.aasm.current_state
     when :discarding
-      hand_count = player.hand.values.size
+      hand_count = player && player.hand.values.size
       left_to_discard_count = hand_count - 4
       are_you_done_discarding = left_to_discard_count <= 0
       are_you_done_discarding ? @t.call("discarding.opponent", {opponent_name: opponent_name}) : @t.call("discarding.you", {card_count: left_to_discard_count})
@@ -60,12 +60,12 @@ class GamePresenter < SimpleDelegator
     alerts = []
 
     unless @your_previous_score.nil?
-      points_you_scored = player.total_score - @your_previous_score
+      points_you_scored = player_total_score - @your_previous_score
       alerts << @t.call("you.scored", {points: points_you_scored}) if points_you_scored > 0
     end
 
     unless @opponents_previous_score.nil?
-      points_opponent_scored = opponent.total_score - @opponents_previous_score
+      points_opponent_scored = opponent_total_score - @opponents_previous_score
       alerts << @t.call("opponent.scored", {points: points_opponent_scored}) if points_opponent_scored > 0
     end
 
@@ -158,8 +158,8 @@ class GamePresenter < SimpleDelegator
     return {
       welcome: @t.call("welcome", {player_name: player_name}),
       opponents_cards: @t.call("opponents.cards", {opponent_name: opponent_name}),
-      you_have_n_points: @t.call("you_have_n_points", {points: player.total_score}),
-      opponent_has_n_points: @t.call("opponent_has_n_points", {opponent_name: opponent_name, points: opponent.total_score}),
+      you_have_n_points: @t.call("you_have_n_points", {points: player_total_score}),
+      opponent_has_n_points: @t.call("opponent_has_n_points", {opponent_name: opponent_name, points: opponent_total_score}),
       your_crib: @t.call("your_crib"),
       opponents_crib: @t.call("opponents_crib", {opponent_name: opponent_name})
     }
@@ -177,11 +177,11 @@ class GamePresenter < SimpleDelegator
   end
 
   def you_won
-    is_the_winner(player.id)
+    player && is_the_winner(player.id)
   end
 
   def opponent_won
-    is_the_winner(opponent.id)
+    opponent && is_the_winner(opponent.id)
   end
 
   def get_unplayed_cards(cards)
