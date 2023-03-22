@@ -143,6 +143,17 @@ class GamePresenter < SimpleDelegator
     false
   end
 
+  def has_game_started
+    case @game.fsm.aasm.current_state
+    when :waiting_for_player_two
+      return false
+    when :waiting_to_start
+      return false
+    else
+      return true
+    end
+  end
+
   def labels
     return {
       welcome: @t.call("welcome", {player_name: player_name}),
