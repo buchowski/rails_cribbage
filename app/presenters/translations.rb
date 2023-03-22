@@ -33,6 +33,10 @@ module Translations
       points == 1 ? "You have one point" : "You have #{points} points"
     when "opponent_has_n_points"
       points == 1 ? "#{opponent_name} has one point" : "#{opponent_name} has #{points} points"
+    when "your_crib"
+      "This is your crib"
+    when "opponents_crib"
+      "This is #{opponent_name}'s crib"
     else
       # todo only throw in dev env
       throw "no translation key #{key}"

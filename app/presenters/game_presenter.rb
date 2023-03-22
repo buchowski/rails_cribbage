@@ -48,7 +48,6 @@ class GamePresenter < SimpleDelegator
     alerts.join(" ")
   end
 
-
   def player
     is_player_one = @player_name == @game_model.player_one_id
     is_player_two = @player_name == @game_model.player_two_id
@@ -110,12 +109,21 @@ class GamePresenter < SimpleDelegator
     @game.fsm.aasm.current_state == :discarding
   end
 
+  def are_you_dealer
+    if player && @game && @game.dealer
+      return player.id == @game.dealer.id
+    end
+    false
+  end
+
   def labels
     return {
       welcome: @t.call("welcome", {player_name: player_name}),
       opponents_cards: @t.call("opponents.cards", {opponent_name: opponent_name}),
       you_have_n_points: @t.call("you_have_n_points", {points: player.total_score}),
-      opponent_has_n_points: @t.call("opponent_has_n_points", {opponent_name: opponent_name, points: opponent.total_score})
+      opponent_has_n_points: @t.call("opponent_has_n_points", {opponent_name: opponent_name, points: opponent.total_score}),
+      your_crib: @t.call("your_crib"),
+      opponents_crib: @t.call("opponents_crib", {opponent_name: opponent_name})
     }
   end
 
