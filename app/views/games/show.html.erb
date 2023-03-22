@@ -19,10 +19,9 @@
 <div id="opponent_score"><%= @game.labels[:opponent_has_n_points] %></div>
 <progress class="progress is-danger" value="<%= @game.opponent_total_score_percent %>" max="100"><%= @game.opponent_total_score_percent %></progress>
 
-<%= render partial: "update_btn", locals: {label: 'Start game', type_of_update: 'start_game' } %>
-<%= render partial: "update_btn", locals: {label: 'Join game', type_of_update: 'join_game' } %>
-<%= render partial: "update_btn", locals: {label: 'Cut for deal', type_of_update: 'cut_for_deal' } %>
-<%= render partial: "update_btn", locals: {label: 'Deal cards', type_of_update: 'deal' } %>
+<% if @game.update_btn_content[:is_show_update_btn] %>
+  <%= render partial: "update_btn", locals: {label: @game.update_btn_content[:label], type_of_update: @game.update_btn_content[:type_of_update]} %>
+<% end %>
 
 <div id="cut_card_section">
   <h3>Cut card:</h3>

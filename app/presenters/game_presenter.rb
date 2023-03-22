@@ -13,6 +13,33 @@ class GamePresenter < SimpleDelegator
     super(@game_model)
   end
 
+  def update_btn_content
+    is_show_update_btn = true
+
+    case @game.fsm.aasm.current_state
+    when :cutting_for_deal
+      label = "Cut for deal"
+      type_of_update = "cut_for_deal"
+    when :dealing
+      label = "Deal cards"
+      type_of_update = "deal"
+    when :waiting_for_player_two
+      label = "Join game"
+      type_of_update = "join_game"
+    when :waiting_to_start
+      label = "Start game"
+      type_of_update = "start_game"
+    else
+      is_show_update_btn = false
+    end
+
+    return {
+      is_show_update_btn: is_show_update_btn,
+      label: label,
+      type_of_update: type_of_update
+    }
+  end
+
   def game_play_message
     is_your_turn = @game.whose_turn.id == @player_name
 
