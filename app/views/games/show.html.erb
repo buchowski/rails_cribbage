@@ -3,7 +3,9 @@
 <% if !@game.game_play_message.blank? %>
   <div id="game_play_message" class="notification is-primary is-light">
     <h1 class="title"><%= @game.game_play_message %></h1>
-    <%= button_to "Refresh", game_path(@game), { method: :get, class: 'button is-primary' } %>
+    <% if @game.show_refresh_btn %>
+      <%= button_to "Refresh", game_path(@game), { method: :get, class: 'button is-primary' } %>
+    <% end %>
   </div>
 <% end %>
 

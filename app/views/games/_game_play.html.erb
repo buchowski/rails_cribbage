@@ -30,7 +30,7 @@
 <div>
   <h3>Your cards:</h3>
 
-  <% if @game.should_show_discard_checkboxes %>
+  <% if @game.show_discard_checkboxes %>
     <%= form_with(url: game_path, method: "patch") do |form| %>
       <div class="row">
         <% @game.player_cards.each do |card| %>
@@ -42,7 +42,7 @@
     <% end %>
   <% end %>
 
-  <% if @game.should_show_play_card_radios %>
+  <% if @game.show_play_card_radios %>
     <%= form_with(url: game_path, method: "patch") do |form| %>
       <div class="row">
         <% @game.player_cards.each do |card| %>
