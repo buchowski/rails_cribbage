@@ -16,7 +16,7 @@ class GamePresenter < SimpleDelegator
   def update_btn_content
     is_show_update_btn = true
 
-    case @game.fsm.aasm.current_state
+    case current_state
     when :cutting_for_deal
       label = "Cut for deal"
       type_of_update = "cut_for_deal"
@@ -41,9 +41,7 @@ class GamePresenter < SimpleDelegator
   end
 
   def game_play_message
-    is_your_turn = @game.whose_turn.id == @player_name
-
-    case @game.fsm.aasm.current_state
+    case current_state
     when :discarding
       hand_count = player && player.hand.values.size
       left_to_discard_count = hand_count - 4
@@ -129,15 +127,15 @@ class GamePresenter < SimpleDelegator
   end
 
   def show_play_card_radios
-    @game.fsm.aasm.current_state == :playing
+    current_state == :playing
   end
 
   def show_discard_checkboxes
-    @game.fsm.aasm.current_state == :discarding
+    current_state == :discarding
   end
 
   def show_refresh_btn
-    false
+    !is_your_turn && current_state == :playing
   end
 
   def are_you_dealer
@@ -148,7 +146,7 @@ class GamePresenter < SimpleDelegator
   end
 
   def has_game_started
-    case @game.fsm.aasm.current_state
+    case current_state
     when :waiting_for_player_two
       return false
     when :waiting_to_start
@@ -172,12 +170,20 @@ class GamePresenter < SimpleDelegator
   private
 
   def is_game_over
-    @game.fsm.aasm.current_state == :game_over
+    current_state == :game_over
+  end
+
+  def current_state
+    @game.fsm.aasm.current_state
   end
 
   def is_the_winner(player_id)
     winner_id = @game.winner && @game.winner.id
     is_game_over && winner_id == player_id
+  end
+
+  def is_your_turn
+    @game.whose_turn.id == @player_name
   end
 
   def you_won
