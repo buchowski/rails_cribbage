@@ -5,13 +5,13 @@
   display: flex;
 }
 
-#game_play_message {
+#game_play_message_container {
   display: flex;
   justify-content: space-between;
+}
 
-  h1 {
-    margin: 0;
-  }
+#game_play_message {
+  margin: 0;
 }
 
 .svg_card {

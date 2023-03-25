@@ -14,6 +14,7 @@ def play_card_as(player_name, card_id)
   access_page_as(player_name)
   expect(page.find("#game_play_message").text).to eq("Select a card to play")
   expect(page.find("#game_play_message").text).to eq(t.call("playing.you"))
+  expect(page).not_to have_selector("#refresh_btn")
 
   page.find("##{card_id}_radio").click
   page.find("#play_btn").click
@@ -117,6 +118,7 @@ RSpec.describe "Games", type: :system do
       end
 
       expect(page.find("#game_play_message").text).to eq("Waiting for Barbara to play a card")
+      expect(page).to have_selector("#refresh_btn")
 
       play_card_as("barbara", "6h")
       should_be_opponents_turn("Cindy")
