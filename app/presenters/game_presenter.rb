@@ -13,6 +13,22 @@ class GamePresenter < SimpleDelegator
     super(@game_model)
   end
 
+  def welcome_msg
+    @t.call("welcome", {player_name: player_name})
+  end
+
+  def crib_label
+    if are_you_dealer
+      return @t.call("your_crib")
+    else
+      return @t.call("player_crib", {player_name: opponent_name})
+    end
+  end
+
+  def player_has_n_points_label
+    @t.call("you_have_n_points", {points: player_total_score})
+  end
+
   def update_btn_content
     is_show_update_btn = true
 
@@ -162,12 +178,9 @@ class GamePresenter < SimpleDelegator
 
   def labels
     return {
-      welcome: @t.call("welcome", {player_name: player_name}),
       player_cards: @t.call("player.cards", {player_name: player_name}),
       opponents_cards: @t.call("player.cards", {player_name: opponent_name}),
-      you_have_n_points: @t.call("you_have_n_points", {points: player_total_score}),
       opponent_has_n_points: @t.call("player_has_n_points", {player_name: opponent_name, points: opponent_total_score}),
-      player_has_n_points: @t.call("player_has_n_points", {player_name: player_name, points: player_total_score}),
       your_crib: @t.call("your_crib"),
       player_crib: @t.call("player_crib", {player_name: player_name}),
       opponents_crib: @t.call("player_crib", {player_name: opponent_name})

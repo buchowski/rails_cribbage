@@ -1,5 +1,5 @@
 
-<div id="your_score"><%= @game.labels[:you_have_n_points] %></div>
+<div id="your_score"><%= @game.player_has_n_points_label %></div>
 <progress class="progress is-success" value="<%= @game.player_total_score_percent %>" max="100"><%= @game.player_total_score_percent %></progress>
 
 <div id="opponent_score"><%= @game.labels[:opponent_has_n_points] %></div>
@@ -65,15 +65,9 @@
 
 <div id="crib_cards_section">
   <h3>Crib cards:</h3>
-  <% if @game.are_you_dealer %>
-    <span class="tag is-info is-large">
-      <%= @game.labels[:your_crib] %>
-    </span>
-  <% else %>
-    <span class="tag is-warning is-large">
-      <%= @game.labels[:opponents_crib] %>
-    </span>
-  <% end %>
+  <span class="tag is-info is-large">
+    <%= @game.crib_label %>
+  </span>
   <div class="row">
     <% @game.crib_cards.each do |card| %>
       <div data-role="card">

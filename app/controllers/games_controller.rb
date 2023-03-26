@@ -9,7 +9,7 @@ class GamesController < ApplicationController
 
   def show
     if is_user_anonymous
-      @game = AnonGamePresenter.new(@game_model)
+      @game = AnonGamePresenter.new(@game_model, @player_name)
     else
       @game = GamePresenter.new(@game_model, @player_name, flash[:your_score], flash[:opponents_score])
     end
