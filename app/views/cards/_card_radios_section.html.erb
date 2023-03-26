@@ -1,0 +1,9 @@
+<%= form_with(url: game_path, method: "patch") do |form| %>
+  <div class="row">
+    <% @game.player_cards.each do |card| %>
+      <%= render partial: 'cards/card_radio', locals: { card: card } %>
+    <% end %>
+  </div>
+  <%= form.submit "Play card", id: "play_btn", class: "button is-primary" %>
+  <%= form.hidden_field :type_of_update, value: 'play_card' %>
+<% end %>

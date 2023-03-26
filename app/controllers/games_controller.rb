@@ -8,7 +8,11 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = GamePresenter.new(@game_model, @player_name, flash[:your_score], flash[:opponents_score])
+    if is_user_anonymous
+      @game = AnonGamePresenter.new(@game_model)
+    else
+      @game = GamePresenter.new(@game_model, @player_name, flash[:your_score], flash[:opponents_score])
+    end
   end
 
   def create
@@ -140,6 +144,10 @@ class GamesController < ApplicationController
     return nil if !player
 
     @game.players.find{ |p| p.id != player.id }
+  end
+
+  def is_user_anonymous
+    !@player_name || (@player_name != @game_model.player_one_id && @player_name != @game_model.player_two_id)
   end
 
   def join_game()

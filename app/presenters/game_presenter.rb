@@ -145,6 +145,10 @@ class GamePresenter < SimpleDelegator
     false
   end
 
+  def are_you_anonymous
+    false
+  end
+
   def has_game_started
     case current_state
     when :waiting_for_player_two
@@ -159,11 +163,14 @@ class GamePresenter < SimpleDelegator
   def labels
     return {
       welcome: @t.call("welcome", {player_name: player_name}),
-      opponents_cards: @t.call("opponents.cards", {opponent_name: opponent_name}),
+      player_cards: @t.call("player.cards", {player_name: player_name}),
+      opponents_cards: @t.call("player.cards", {player_name: opponent_name}),
       you_have_n_points: @t.call("you_have_n_points", {points: player_total_score}),
-      opponent_has_n_points: @t.call("opponent_has_n_points", {opponent_name: opponent_name, points: opponent_total_score}),
+      opponent_has_n_points: @t.call("player_has_n_points", {player_name: opponent_name, points: opponent_total_score}),
+      player_has_n_points: @t.call("player_has_n_points", {player_name: player_name, points: player_total_score}),
       your_crib: @t.call("your_crib"),
-      opponents_crib: @t.call("opponents_crib", {opponent_name: opponent_name})
+      player_crib: @t.call("player_crib", {player_name: player_name}),
+      opponents_crib: @t.call("player_crib", {player_name: opponent_name})
     }
   end
 
