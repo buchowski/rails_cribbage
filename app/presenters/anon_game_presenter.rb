@@ -26,7 +26,8 @@ class AnonGamePresenter < GamePresenter
   end
 
   def game_play_message
-    "take a walk on the wildside"
+    return "Would you like to join this game against #{player_name}?" if current_state == :waiting_for_player_two
+    "This is a game between #{player_name} and #{opponent_name}"
   end
 
   def game_play_alert
