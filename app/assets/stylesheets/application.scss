@@ -3,6 +3,12 @@
 
 .row {
   display: flex;
+  flex-wrap: wrap;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
 }
 
 #game_play_message_container {

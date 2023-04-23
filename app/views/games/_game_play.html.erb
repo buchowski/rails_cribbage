@@ -5,25 +5,51 @@
 <div id="opponent_score"><%= @game.labels[:opponent_has_n_points] %></div>
 <progress class="progress is-danger" value="<%= @game.opponent_total_score_percent %>" max="100"><%= @game.opponent_total_score_percent %></progress>
 
-
-<div id="cut_card_section">
-  <h3>Cut card:</h3>
-  <div>
-    <% if !@game.cut_card.nil? %>
-      <%= render partial: "cards/card_svg", locals: { card: @game.cut_card } %>
-    <% end %>
+<div class="row">
+  <div id="cut_card_section" class="card">
+    <div class="card-header">
+      <p class="card-header-title">
+        Cut card
+      </p>
+    </div>
+    <div class="card-content">
+      <% if !@game.cut_card.nil? %>
+        <%= render partial: "cards/card_svg", locals: { card: @game.cut_card } %>
+      <% end %>
+    </div>
+  </div>
+  <div id="crib_cards_section" class="card">
+    <div class="card-header">
+      <p class="card-header-title">
+        <%= @game.crib_label %>
+      </p>
+    </div>
+    <div class="card-content">
+      <div class="row">
+        <% @game.crib_cards.each do |card| %>
+          <div data-role="card">
+            <%= render partial: "cards/card_anonymous" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 
-<div id="pile_cards_section">
-  <h3>Pile cards:</h3>
-  <h4 id="pile_score">Pile score: <%= @game.pile_score %></h4>
-  <div class="row">
-    <% @game.pile_cards.each do |card| %>
-      <div data-role="card">
-        <%= render partial: "cards/card_svg", locals: { card: card } %>
-      </div>
-    <% end %>
+<div id="pile_cards_section" class="card">
+  <div class="card-header">
+    <p class="card-header-title">
+      Pile score: <%= @game.pile_score %>
+    </p>
+  </div>
+  <div class="card-content">
+    <div class="row">
+      <% @game.pile_cards.each do |card| %>
+        <div data-role="card">
+          <%= render partial: "cards/card_svg", locals: { card: card } %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 
@@ -63,16 +89,3 @@
   </div>
 </div>
 
-<div id="crib_cards_section">
-  <h3>Crib cards:</h3>
-  <span class="tag is-info is-large">
-    <%= @game.crib_label %>
-  </span>
-  <div class="row">
-    <% @game.crib_cards.each do |card| %>
-      <div data-role="card">
-        <%= render partial: "cards/card_anonymous" %>
-      </div>
-    <% end %>
-  </div>
-</div>
