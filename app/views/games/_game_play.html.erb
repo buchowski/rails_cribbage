@@ -7,11 +7,7 @@
 
 <div class="row">
   <div id="cut_card_section" class="card">
-    <div class="card-header">
-      <p class="card-header-title">
-        Cut card
-      </p>
-    </div>
+    <%= render partial: "cards/card_section_title", locals: { title: "Cut card"} %>
     <div class="card-content">
       <% if !@game.cut_card.nil? %>
         <%= render partial: "cards/card_svg", locals: { card: @game.cut_card } %>
@@ -19,11 +15,7 @@
     </div>
   </div>
   <div id="crib_cards_section" class="card">
-    <div class="card-header">
-      <p class="card-header-title">
-        <%= @game.crib_label %>
-      </p>
-    </div>
+    <%= render partial: "cards/card_section_title", locals: { title: @game.crib_label } %>
     <div class="card-content">
       <div class="row">
         <% @game.crib_cards.each do |card| %>
@@ -37,11 +29,7 @@
 </div>
 
 <div id="pile_cards_section" class="card">
-  <div class="card-header">
-    <p class="card-header-title">
-      Pile score: <%= @game.pile_score %>
-    </p>
-  </div>
+  <%= render partial: "cards/card_section_title", locals: { title: "Pile score: #{@game.pile_score}" } %>
   <div class="card-content">
     <div class="row">
       <% @game.pile_cards.each do |card| %>
@@ -54,38 +42,44 @@
 </div>
 
 <% if @game.are_you_anonymous %>
-  <div>
-    <h3><%= @game.labels[:player_cards] %></h3>
+  <div class="card">
+    <%= render partial: "cards/card_section_title", locals: { title: @game.labels[:player_cards] } %>
+    <div class="card-content">
+      <div class="row">
+        <% @game.player_cards.each do |card| %>
+          <div data-role="card">
+            <%= render partial: "cards/card_anonymous" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="card">
+    <%= render partial: "cards/card_section_title", locals: { title: "Your cards" } %>
+    <div class="card-content">
+
+      <% if @game.show_discard_checkboxes %>
+        <%= render partial: "cards/card_checkboxes_section" %>
+      <% end %>
+
+      <% if @game.show_play_card_radios %>
+        <%= render partial: "cards/card_radios_section" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div id="opponent_cards_section" class="card">
+  <%= render partial: "cards/card_section_title", locals: { title: @game.labels[:opponents_cards]} %>
+  <div class="card-content">
     <div class="row">
-      <% @game.player_cards.each do |card| %>
+      <% @game.opponent_cards.each do |card| %>
         <div data-role="card">
           <%= render partial: "cards/card_anonymous" %>
         </div>
       <% end %>
     </div>
-  </div>
-<% else %>
-  <div>
-    <h3>Your cards:</h3>
-
-    <% if @game.show_discard_checkboxes %>
-      <%= render partial: "cards/card_checkboxes_section" %>
-    <% end %>
-
-    <% if @game.show_play_card_radios %>
-      <%= render partial: "cards/card_radios_section" %>
-    <% end %>
-  </div>
-<% end %>
-
-<div id="opponent_cards_section">
-  <h3><%= @game.labels[:opponents_cards] %></h3>
-  <div class="row">
-    <% @game.opponent_cards.each do |card| %>
-      <div data-role="card">
-        <%= render partial: "cards/card_anonymous" %>
-      </div>
-    <% end %>
   </div>
 </div>
 
