@@ -112,13 +112,6 @@ class GamesController < ApplicationController
   end
 
   def get_player_name
-    params_player_name = (params[:player_name] || "").strip
-    do_names_match = params_player_name == cookies[:player_name]
-
-    if !do_names_match && params_player_name.present?
-      cookies[:player_name] = params_player_name
-    end
-
     @player_name = cookies[:player_name]
   end
 
