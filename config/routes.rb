@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   root "games#index"
 
   get "/cards", to: "games#cards"
+  get "/admin", to: "games#admin"
 end

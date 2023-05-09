@@ -1,9 +1,13 @@
 class GamesController < ApplicationController
-  before_action :get_game, except: [:index, :create, :cards]
-  before_action :get_player_name
-  before_action :require_player_name, except: [:index, :show, :cards]
+  before_action :get_game, except: [:index, :create, :cards, :admin]
+  before_action :get_player_id
+  before_action :require_player_id, except: [:index, :show, :cards]
 
   def index
+    @games = Game.all
+  end
+
+  def admin
     @games = Game.all
   end
 
@@ -111,14 +115,18 @@ class GamesController < ApplicationController
     end
   end
 
+  def get_player_id
+    @player_id = cookies[:player_id]
+  end
+
   def get_player_name
     @player_name = cookies[:player_name]
   end
 
-  def require_player_name
-    if @player_name.nil? || @player_name.empty?
-      flash[:error_msg] = "you must include your player_name in the request"
-      redirect_to request.env['HTTP_REFERER']
+  def require_player_id
+    if @player_id.nil? || @player_id.empty?
+      flash[:error_msg] = "you must must log in before you're able to play"
+      redirect_to request.env['HTTP_REFERER'] || games_path
       return
     end
   end
