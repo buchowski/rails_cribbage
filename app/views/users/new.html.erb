@@ -1,2 +1,9 @@
 <h1>Users#new</h1>
-<p>Find me in app/views/users/new.html.erb</p>
+
+<%= form_with url: "/users" do |form| %>
+  <%= form.label :name, "Your name" %>
+  <%= form.text_field :name, required: true %>
+  <%= form.label :email, "Your email (optional)" %>
+  <%= form.text_field :email%>
+  <%= form.submit "Save" %>
+<% end %>
