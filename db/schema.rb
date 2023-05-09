@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_25_185510) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_09_034137) do
   create_table "games", force: :cascade do |t|
     t.string "player_one_id"
     t.string "player_two_id"
@@ -29,6 +29,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_25_185510) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "crib_cards"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "password_digest"
+    t.boolean "is_admin"
+    t.string "name", limit: 20
+    t.string "email", limit: 24
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
