@@ -12,4 +12,10 @@ class UsersController < ApplicationController
       flash[:error_msg] = "Sorry, we weren't able to create a user for you"
     end
   end
+
+  def login
+    user = User.find(params[:user_id])
+    session[:user_id] = user.id
+    redirect_to games_path
+  end
 end

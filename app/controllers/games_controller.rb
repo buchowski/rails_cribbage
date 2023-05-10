@@ -1,14 +1,17 @@
 class GamesController < ApplicationController
   before_action :get_game, except: [:index, :create, :cards, :admin]
   before_action :get_player_id
-  before_action :require_player_id, except: [:index, :show, :cards]
+  before_action :require_player_id, except: [:index, :show, :cards, :admin]
 
   def index
-    @games = Game.all
+    p "bobby", session[:user_id]
+    user = User.find_by_id(session[:user_id])
+    @games = user.games
   end
 
   def admin
     @games = Game.all
+    @users = User.all
   end
 
   def show

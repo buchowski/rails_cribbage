@@ -2,3 +2,6 @@
 
 <%= render "table" %>
 
+<% @users.each do |user| %>
+  <%= button_to user.name, '/login', { method: :post, params: { user_id: user.id } } %>
+<% end %>
