@@ -38,3 +38,8 @@ input[type="radio"] ~ label {
 input[type="radio"]:checked ~ label {
   border: 5px solid red;
 }
+
+th, td {
+  border: 1px solid black;
+  padding: 0.5rem;
+}
