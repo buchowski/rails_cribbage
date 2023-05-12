@@ -15,7 +15,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    if is_user_anonymous
+    if player.nil?
       @game = AnonGamePresenter.new(@game_model, @player_name)
     else
       @game = GamePresenter.new(@game_model, @player_name, flash[:your_score], flash[:opponents_score])
@@ -150,16 +150,6 @@ class GamesController < ApplicationController
     return nil if !player
 
     @game.players.find{ |p| p.id != player.id }
-  end
-
-  def is_user_anonymous
-    return true if !@player_id
-    begin
-      check_membership()
-      return true
-    rescue
-      return false
-    end
   end
 
   def join_game()
