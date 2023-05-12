@@ -6,7 +6,7 @@ class GamesController < ApplicationController
   def index
     p "bobby", session[:user_id]
     user = User.find_by_id(session[:user_id])
-    @games = user.games
+    @games = user ? user.games : []
   end
 
   def admin
@@ -24,7 +24,7 @@ class GamesController < ApplicationController
 
   def create
     begin
-      new_game = Game.new(@player_name)
+      new_game = Game.new(@player_id)
 
       if !new_game.save
         flash[:error_msg] = "error: failed to save game"
@@ -109,8 +109,8 @@ class GamesController < ApplicationController
   end
 
   def check_membership
-    is_player_one = @player_name == @game_model.player_one_id
-    is_player_two = @player_name == @game_model.player_two_id
+    is_player_one = @player_id == @game_model.player_one_id
+    is_player_two = @player_id == @game_model.player_two_id
     is_member = is_player_one || is_player_two
 
     if !is_member
@@ -119,11 +119,13 @@ class GamesController < ApplicationController
   end
 
   def get_player_id
-    @player_id = cookies[:player_id]
+    user = User.find_by_id(session[:user_id])
+    @player_id = user ? user.id : nil
   end
 
   def get_player_name
-    @player_name = cookies[:player_name]
+    user = User.find_by_id(session[:user_id])
+    @player_name = user ? user.name : nil
   end
 
   def require_player_id
@@ -135,10 +137,10 @@ class GamesController < ApplicationController
   end
 
   def player
-    return if @game_model.nil? || @player_name.nil?
+    return if @game_model.nil? || @player_id.nil?
 
-    is_player_one = @player_name == @game_model.player_one_id
-    is_player_two = @player_name == @game_model.player_two_id
+    is_player_one = @player_id == @game_model.player_one_id
+    is_player_two = @player_id == @game_model.player_two_id
 
     return @game.players[0] if is_player_one
     return @game.players[1] if is_player_two
@@ -151,19 +153,25 @@ class GamesController < ApplicationController
   end
 
   def is_user_anonymous
-    !@player_name || (@player_name != @game_model.player_one_id && @player_name != @game_model.player_two_id)
+    return true if !@player_id
+    begin
+      check_membership()
+      return true
+    rescue
+      return false
+    end
   end
 
   def join_game()
-    player_one_name = @game_model.player_one_id
-    player_two_name = @game_model.player_two_id
+    player_one_id = @game_model.player_one_id
+    player_two_id = @game_model.player_two_id
 
-    if @player_name == player_one_name || @player_name == player_two_name
+    if @player_id == player_one_id || @player_id == player_two_id
       throw "you already joined this game"
     end
 
-    if player_two_name.nil?
-      @game_model.player_two_id = @player_name
+    if player_two_id.nil?
+      @game_model.player_two_id = @player_id
       @game_model.current_fsm_state = :waiting_to_start
 
       if !@game_model.save then throw "failed to join game" end
