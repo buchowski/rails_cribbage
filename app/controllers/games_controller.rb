@@ -1,12 +1,10 @@
 class GamesController < ApplicationController
   before_action :get_game, except: [:index, :create, :cards, :admin]
-  before_action :get_player_id
-  before_action :require_player_id, except: [:index, :show, :cards, :admin]
+  before_action :get_user
+  before_action :require_user_id, except: [:index, :show, :cards, :admin]
 
   def index
-    p "bobby", session[:user_id]
-    user = User.find_by_id(session[:user_id])
-    @games = user ? user.games : []
+    @games = @user ? @user.games : []
   end
 
   def admin
@@ -18,7 +16,7 @@ class GamesController < ApplicationController
     if player.nil?
       @game = AnonGamePresenter.new(@game_model, @player_name)
     else
-      @game = GamePresenter.new(@game_model, @player_name, flash[:your_score], flash[:opponents_score])
+      @game = GamePresenter.new(@game_model, player, flash[:your_score], flash[:opponents_score])
     end
   end
 
@@ -118,17 +116,13 @@ class GamesController < ApplicationController
     end
   end
 
-  def get_player_id
-    user = User.find_by_id(session[:user_id])
-    @player_id = user ? user.id : nil
+  def get_user
+    @user = User.find_by_id(session[:user_id])
+    @player_id = @user ? @user.id.to_s : nil
+    @player_name = @user ? @user.name : nil
   end
 
-  def get_player_name
-    user = User.find_by_id(session[:user_id])
-    @player_name = user ? user.name : nil
-  end
-
-  def require_player_id
+  def require_user_id
     if @player_id.nil? || @player_id.empty?
       flash[:error_msg] = "you must must log in before you're able to play"
       redirect_to request.env['HTTP_REFERER'] || games_path

@@ -1,11 +1,11 @@
 class GamePresenter < SimpleDelegator
   attr_reader :player_name
 
-  def initialize(game_model, player_name, your_previous_score, opponents_previous_score)
+  def initialize(game_model, player, your_previous_score, opponents_previous_score)
     @t = Proc.new do |key, data| Translations.en(key, data) end
     @game_model = game_model
     @game = Game.adapt_to_cribbage_game(game_model)
-    @player_name = player_name
+    @player = player
     # the previous scores are what the user last saw in the UI.
     # we diff against these to determine if we should alert the user that points were scored
     @your_previous_score = your_previous_score
@@ -90,28 +90,26 @@ class GamePresenter < SimpleDelegator
   end
 
   def player
-    is_player_one = @player_name == @game_model.player_one_id
-    is_player_two = @player_name == @game_model.player_two_id
-
-    return @game.players[0] if is_player_one
-    return @game.players[1] if is_player_two
+    @player
   end
 
   def opponent
     return nil if player.nil?
 
-    is_player_one = @player_name == @game_model.player_one_id
+    is_player_one = player.id == @game_model.player_one_id
     is_player_one ? @game.players[1] : @game.players[0]
   end
 
   def opponent_name
     name = opponent && opponent.id || ""
     name.capitalize
+    "TODO - opponent needs a name attribute"
   end
 
   def player_name
     name = player && player.id || ""
     name.capitalize
+    "TODO - player needs a name attribute"
   end
 
   def player_cards
@@ -203,7 +201,7 @@ class GamePresenter < SimpleDelegator
   end
 
   def is_your_turn
-    @game.whose_turn.id == @player_name
+    @game.whose_turn.id == player.id
   end
 
   def you_won
