@@ -13,8 +13,8 @@ class GamesController < ApplicationController
   end
 
   def show
-    if player.nil?
-      @game = AnonGamePresenter.new(@game_model, @player_name)
+    if @user.is_anon?
+      @game = AnonGamePresenter.new(@game_model, @user.name)
     else
       @game = GamePresenter.new(@game_model, player, flash[:your_score], flash[:opponents_score])
     end
@@ -22,7 +22,7 @@ class GamesController < ApplicationController
 
   def create
     begin
-      new_game = Game.new(@player_id)
+      new_game = Game.new(@user.id)
 
       if !new_game.save
         flash[:error_msg] = "error: failed to save game"
@@ -107,8 +107,8 @@ class GamesController < ApplicationController
   end
 
   def check_membership
-    is_player_one = @player_id == @game_model.player_one_id
-    is_player_two = @player_id == @game_model.player_two_id
+    is_player_one = @user.id == @game_model.player_one_id
+    is_player_two = @user.id == @game_model.player_two_id
     is_member = is_player_one || is_player_two
 
     if !is_member
@@ -117,13 +117,11 @@ class GamesController < ApplicationController
   end
 
   def get_user
-    @user = User.find_by_id(session[:user_id])
-    @player_id = @user ? @user.id.to_s : nil
-    @player_name = @user ? @user.name : nil
+    @user = User.find_by_id(session[:user_id]) || AnonUser.new
   end
 
   def require_user_id
-    if @player_id.nil? || @player_id.empty?
+    if @user.is_anon?
       flash[:error_msg] = "you must must log in before you're able to play"
       redirect_to request.env['HTTP_REFERER'] || games_path
       return
@@ -131,31 +129,31 @@ class GamesController < ApplicationController
   end
 
   def player
-    return if @game_model.nil? || @player_id.nil?
+    return if @game_model.nil?
 
-    is_player_one = @player_id == @game_model.player_one_id
-    is_player_two = @player_id == @game_model.player_two_id
+    is_user_player_two = @user.id == @game_model.player_two_id
 
-    return @game.players[0] if is_player_one
-    return @game.players[1] if is_player_two
+    return is_user_player_two ? @game.players[1] : @game.players[0]
   end
 
   def opponent
-    return nil if !player
+    return if @game_model.nil?
 
-    @game.players.find{ |p| p.id != player.id }
+    is_user_player_two = @user.id == @game_model.player_two_id
+
+    return is_user_player_two ? @game.players[0] : @game.players[1]
   end
 
   def join_game()
     player_one_id = @game_model.player_one_id
     player_two_id = @game_model.player_two_id
 
-    if @player_id == player_one_id || @player_id == player_two_id
+    if @user.id == player_one_id || @user.id == player_two_id
       throw "you already joined this game"
     end
 
     if player_two_id.nil?
-      @game_model.player_two_id = @player_id
+      @game_model.player_two_id = @user.id
       @game_model.current_fsm_state = :waiting_to_start
 
       if !@game_model.save then throw "failed to join game" end
