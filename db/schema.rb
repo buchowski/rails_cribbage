@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_09_034137) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_19_033055) do
   create_table "games", force: :cascade do |t|
-    t.string "player_one_id"
-    t.string "player_two_id"
+    t.integer "player_one_id"
+    t.integer "player_two_id"
     t.string "player_one_cards"
     t.string "player_two_cards"
     t.string "pile_cards"
