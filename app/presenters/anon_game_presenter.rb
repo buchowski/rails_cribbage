@@ -1,10 +1,10 @@
 class AnonGamePresenter < GamePresenter
 
-  def initialize(game_model, player_name)
-    @anon_users_name = player_name
+  def initialize(game_model, game, user)
+    @anon_users_name = user.name
     your_previous_score = 0
     opponents_previous_score = 0
-    super(game_model, game_model.player_one_id, your_previous_score, opponents_previous_score)
+    super(game_model, game, user, your_previous_score, opponents_previous_score)
   end
 
   def are_you_anonymous

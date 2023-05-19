@@ -14,4 +14,8 @@ class AnonUser
   def games
     []
   end
+
+  def is_member(game_model)
+    false
+  end
 end

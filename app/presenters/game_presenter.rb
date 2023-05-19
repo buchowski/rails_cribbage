@@ -1,11 +1,11 @@
 class GamePresenter < SimpleDelegator
   attr_reader :player_name
 
-  def initialize(game_model, player, your_previous_score, opponents_previous_score)
+  def initialize(game_model, game, user, your_previous_score, opponents_previous_score)
     @t = Proc.new do |key, data| Translations.en(key, data) end
     @game_model = game_model
-    @game = Game.adapt_to_cribbage_game(game_model)
-    @player = player
+    @game = game
+    @user = user
     # the previous scores are what the user last saw in the UI.
     # we diff against these to determine if we should alert the user that points were scored
     @your_previous_score = your_previous_score
@@ -14,7 +14,7 @@ class GamePresenter < SimpleDelegator
   end
 
   def welcome_msg
-    @t.call("welcome", {player_name: player_name})
+    @t.call("welcome", {player_name: @user.name})
   end
 
   def crib_label
@@ -40,6 +40,7 @@ class GamePresenter < SimpleDelegator
       label = "Deal cards"
       type_of_update = "deal"
     when :waiting_for_player_two
+      #TODO user cannot join their own game
       label = "Join game"
       type_of_update = "join_game"
     when :waiting_to_start
@@ -90,26 +91,27 @@ class GamePresenter < SimpleDelegator
   end
 
   def player
-    @player
+    is_user_player_two = @user.id == @game_model.player_two_id
+
+    return is_user_player_two ? @game.players[1] : @game.players[0]
   end
 
   def opponent
-    return nil if player.nil?
+    is_user_player_two = @user.id == @game_model.player_two_id
 
-    is_player_one = player.id == @game_model.player_one_id
-    is_player_one ? @game.players[1] : @game.players[0]
+    return is_user_player_two ? @game.players[0] : @game.players[1]
   end
 
   def opponent_name
-    name = opponent && opponent.id || ""
-    name.capitalize
-    "TODO - opponent needs a name attribute"
+    return "FIX ME" if opponent.nil?
+
+    opponent.name.capitalize
   end
 
   def player_name
-    name = player && player.id || ""
-    name.capitalize
-    "TODO - player needs a name attribute"
+    return "FIX ME" if player.nil?
+
+    player.name.capitalize
   end
 
   def player_cards

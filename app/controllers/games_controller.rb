@@ -13,10 +13,10 @@ class GamesController < ApplicationController
   end
 
   def show
-    if @user.is_anon?
-      @game = AnonGamePresenter.new(@game_model, @user.name)
+    if @user.is_member(@game_model)
+      @game = GamePresenter.new(@game_model, @game, @user, flash[:your_score], flash[:opponents_score])
     else
-      @game = GamePresenter.new(@game_model, player, flash[:your_score], flash[:opponents_score])
+      @game = AnonGamePresenter.new(@game_model, @game, @user)
     end
   end
 
@@ -94,24 +94,23 @@ class GamesController < ApplicationController
 
   def get_game
     @game_model = get_game_model()
-    @game = get_cribbage_game(@game_model)
+    user_one = User.find_by_id(@game_model.player_one_id)
+    user_two = User.find_by_id(@game_model.player_two_id)
+
+    @game = get_cribbage_game(@game_model, user_one, user_two)
   end
 
   def get_game_model
     game_id = params[:id]
-    Game.find(game_id)
+    Game.find_by_id(game_id)
   end
 
-  def get_cribbage_game(game_model)
-    Game.adapt_to_cribbage_game(game_model)
+  def get_cribbage_game(game_model, user_one, user_two)
+    Game.adapt_to_cribbage_game(game_model, user_one, user_two)
   end
 
   def check_membership
-    is_player_one = @user.id == @game_model.player_one_id
-    is_player_two = @user.id == @game_model.player_two_id
-    is_member = is_player_one || is_player_two
-
-    if !is_member
+    if !@user.is_member(@game_model)
       throw "You are not a member of this game"
     end
   end

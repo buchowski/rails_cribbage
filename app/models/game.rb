@@ -51,7 +51,7 @@ class Game < ApplicationRecord
     return winner_id == player_one.id ? player_one : player_two
   end
 
-  def self.adapt_to_cribbage_game(game_model)
+  def self.adapt_to_cribbage_game(game_model, user_one, user_two)
     game = CribbageGame::Game.new
     player_one = game.players[0]
     player_two = game.players[1]
@@ -59,9 +59,11 @@ class Game < ApplicationRecord
     player_one.id = game_model.player_one_id
     player_one.hand = game_model.player_one_cards
     player_one.total_score = game_model.player_one_points
+    player_one.name = user_one.nil? ? "" : user_one.name
     player_two.id = game_model.player_two_id
     player_two.hand = game_model.player_two_cards
     player_two.total_score = game_model.player_two_points
+    player_two.name = user_two.nil? ? "" : user_two.name
 
     is_player_one_dealer = game_model.dealer_id == game_model.player_one_id
     game.dealer = is_player_one_dealer ? player_one : player_two
