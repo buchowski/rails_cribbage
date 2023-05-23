@@ -13,3 +13,10 @@ two:
   is_admin: false
   name: Cindy
   email: cinder88@mallcart.net
+
+three:
+  id: 3
+  password_digest: <%= BCrypt::Password.create("secret") %>
+  is_admin: false
+  name: Martin
+  email: martin@express-tops.net
