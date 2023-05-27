@@ -32,6 +32,12 @@
   height: 96px;
 }
 
+#preview_page {
+  .png_card {
+    margin: 3px;
+  }
+}
+
 input[type="radio"] {
   border: none;
 }

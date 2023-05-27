@@ -61,7 +61,7 @@ end
 desc "create css classes for each card in the png spritesheet"
 task :create_card_classes do
   width = 71
-  height = 96
+  height = 95
   x_gap = 0
   y_gap = 0
   card_positions = [
@@ -75,7 +75,7 @@ task :create_card_classes do
 
   sass_file = File.open("app/assets/stylesheets/cards.scss", "w+")
   preview_cards_file = File.open("app/views/cards/cards_png_preview.html.erb", "w+")
-  preview_cards_file.write("<h1>Preview of generated PNG elements</h1>\n")
+  preview_cards_file.write("<h1>Preview of generated PNG elements</h1>\n<div id='preview_page'>\n")
 
   card_positions.each_with_index do |row, i|
     preview_cards_file.write("<div class='row'>\n")
@@ -90,4 +90,5 @@ task :create_card_classes do
 
     preview_cards_file.write("</div>\n")
   end
+  preview_cards_file.write("</div>\n")
 end
