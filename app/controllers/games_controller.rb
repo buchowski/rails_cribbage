@@ -88,7 +88,7 @@ class GamesController < ApplicationController
   end
 
   def cards
-    render "cards/cards_preview"
+    render "cards/cards_png_preview"
   end
 
   private

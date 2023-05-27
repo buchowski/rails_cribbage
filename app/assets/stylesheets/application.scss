@@ -1,5 +1,6 @@
 @charset "utf-8";
 @import "../../../node_modules/bulma/bulma.sass";
+@import "./cards";
 
 .row {
   display: flex;
@@ -25,6 +26,12 @@
   height: 135px;
 }
 
+.png_card {
+  background-image: url("pc_computer_playing_cards.png");
+  width: 71px;
+  height: 96px;
+}
+
 input[type="radio"] {
   border: none;
 }
@@ -43,3 +50,4 @@ th, td {
   border: 1px solid black;
   padding: 0.5rem;
 }
+
