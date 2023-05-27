@@ -7,9 +7,9 @@
 
 <div class="row">
   <% if @game.are_you_anonymous %>
-    <div class="card">
+    <div>
       <%= render partial: "cards/card_section_title", locals: { title: @game.labels[:player_cards] } %>
-      <div class="card-content">
+      <div>
         <div class="row">
           <% @game.player_cards.each do |card| %>
             <div data-role="card">
@@ -20,9 +20,9 @@
       </div>
     </div>
   <% else %>
-    <div class="card">
+    <div>
       <%= render partial: "cards/card_section_title", locals: { title: "Your cards" } %>
-      <div class="card-content">
+      <div>
 
         <% if @game.show_discard_checkboxes %>
           <%= render partial: "cards/card_checkboxes_section" %>
@@ -35,9 +35,9 @@
     </div>
   <% end %>
 
-  <div id="cut_card_section" class="card">
+  <div id="cut_card_section">
     <%= render partial: "cards/card_section_title", locals: { title: "Cut card"} %>
-    <div class="card-content">
+    <div>
       <% if !@game.cut_card.nil? %>
         <%= render partial: "cards/card_svg", locals: { card: @game.cut_card } %>
       <% end %>
@@ -45,11 +45,11 @@
   </div>
 </div>
 
-<div id="pile_cards_section" class="card">
+<div id="pile_cards_section">
   <div id="pile_score">
     <%= render partial: "cards/card_section_title", locals: { title: "Pile score: #{@game.pile_score}" } %>
   </div>
-  <div class="card-content">
+  <div>
     <div class="row">
       <% @game.pile_cards.each do |card| %>
         <div data-role="card">
@@ -61,9 +61,9 @@
 </div>
 
 <div class="row">
-  <div id="opponent_cards_section" class="card">
+  <div id="opponent_cards_section">
     <%= render partial: "cards/card_section_title", locals: { title: @game.labels[:opponents_cards]} %>
-    <div class="card-content">
+    <div>
       <div class="row">
         <% @game.opponent_cards.each do |card| %>
           <div data-role="card">
@@ -73,9 +73,9 @@
       </div>
     </div>
   </div>
-  <div id="crib_cards_section" class="card">
+  <div id="crib_cards_section">
     <%= render partial: "cards/card_section_title", locals: { title: @game.crib_label } %>
-    <div class="card-content">
+    <div>
       <div class="row">
         <% @game.crib_cards.each do |card| %>
           <div data-role="card">
