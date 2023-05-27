@@ -4,12 +4,13 @@ class GamesController < ApplicationController
   before_action :require_user_id, except: [:index, :show, :cards, :admin]
 
   def index
-    @games = @user ? @user.games : []
+    game_models = @user ? @user.games : []
+    @games = get_game_presenters(game_models)
   end
 
   def admin
-    @games = Game.all
     @users = User.all
+    @games = get_game_presenters(Game.all)
   end
 
   def show
@@ -92,12 +93,17 @@ class GamesController < ApplicationController
 
   private
 
+  def get_game_presenters(game_models)
+    game_models.map do |game_model|
+      game = get_cribbage_game(game_model)
+      AnonGamePresenter.new(game_model, game, @user)
+    end
+  end
+
   def get_game
     @game_model = get_game_model()
-    user_one = User.find_by_id(@game_model.player_one_id)
-    user_two = User.find_by_id(@game_model.player_two_id)
 
-    @game = get_cribbage_game(@game_model, user_one, user_two)
+    @game = get_cribbage_game(@game_model)
   end
 
   def get_game_model
@@ -105,7 +111,10 @@ class GamesController < ApplicationController
     Game.find_by_id(game_id)
   end
 
-  def get_cribbage_game(game_model, user_one, user_two)
+  def get_cribbage_game(game_model)
+    user_one = User.find_by_id(game_model.player_one_id)
+    user_two = User.find_by_id(game_model.player_two_id)
+
     Game.adapt_to_cribbage_game(game_model, user_one, user_two)
   end
 

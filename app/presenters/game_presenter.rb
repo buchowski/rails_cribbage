@@ -90,12 +90,26 @@ class GamePresenter < SimpleDelegator
     alerts.join(" ")
   end
 
+  # this is the creator
+  def player_one_name
+    player = @game.players[0]
+    player ? player.name : 'unnamed'
+  end
+
+  # this is the player who joined
+  def player_two_name
+    player = @game.players[1]
+    player ? player.name : 'unnamed'
+  end
+
+  # this is the authenticated user
   def player
     is_user_player_two = @user.id == @game_model.player_two_id
 
     return is_user_player_two ? @game.players[1] : @game.players[0]
   end
 
+  # this is the authenticated user's opponent
   def opponent
     is_user_player_two = @user.id == @game_model.player_two_id
 

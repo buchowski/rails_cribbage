@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  player_one_id: bill
+  player_one_id: 1
   player_two_id:
   player_one_cards: {}
   player_two_cards: {}
@@ -18,15 +18,15 @@ one:
   winner_id:
 
 two:
-  player_one_id: barbara
-  player_two_id: cindy
+  player_one_id: 1
+  player_two_id: 2
   player_one_cards: {5c: true, 4h: true, jh: true, 6h: true, 3h: true, 2h: true}
   player_two_cards: {6c: true, 6s: true, 8h: true, 9c: true, as: true}
   pile_cards: []
   crib_cards: ["8d"]
   cut_card:
-  dealer_id: cindy
-  whose_turn_id: barbara
+  dealer_id: 2
+  whose_turn_id: 1
   current_fsm_state: discarding
   player_one_points: 0
   player_two_points: 0

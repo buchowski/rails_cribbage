@@ -15,8 +15,8 @@
     <% @games.each do |game| %>
       <tr>
         <td><%= game.id %></td>
-        <td><%= game.player_one_id %></td>
-        <td><%= game.player_two_id %></td>
+        <td><%= game.player_one_name %></td>
+        <td><%= game.player_two_name %></td>
         <td><%= game.current_fsm_state %></td>
         <td><%= game.created_at.strftime("%m-%d-%Y %T") %></td>
         <td>
