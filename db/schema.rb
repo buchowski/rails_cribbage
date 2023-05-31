@@ -18,14 +18,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_033055) do
     t.string "player_two_cards"
     t.string "pile_cards"
     t.string "cut_card"
-    t.string "dealer_id"
-    t.string "whose_turn_id"
+    t.integer "dealer_id"
+    t.integer "whose_turn_id"
     t.string "current_fsm_state"
     t.integer "player_one_points"
     t.integer "player_two_points"
     t.integer "round"
     t.integer "points_to_win"
-    t.string "winner_id"
+    t.integer "winner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "crib_cards"
