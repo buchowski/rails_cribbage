@@ -46,7 +46,7 @@ class Game < ApplicationRecord
   end
 
   def self.get_winner(winner_id, player_one, player_two)
-    return nil if winner_id.nil? || winner_id.empty?
+    return nil if winner_id.nil?
 
     return winner_id == player_one.id ? player_one : player_two
   end

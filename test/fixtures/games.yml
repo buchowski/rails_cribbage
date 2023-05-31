@@ -2,7 +2,7 @@
 
 one:
   id: 1
-  player_one_id: 2
+  player_one_id: 1
   player_two_id:
   player_one_cards: {}
   player_two_cards: {}

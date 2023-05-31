@@ -1,16 +1,14 @@
 require 'rails_helper'
 
-def access_page_as(player_name)
-  Capybara.reset_sessions!
-  page.driver.browser.set_cookie("player_name=#{player_name}")
-
-  visit games_path
-  page.click_on("open", :match => :first)
+def access_page_as(player_name, route = nil)
+  visit admin_path
+  page.find_button(player_name.capitalize).click()
+  visit route if !route.nil?
 end
 
 def play_card_as(player_name, card_id)
   t = Proc.new do |key, data| Translations.en(key, data) end
-  access_page_as(player_name)
+  access_page_as(player_name, game_path(2))
   expect(page.find("#game_play_message").text).to eq("Select a card to play")
   expect(page.find("#game_play_message").text).to eq(t.call("playing.you"))
   expect(page).not_to have_selector("#refresh_btn")
@@ -44,41 +42,39 @@ RSpec.describe "Games", type: :system do
   first_row = "tbody tr:first-child"
   last_row = "tbody tr:last-child"
 
-  describe "index page" do
-    fixtures :games
+  describe "admin page" do
+    fixtures :games, :users
 
     it "should display all games in the table" do
       visit admin_path
 
       expect(page).to have_selector "tbody tr", count: 2
       expect(page.find("#{last_row} td:nth-child(2)")).to have_content("Barbara")
-      expect(page.find("#{last_row} td:nth-child(3)").text).to eq("")
-      expect(page.find("#{last_row} td:nth-child(4)")).to have_content("waiting_for_player_two")
+      expect(page.find("#{last_row} td:nth-child(3)").text).to eq("Cindy")
+      expect(page.find("#{last_row} td:nth-child(4)")).to have_content("discarding")
 
       expect(page.find("#{first_row} td:nth-child(2)")).to have_content("Barbara")
-      expect(page.find("#{first_row} td:nth-child(3)")).to have_content("Cindy")
-      expect(page.find("#{first_row} td:nth-child(4)")).to have_content("discarding")
+      expect(page.find("#{first_row} td:nth-child(3)")).to have_content("")
+      expect(page.find("#{first_row} td:nth-child(4)")).to have_content("waiting_for_player_two")
     end
   end
 
   describe "show page" do
-    fixtures :games
+    fixtures :games, :users
     barbaras_cards = %{5c 4h jh 6h 3h 2h}.split()
     cindys_cards = %{6c 6s 8h 9c as}.split()
 
-    before(:each) do
-      access_page_as("barbara")
-    end
-
     it "should show the player's cards and hide the opponent's cards" do
+      access_page_as("barbara", game_path(2))
+
       barbaras_cards.each do |card|
-        expect(page).to have_selector("##{card}_card")
+        expect(page).to have_selector(".card_#{card}")
         expect(page).to have_selector("##{card}_checkbox")
         expect(page).not_to have_selector("##{card}_radio")
       end
 
       cindys_cards.each do |card|
-        expect(page).not_to have_selector("##{card}_card")
+        expect(page).not_to have_selector(".card_#{card}")
         expect(page).not_to have_selector("##{card}_checkbox")
         expect(page).not_to have_selector("##{card}_radio")
       end
@@ -93,6 +89,7 @@ RSpec.describe "Games", type: :system do
     end
 
     it "should let the players play until there's a winner" do
+      access_page_as("barbara", game_path(2))
       # barbara selects two cards and then discards
       expect(page.find("#game_play_message").text).to eq("Select two cards to discard")
       page.find("#3h_checkbox").click
@@ -104,7 +101,7 @@ RSpec.describe "Games", type: :system do
         expect(page).to have_selector("##{card}_checkbox")
       end
 
-      access_page_as("cindy")
+      access_page_as("cindy", game_path(2))
       expect(page.find("#game_play_message").text).to eq("Select one card to discard")
 
       # cindy has already discarded one card (games.yml) so she discards one additional card
@@ -149,7 +146,7 @@ RSpec.describe "Games", type: :system do
       expect_scores_to_be(5, 4, "Cindy", "You scored 5 points! You won the game!")
       expect(page.find("#game_play_message").text).to eq("Game over")
 
-      access_page_as("cindy")
+      access_page_as("cindy", game_path(2))
       expect(page.find("#game_play_message").text).to eq("Game over")
       expect(page.find("#game_play_alert").text).to eq("Barbara won the game.")
     end
