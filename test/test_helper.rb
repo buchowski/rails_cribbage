@@ -11,7 +11,7 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
   def sign_in_as(user_id)
-    post login_url, params: { user_id: user_id }
+    post admin_login_url, params: { user_id: user_id }
   end
 
   def sign_in_as_cindy()
