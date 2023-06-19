@@ -1,7 +1,9 @@
 <%= link_to "home", games_path %>
 
-<%= render "table" %>
+<div id="admin_games_table">
+  <%= render "table" %>
+</div>
 
 <% @users.each do |user| %>
-  <%= button_to user.name, '/login', { method: :post, params: { user_id: user.id } } %>
+  <%= button_to user.name, '/admin-login', { method: :post, params: { user_id: user.id } } %>
 <% end %>
