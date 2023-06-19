@@ -1,9 +1,24 @@
-<h1>Users#new</h1>
-
-<%= form_with url: "/users" do |form| %>
-  <%= form.label :name, "Your name" %>
-  <%= form.text_field :name, required: true %>
-  <%= form.label :email, "Your email (optional)" %>
-  <%= form.text_field :email%>
-  <%= form.submit "Save" %>
-<% end %>
+<div>
+  <%= form_with url: "/users" do |form| %>
+    <div>
+      <%= form.label :name, "Your name" %>
+      <%= form.text_field :name, required: true %>
+    </div>
+    <fieldset>
+    <legend>Optional fields</legend>
+    <div>
+      <%= form.label :email, "Your email" %>
+      <%= form.text_field :email%>
+    </div>
+    <div>
+      <%= form.label :password, "Password" %>
+      <%= form.password_field :password%>
+    </div>
+    <div>
+      <%= form.label :password_confirm, "Confirm Password" %>
+      <%= form.password_field :password_confirm%>
+    </div>
+    </fieldset>
+    <%= form.submit "Create User" %>
+  <% end %>
+</div>
