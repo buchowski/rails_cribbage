@@ -3,7 +3,8 @@ class GamesController < ApplicationController
   before_action :require_user_id, except: [:index, :show, :cards, :admin]
 
   def index
-    @games = get_game_presenters(@user.games)
+    game_models = Game.where(player_one_id: @user.id).or(Game.where(player_two_id: @user.id))
+    @games = get_game_presenters(game_models)
   end
 
   def admin
