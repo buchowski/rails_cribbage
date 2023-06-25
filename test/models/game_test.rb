@@ -29,6 +29,7 @@ class GameTest < ActiveSupport::TestCase
     assert_equal(game.players[0].id, barbaras_id)
     assert_equal(game.players[0].name, "Barbara")
     assert_nil(game.players[1].id)
+    assert_equal(game.players[1].name, "")
     assert_equal(game.fsm.aasm.current_state, :waiting_for_player_two)
   end
 end

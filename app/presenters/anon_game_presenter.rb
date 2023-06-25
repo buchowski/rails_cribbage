@@ -1,7 +1,6 @@
 class AnonGamePresenter < GamePresenter
 
   def initialize(game_model, game, user)
-    @anon_users_name = user.name
     your_previous_score = 0
     opponents_previous_score = 0
     super(game_model, game, user, your_previous_score, opponents_previous_score)
@@ -9,10 +8,6 @@ class AnonGamePresenter < GamePresenter
 
   def are_you_anonymous
     true
-  end
-
-  def welcome_msg
-    @t.call("welcome", {player_name: @anon_users_name})
   end
 
   def crib_label

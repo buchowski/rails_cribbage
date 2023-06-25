@@ -13,10 +13,6 @@ class GamePresenter < SimpleDelegator
     super(@game_model)
   end
 
-  def welcome_msg
-    @t.call("welcome", {player_name: @user.name})
-  end
-
   def crib_label
     if are_you_dealer
       return @t.call("your_crib")
@@ -117,14 +113,10 @@ class GamePresenter < SimpleDelegator
   end
 
   def opponent_name
-    return "FIX ME" if opponent.nil?
-
     opponent.name.capitalize
   end
 
   def player_name
-    return "FIX ME" if player.nil?
-
     player.name.capitalize
   end
 

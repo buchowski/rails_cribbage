@@ -1,11 +1,9 @@
 class GamesController < ApplicationController
   before_action :get_game, except: [:index, :create, :cards, :admin]
-  before_action :get_user
   before_action :require_user_id, except: [:index, :show, :cards, :admin]
 
   def index
-    game_models = @user ? @user.games : []
-    @games = get_game_presenters(game_models)
+    @games = get_game_presenters(@user.games)
   end
 
   def admin
@@ -122,10 +120,6 @@ class GamesController < ApplicationController
     if !@user.is_member(@game_model)
       throw "You are not a member of this game"
     end
-  end
-
-  def get_user
-    @user = User.find_by_id(session[:user_id]) || AnonUser.new
   end
 
   def require_user_id
