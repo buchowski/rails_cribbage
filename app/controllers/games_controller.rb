@@ -43,6 +43,7 @@ class GamesController < ApplicationController
       if type_of_update == "join_game"
         join_game()
       elsif type_of_update == "start_game"
+        check_membership()
         start_game()
       else
         check_membership()
@@ -74,9 +75,9 @@ class GamesController < ApplicationController
 
   def destroy
     begin
-      check_membership()
-      # todo only creator can delete game
-      if !@game_model.destroy
+      if !@user.is_creator(@game_model)
+        flash[:error_msg] = "Only the game creator can delete this game"
+      elsif !@game_model.destroy
         flash[:error_msg] = "error: failed to delete game"
       end
     rescue => exception

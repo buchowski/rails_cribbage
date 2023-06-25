@@ -13,4 +13,10 @@ class User < ApplicationRecord
 
     is_player_one || is_player_two
   end
+
+  def is_creator(game_model)
+    return false if game_model.nil?
+
+    self.id == game_model.player_one_id
+  end
 end
