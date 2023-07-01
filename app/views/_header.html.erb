@@ -2,6 +2,7 @@
   <div>Cribbage</div>
   <div>
     <div><%= @app.welcome_msg %></div>
-    <%= link_to "Login", "/login" %>
+    <%= link_to "Login", login_path %>
+    <%= button_to "Log out", logout_path, method: :delete %>
   </div>
 </div>

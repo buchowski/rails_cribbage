@@ -50,6 +50,12 @@ class UsersController < ApplicationController
     redirect_to games_path
   end
 
+  def logout
+    session.delete(:user_id)
+    flash[:error_msg] = "You have been logged out"
+    redirect_to login_path
+  end
+
   private
 
   def are_passwords_valid(params)
