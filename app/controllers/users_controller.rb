@@ -27,6 +27,12 @@ class UsersController < ApplicationController
   def login
     user = User.find_by_email(params[:email])
 
+    if user.nil?
+      flash[:error_msg] = "Sorry, we can't find user \"#{params[:email]}\""
+      redirect_to login_path
+      return
+    end
+
     if !does_password_match(user, params[:password])
       flash[:error_msg] = "Sorry, that's not the correct password"
       redirect_back(fallback_location: root_path)
@@ -54,6 +60,7 @@ class UsersController < ApplicationController
   end
 
   def does_password_match(user, password)
+    return false if user.nil? || password.empty?
     BCrypt::Password.new(user.password_digest) == password
   end
 end
