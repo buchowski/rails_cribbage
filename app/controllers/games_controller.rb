@@ -46,6 +46,8 @@ class GamesController < ApplicationController
         check_membership()
         start_game()
       else
+        # TODO only allow creator to perform cut_for_deal & deal?
+        # perform these actions as part of start_game?
         check_membership()
 
         case type_of_update
@@ -103,6 +105,9 @@ class GamesController < ApplicationController
 
   def get_game
     @game_model = get_game_model()
+
+    # TODO how to properly handle 404?
+    throw "sorry can't find that game" if @game_model.nil?
 
     @game = get_cribbage_game(@game_model)
   end
