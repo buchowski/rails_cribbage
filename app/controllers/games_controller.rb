@@ -65,7 +65,8 @@ class GamesController < ApplicationController
 
         @game_model.update(Game.adapt_to_active_record(@game))
       end
-    rescue => exception
+    # TODO improve error handling. remove "uncaught..." from error msg we render in UI
+    rescue StandardError => exception
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
     ensure
@@ -169,6 +170,8 @@ class GamesController < ApplicationController
   def start_game()
     if @game_model.current_fsm_state.to_sym != :waiting_to_start
       throw "this game is either not ready to start or has been started already"
+    elsif !@user.is_creator(@game_model)
+      throw "Only the game creator can start the game"
     end
 
     @game_model.current_fsm_state = :cutting_for_deal
