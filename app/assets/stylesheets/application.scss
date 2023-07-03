@@ -62,3 +62,17 @@ th, td {
   justify-content: space-between;
 }
 
+.rotated_cards {
+  position: relative;
+  height: 135px;
+
+  div[data-role="card"] {
+    position: absolute;
+    @for $i from 1 through 6 {
+      &:nth-child(#{$i}) {
+        top: ($i - 1) * 7px;
+        left: 42px - $i * 7px;
+      }
+    }
+  }
+}

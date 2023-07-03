@@ -1,16 +1,9 @@
-
-<div id="your_score"><%= @game.player_has_n_points_label %></div>
-<progress class="progress is-success" value="<%= @game.player_total_score_percent %>" max="100"><%= @game.player_total_score_percent %></progress>
-
-<div id="opponent_score"><%= @game.labels[:opponent_has_n_points] %></div>
-<progress class="progress is-danger" value="<%= @game.opponent_total_score_percent %>" max="100"><%= @game.opponent_total_score_percent %></progress>
-
 <div class="row">
   <% if @game.are_you_anonymous %>
     <div>
       <%= render partial: "cards/card_section_title", locals: { title: @game.labels[:player_cards] } %>
       <div>
-        <div class="row">
+        <div class="rotated_cards">
           <% @game.player_cards.each do |card| %>
             <div data-role="card">
               <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
@@ -64,7 +57,7 @@
   <div id="opponent_cards_section">
     <%= render partial: "cards/card_section_title", locals: { title: @game.labels[:opponents_cards]} %>
     <div>
-      <div class="row">
+      <div class="rotated_cards">
         <% @game.opponent_cards.each do |card| %>
           <div data-role="card">
             <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
@@ -76,7 +69,7 @@
   <div id="crib_cards_section">
     <%= render partial: "cards/card_section_title", locals: { title: @game.crib_label } %>
     <div>
-      <div class="row">
+      <div class="rotated_cards">
         <% @game.crib_cards.each do |card| %>
           <div data-role="card">
             <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>

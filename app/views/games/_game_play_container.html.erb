@@ -1,0 +1,12 @@
+<div id="game-grid">
+  <div>
+    <div id="your_score"><%= @game.player_has_n_points_label %></div>
+    <progress class="progress is-success" value="<%= @game.player_total_score_percent %>" max="100"><%= @game.player_total_score_percent %></progress>
+
+    <div id="opponent_score"><%= @game.labels[:opponent_has_n_points] %></div>
+    <progress class="progress is-danger" value="<%= @game.opponent_total_score_percent %>" max="100"><%= @game.opponent_total_score_percent %></progress>
+  </div>
+  <div>
+    <%= render partial: "game_play" %>
+  </div>
+</div>
