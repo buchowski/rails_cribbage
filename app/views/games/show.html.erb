@@ -1,24 +1,29 @@
-<div class="is-size-1"><%= @app.welcome_msg %></div>
+<div id="<%= dom_id(@game) %>">
+  <div class="is-size-1"><%= @app.welcome_msg %></div>
 
-<% if !@game.game_play_message.blank? %>
-  <div id="game_play_message_container" class="notification is-primary is-light">
-    <h1 id="game_play_message" class="title"><%= @game.game_play_message %></h1>
-    <% if @game.show_refresh_btn %>
-      <%= button_to "Refresh", game_path(@game), { method: :get, id: "refresh_btn", class: 'button is-primary' } %>
-    <% end %>
-  </div>
-<% end %>
+  <% if !@game.game_play_message.blank? %>
+    <div id="game_play_message_container" class="notification is-primary is-light">
+      <h1 id="game_play_message" class="title"><%= @game.game_play_message %></h1>
+      <% if @game.show_refresh_btn %>
+        <%= button_to "Refresh", game_path(@game), { method: :get, id: "refresh_btn", class: 'button is-primary' } %>
+      <% end %>
+    </div>
+  <% end %>
 
-<% if !@game.game_play_alert.blank? %>
-  <div id="game_play_alert" class="notification is-secondary">
-    <%= @game.game_play_alert %>
-  </div>
-<% end %>
+  <% if !@game.game_play_alert.blank? %>
+    <div id="game_play_alert" class="notification is-secondary">
+      <%= @game.game_play_alert %>
+    </div>
+  <% end %>
 
-<% if @game.update_btn_content[:is_show_update_btn] %>
-  <%= render partial: "update_btn", locals: {label: @game.update_btn_content[:label], type_of_update: @game.update_btn_content[:type_of_update]} %>
-<% end %>
+  <% if @game.update_btn_content[:is_show_update_btn] %>
+    <%= render partial: "update_btn", locals: {label: @game.update_btn_content[:label], type_of_update: @game.update_btn_content[:type_of_update]} %>
+  <% end %>
 
-<% if @game.has_game_started %>
-  <%= render partial: "game_play_container" %>
-<% end %>
+  <% if @game.has_game_started %>
+    <%= render partial: "game_play_container" %>
+  <% end %>
+
+</div>
+
+<%= turbo_stream_from dom_id(@game) %>

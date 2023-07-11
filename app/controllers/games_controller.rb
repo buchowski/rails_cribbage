@@ -12,12 +12,16 @@ class GamesController < ApplicationController
     @games = get_game_presenters(Game.all)
   end
 
-  def show
+  def game_view_model
     if @user.is_member(@game_model)
-      @game = GamePresenter.new(@game_model, @game, @user, flash[:your_score], flash[:opponents_score])
+      return GamePresenter.new(@game_model, @game, @user, flash[:your_score], flash[:opponents_score])
     else
-      @game = AnonGamePresenter.new(@game_model, @game, @user)
+      return AnonGamePresenter.new(@game_model, @game, @user)
     end
+  end
+
+  def show
+    @game = game_view_model()
   end
 
   def create
@@ -72,7 +76,14 @@ class GamesController < ApplicationController
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
     ensure
-      redirect_to game_path, flash: { your_score: your_score, opponents_score: opponents_score }
+      respond_to do |format|
+        format.turbo_stream {
+          # TODO @game has two different meanings (get_game vs game_view_model). clean up
+          @game = game_view_model()
+          render turbo_stream: turbo_stream.replace(helpers.dom_id(@game_model), partial: 'games/game_play_container')
+        }
+        format.html { redirect_to game_path, flash: { your_score: your_score, opponents_score: opponents_score } }
+      end
     end
   end
 
