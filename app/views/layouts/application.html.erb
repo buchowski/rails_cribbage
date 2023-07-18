@@ -13,7 +13,7 @@
   <body>
     <div class="container">
       <%= render "/header" %>
-      <%= render "/flash_errors" %>
+      <%= render partial: "/flash_errors", locals: { error_msg: flash[:error_msg] } %>
       <%= yield %>
     </div>
   </body>

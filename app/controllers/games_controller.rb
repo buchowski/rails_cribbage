@@ -78,6 +78,8 @@ class GamesController < ApplicationController
     ensure
       respond_to do |format|
         format.turbo_stream {
+          flash.discard(:error_msg)
+
           # TODO @game has two different meanings (get_game vs game_view_model). clean up
           @game = game_view_model()
           render turbo_stream: turbo_stream.replace(helpers.dom_id(@game_model), partial: 'games/game_play_container')

@@ -1,5 +1,5 @@
-<% if !flash[:error_msg].blank? %>
+<% if error_msg %>
   <div id="error_msg" class="notification is-danger">
-    <%= flash[:error_msg] %>
+    <%= error_msg %>
   </div>
 <% end %>

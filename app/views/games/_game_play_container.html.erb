@@ -1,3 +1,4 @@
+<%= render partial: "/flash_errors", locals: { error_msg: flash[:error_msg] } %>
 <div id="game-grid">
   <div>
     <div id="your_score"><%= @game.player_has_n_points_label %></div>
