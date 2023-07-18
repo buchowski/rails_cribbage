@@ -82,7 +82,7 @@ class GamesController < ApplicationController
 
           # TODO @game has two different meanings (get_game vs game_view_model). clean up
           @game = game_view_model()
-          render turbo_stream: turbo_stream.replace(helpers.dom_id(@game_model), partial: 'games/game_play_container')
+          render turbo_stream: turbo_stream.replace(helpers.dom_id(@game_model), partial: "games/game_play_container")
         }
         format.html { redirect_to game_path, flash: { your_score: your_score, opponents_score: opponents_score } }
       end
