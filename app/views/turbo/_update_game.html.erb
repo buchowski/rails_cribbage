@@ -1,0 +1,15 @@
+<turbo-stream action="replace" target="error_msg_container">
+  <template>
+    <div id="error_msg_container">
+      <%= render partial: "/flash_errors", locals: { error_msg: flash[:error_msg] } %>
+    </div>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="<%= dom_id(@game) %>">
+  <template>
+    <div id="<%= dom_id(@game) %>">
+      <%= render partial: "game_play_container" %>
+    </div>
+  </template>
+</turbo-stream>

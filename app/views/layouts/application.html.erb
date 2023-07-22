@@ -13,7 +13,9 @@
   <body>
     <div class="container">
       <%= render "/header" %>
-      <%= render partial: "/flash_errors", locals: { error_msg: flash[:error_msg] } %>
+      <div id="error_msg_container">
+        <%= render partial: "/flash_errors", locals: { error_msg: flash[:error_msg] } %>
+      </div>
       <%= yield %>
     </div>
   </body>
