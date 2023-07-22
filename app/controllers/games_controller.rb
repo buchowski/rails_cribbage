@@ -82,8 +82,6 @@ class GamesController < ApplicationController
 
           # TODO @game has two different meanings (get_game vs game_view_model). clean up
           @game = game_view_model()
-          # why do i have to pass in a target? shouldn't it be inferred from the partial?
-          render turbo_stream: turbo_stream.update(helpers.dom_id(@game_model), partial: "turbo/update_game")
         }
         format.html { redirect_to game_path, flash: { your_score: your_score, opponents_score: opponents_score } }
       end
