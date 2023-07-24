@@ -1,4 +1,4 @@
 <div id="<%= dom_id(@game) %>">
   <%= render partial: "game_play_container" %>
 </div>
-<%= turbo_stream_from dom_id(@game) %>
+<%= turbo_stream_from @game %>
