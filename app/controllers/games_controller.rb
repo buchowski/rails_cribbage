@@ -22,7 +22,7 @@ class GamesController < ApplicationController
 
   def show
     gvm = game_view_model()
-    render "games/show", { locals: { gvm: gvm, app: @app } }
+    render "games/show", { locals: { gvm: gvm, app: @app, user: @user } }
   end
 
   def create
@@ -77,13 +77,19 @@ class GamesController < ApplicationController
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
     ensure
+      # TODO this will broadcast even if there's an error. fix this
+      if !opponent.nil?
+        opponent_user = User.find_by_id(opponent.id)
+        opponent_gvm = GamePresenter.new(@game_model, @game, opponent_user, opponents_score, your_score)
+
+        Turbo::StreamsChannel.broadcast_render_to(opponent_user, partial: "games/update", locals: { gvm: opponent_gvm, app: AppPresenter.new(opponent_user) })
+      end
+
       respond_to do |format|
         format.turbo_stream {
           flash.discard(:error_msg)
 
-          gvm = game_view_model()
-          Turbo::StreamsChannel.broadcast_render_to(gvm, partial: "games/update", locals: { gvm: gvm, app: @app })
-          render partial: "games/update", locals: { gvm: gvm, app: @app }
+          render partial: "games/update", locals: { gvm: game_view_model, app: @app }
         }
         format.html { redirect_to game_path, flash: { your_score: your_score, opponents_score: opponents_score } }
       end
