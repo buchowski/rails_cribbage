@@ -16,7 +16,7 @@
 <% end %>
 
 <% if gvm.update_btn_content[:is_show_update_btn] %>
-  <%= render partial: "update_btn", locals: { gvm: gvm, label: gvm.update_btn_content[:label], type_of_update: gvm.update_btn_content[:type_of_update]} %>
+  <%= render partial: "games/update_btn", locals: { gvm: gvm, label: gvm.update_btn_content[:label], type_of_update: gvm.update_btn_content[:type_of_update]} %>
 <% end %>
 
 <% if gvm.has_game_started %>
@@ -29,7 +29,7 @@
       <progress class="progress is-danger" value="<%= gvm.opponent_total_score_percent %>" max="100"><%= gvm.opponent_total_score_percent %></progress>
     </div>
     <div>
-      <%= render partial: "game_play", locals: { gvm: gvm } %>
+      <%= render partial: "games/game_play", locals: { gvm: gvm } %>
     </div>
   </div>
 <% end %>
