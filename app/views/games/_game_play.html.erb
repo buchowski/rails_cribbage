@@ -1,10 +1,10 @@
 <div class="row">
-  <% if @game.are_you_anonymous %>
+  <% if gvm.are_you_anonymous %>
     <div>
-      <%= render partial: "cards/card_section_title", locals: { title: @game.labels[:player_cards] } %>
+      <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:player_cards] } %>
       <div>
         <div class="rotated_cards">
-          <% @game.player_cards.each do |card| %>
+          <% gvm.player_cards.each do |card| %>
             <div data-role="card">
               <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
             </div>
@@ -17,12 +17,12 @@
       <%= render partial: "cards/card_section_title", locals: { title: "Your cards" } %>
       <div>
 
-        <% if @game.show_discard_checkboxes %>
-          <%= render partial: "cards/card_checkboxes_section" %>
+        <% if gvm.show_discard_checkboxes %>
+          <%= render partial: "cards/card_checkboxes_section", locals: { gvm: gvm } %>
         <% end %>
 
-        <% if @game.show_play_card_radios %>
-          <%= render partial: "cards/card_radios_section" %>
+        <% if gvm.show_play_card_radios %>
+          <%= render partial: "cards/card_radios_section", locals: { gvm: gvm } %>
         <% end %>
       </div>
     </div>
@@ -31,8 +31,8 @@
   <div id="cut_card_section">
     <%= render partial: "cards/card_section_title", locals: { title: "Cut card"} %>
     <div>
-      <% if !@game.cut_card.nil? %>
-        <%= render partial: "cards/card_png", locals: { card: @game.cut_card } %>
+      <% if !gvm.cut_card.nil? %>
+        <%= render partial: "cards/card_png", locals: { card: gvm.cut_card } %>
       <% end %>
     </div>
   </div>
@@ -40,11 +40,11 @@
 
 <div id="pile_cards_section">
   <div id="pile_score">
-    <%= render partial: "cards/card_section_title", locals: { title: "Pile score: #{@game.pile_score}" } %>
+    <%= render partial: "cards/card_section_title", locals: { title: "Pile score: #{gvm.pile_score}" } %>
   </div>
   <div>
     <div class="row">
-      <% @game.pile_cards.each do |card| %>
+      <% gvm.pile_cards.each do |card| %>
         <div data-role="card">
           <%= render partial: "cards/card_png", locals: { card: card } %>
         </div>
@@ -55,10 +55,10 @@
 
 <div class="row">
   <div id="opponent_cards_section">
-    <%= render partial: "cards/card_section_title", locals: { title: @game.labels[:opponents_cards]} %>
+    <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:opponents_cards]} %>
     <div>
       <div class="rotated_cards">
-        <% @game.opponent_cards.each do |card| %>
+        <% gvm.opponent_cards.each do |card| %>
           <div data-role="card">
             <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
           </div>
@@ -67,10 +67,10 @@
     </div>
   </div>
   <div id="crib_cards_section">
-    <%= render partial: "cards/card_section_title", locals: { title: @game.crib_label } %>
+    <%= render partial: "cards/card_section_title", locals: { title: gvm.crib_label } %>
     <div>
       <div class="rotated_cards">
-        <% @game.crib_cards.each do |card| %>
+        <% gvm.crib_cards.each do |card| %>
           <div data-role="card">
             <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
           </div>

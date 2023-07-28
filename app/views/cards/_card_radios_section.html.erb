@@ -1,6 +1,6 @@
 <%= form_with(url: game_path, method: "patch") do |form| %>
   <div class="row">
-    <% @game.player_cards.each do |card| %>
+    <% gvm.player_cards.each do |card| %>
       <%= render partial: 'cards/card_radio', locals: { card: card } %>
     <% end %>
   </div>

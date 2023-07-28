@@ -1,35 +1,35 @@
-<div class="is-size-1"><%= @app.welcome_msg %></div>
+<div class="is-size-1"><%= app.welcome_msg %></div>
 
-<% if !@game.game_play_message.blank? %>
+<% if !gvm.game_play_message.blank? %>
   <div id="game_play_message_container" class="notification is-primary is-light">
-    <h1 id="game_play_message" class="title"><%= @game.game_play_message %></h1>
-    <% if @game.show_refresh_btn %>
-      <%= button_to "Refresh", game_path(@game), { method: :get, id: "refresh_btn", class: 'button is-primary' } %>
+    <h1 id="game_play_message" class="title"><%= gvm.game_play_message %></h1>
+    <% if gvm.show_refresh_btn %>
+      <%= button_to "Refresh", game_path(gvm), { method: :get, id: "refresh_btn", class: 'button is-primary' } %>
     <% end %>
   </div>
 <% end %>
 
-<% if !@game.game_play_alert.blank? %>
+<% if !gvm.game_play_alert.blank? %>
   <div id="game_play_alert" class="notification is-secondary">
-    <%= @game.game_play_alert %>
+    <%= gvm.game_play_alert %>
   </div>
 <% end %>
 
-<% if @game.update_btn_content[:is_show_update_btn] %>
-  <%= render partial: "update_btn", locals: {label: @game.update_btn_content[:label], type_of_update: @game.update_btn_content[:type_of_update]} %>
+<% if gvm.update_btn_content[:is_show_update_btn] %>
+  <%= render partial: "update_btn", locals: { gvm: gvm, label: gvm.update_btn_content[:label], type_of_update: gvm.update_btn_content[:type_of_update]} %>
 <% end %>
 
-<% if @game.has_game_started %>
+<% if gvm.has_game_started %>
   <div id="game-grid">
     <div>
-      <div id="your_score"><%= @game.player_has_n_points_label %></div>
-      <progress class="progress is-success" value="<%= @game.player_total_score_percent %>" max="100"><%= @game.player_total_score_percent %></progress>
+      <div id="your_score"><%= gvm.player_has_n_points_label %></div>
+      <progress class="progress is-success" value="<%= gvm.player_total_score_percent %>" max="100"><%= gvm.player_total_score_percent %></progress>
 
-      <div id="opponent_score"><%= @game.labels[:opponent_has_n_points] %></div>
-      <progress class="progress is-danger" value="<%= @game.opponent_total_score_percent %>" max="100"><%= @game.opponent_total_score_percent %></progress>
+      <div id="opponent_score"><%= gvm.labels[:opponent_has_n_points] %></div>
+      <progress class="progress is-danger" value="<%= gvm.opponent_total_score_percent %>" max="100"><%= gvm.opponent_total_score_percent %></progress>
     </div>
     <div>
-      <%= render partial: "game_play" %>
+      <%= render partial: "game_play", locals: { gvm: gvm } %>
     </div>
   </div>
 <% end %>

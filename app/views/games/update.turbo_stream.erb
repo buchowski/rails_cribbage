@@ -6,9 +6,9 @@
   </template>
 </turbo-stream>
 
-<turbo-stream action="replace" target="<%= dom_id(@game) %>">
+<turbo-stream action="replace" target="<%= dom_id(gvm) %>">
   <template>
-    <div id="<%= dom_id(@game) %>">
+    <div id="<%= dom_id(gvm) %>">
       <%= render partial: "game_play_container", formats: [:html] %>
     </div>
   </template>
