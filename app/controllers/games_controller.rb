@@ -82,6 +82,7 @@ class GamesController < ApplicationController
           flash.discard(:error_msg)
 
           gvm = game_view_model()
+          Turbo::StreamsChannel.broadcast_render_to(gvm, partial: "games/update", locals: { gvm: gvm, app: @app })
           render partial: "games/update", locals: { gvm: gvm, app: @app }
         }
         format.html { redirect_to game_path, flash: { your_score: your_score, opponents_score: opponents_score } }
