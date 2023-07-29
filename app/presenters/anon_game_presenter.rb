@@ -25,6 +25,24 @@ class AnonGamePresenter < GamePresenter
     "This is a game between #{player_name} and #{opponent_name}"
   end
 
+  def update_btn_content
+    is_show_update_btn = true
+
+    case current_state
+    when :waiting_for_player_two
+      label = "Join game"
+      type_of_update = "join_game"
+    else
+      is_show_update_btn = false
+    end
+
+    return {
+      is_show_update_btn: is_show_update_btn,
+      label: label,
+      type_of_update: type_of_update
+    }
+  end
+
   def game_play_alert
     nil
   end
