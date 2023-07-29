@@ -1,4 +1,4 @@
 <div id="<%= dom_id(gvm) %>">
   <%= render partial: "game_play_container", locals: { gvm: gvm, app: app } %>
 </div>
-<%= turbo_stream_from user %>
+<%= turbo_stream_from gvm.get_stream_id_for_user(user) %>

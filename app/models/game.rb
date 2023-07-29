@@ -16,6 +16,10 @@ class Game < ApplicationRecord
     super(adapted_game);
   end
 
+  def get_stream_id_for_user(user)
+    user.is_member(self) ? "#{user.id}-#{self.id}" : "guest-#{self.id}"
+  end
+
   private
 
   def self.safely_get_id entity
