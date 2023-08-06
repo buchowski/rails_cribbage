@@ -71,20 +71,23 @@ class GamesController < ApplicationController
         end
 
         @game_model.update(Game.adapt_to_active_record(@game))
-
-        if !opponent.nil?
-          opponent_user = User.find_by_id(opponent.id)
-          opponent_gvm = GamePresenter.new(@game_model, @game, opponent_user, opponents_score, your_score)
-          opponent_stream_id = opponent_gvm.get_stream_id_for_user(opponent_user)
-
-          Turbo::StreamsChannel.broadcast_render_to(opponent_stream_id, partial: "games/update", locals: { gvm: opponent_gvm, app: AppPresenter.new(opponent_user) })
-        end
-
-        anon_user = AnonUser.new
-        guest_gvm = AnonGamePresenter.new(@game_model, @game, anon_user)
-        guest_stream_id = guest_gvm.get_stream_id_for_user(anon_user)
-        Turbo::StreamsChannel.broadcast_render_to(guest_stream_id, partial: "games/update", locals: { gvm: guest_gvm, app: AppPresenter.new(anon_user) })
       end
+
+      # if there's an opponent, update their view
+      if !opponent.nil?
+        opponent_user = User.find_by_id(opponent.id)
+        opponent_gvm = GamePresenter.new(@game_model, @game, opponent_user, opponents_score, your_score)
+        opponent_stream_id = opponent_gvm.get_stream_id_for_user(opponent_user)
+
+        Turbo::StreamsChannel.broadcast_render_to(opponent_stream_id, partial: "games/update", locals: { gvm: opponent_gvm, app: AppPresenter.new(opponent_user) })
+      end
+
+      # if any guests are watching the game, update their views
+      anon_user = AnonUser.new
+      guest_gvm = AnonGamePresenter.new(@game_model, @game, anon_user)
+      guest_stream_id = guest_gvm.get_stream_id_for_user(anon_user)
+      Turbo::StreamsChannel.broadcast_render_to(guest_stream_id, partial: "games/update", locals: { gvm: guest_gvm, app: AppPresenter.new(anon_user) })
+
     # TODO improve error handling. remove "uncaught..." from error msg we render in UI
     rescue StandardError => exception
       # truncate exception.message to prevent cookieoverflow
