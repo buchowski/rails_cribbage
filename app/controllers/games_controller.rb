@@ -29,13 +29,16 @@ class GamesController < ApplicationController
   end
 
   def create
+    # User.is_bot ultimately determines if the game is_single_player_game
     bot_id = params[:bot_id]
+    bot = User.find_by_id(bot_id) if !bot_id.nil?
 
     begin
       new_game = Game.new(@user.id)
 
-      if !bot_id.nil?
-        new_game.player_two_id = bot_id
+      if !bot.nil?
+        new_game.player_one_id = @user.id
+        new_game.player_two_id = bot.id
         new_game.current_fsm_state = :waiting_to_start
       end
 
@@ -84,8 +87,7 @@ class GamesController < ApplicationController
       end
 
       # if there's an opponent, update their view
-      if !opponent.nil?
-        opponent_user = User.find_by_id(opponent.id)
+      if !opponent_user.nil? && !opponent_user.is_bot
         opponent_gvm = GamePresenter.new(@game_model, @game, opponent_user, opponents_score, your_score)
         opponent_stream_id = opponent_gvm.get_stream_id_for_user(opponent_user)
 
@@ -133,6 +135,10 @@ class GamesController < ApplicationController
   end
 
   private
+
+  def is_single_player_game
+    !opponent_user.nil? && opponent_user.is_bot
+  end
 
   def get_game_presenters(game_models)
     game_models.map do |game_model|
@@ -190,6 +196,11 @@ class GamesController < ApplicationController
     is_user_player_two = @user.id == @game_model.player_two_id
 
     return is_user_player_two ? @game.players[0] : @game.players[1]
+  end
+
+  def opponent_user
+    # TODO we only need to load this user once per request
+    opponent.nil? ? nil : User.find_by_id(opponent.id)
   end
 
   def join_game()
