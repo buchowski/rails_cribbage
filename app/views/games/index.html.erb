@@ -1,4 +1,4 @@
-<h1>Games #index</h1>
 <div id="user_games_table">
   <%= render "table" %>
 </div>
+<%= button_to "New Game", games_path, method: :post, params: { bot_id: 3 } %>

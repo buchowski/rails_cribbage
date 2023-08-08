@@ -13,6 +13,9 @@ class GamesController < ApplicationController
   end
 
   def game_view_model
+    # make sure @game is up to date
+    @game = get_cribbage_game(@game_model)
+
     if @user.is_member(@game_model)
       return GamePresenter.new(@game_model, @game, @user, flash[:your_score], flash[:opponents_score])
     else
@@ -26,8 +29,15 @@ class GamesController < ApplicationController
   end
 
   def create
+    bot_id = params[:bot_id]
+
     begin
       new_game = Game.new(@user.id)
+
+      if !bot_id.nil?
+        new_game.player_two_id = bot_id
+        new_game.current_fsm_state = :waiting_to_start
+      end
 
       if !new_game.save
         flash[:error_msg] = "error: failed to save game"
