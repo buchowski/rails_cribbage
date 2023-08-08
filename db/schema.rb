@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_19_033055) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_08_054818) do
   create_table "games", force: :cascade do |t|
     t.integer "player_one_id"
     t.integer "player_two_id"
@@ -38,6 +38,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_19_033055) do
     t.string "email", limit: 24
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_bot", default: false
   end
 
 end
