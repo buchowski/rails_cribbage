@@ -20,3 +20,11 @@ three:
   is_admin: false
   name: Martin
   email: martin@express-tops.net
+
+four:
+  id: 4
+  password_digest: <%= BCrypt::Password.create("secret") %>
+  is_admin: false
+  name: Spookey-Bot
+  email: spookster@express-tops.net
+  is_bot: true
