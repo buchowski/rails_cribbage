@@ -1,4 +1,4 @@
 <div id="user_games_table">
-  <%= render "table" %>
+  <%= render partial: "games/table", locals: { gvms: gvms } %>
 </div>
-<%= button_to "New Game", games_path, method: :post, params: { bot_id: 3 } %>
+<%= button_to "New Game", games_path, method: :post, params: { bot_id: bots.first.id } %>

@@ -4,12 +4,15 @@ class GamesController < ApplicationController
 
   def index
     game_models = Game.where(player_one_id: @user.id).or(Game.where(player_two_id: @user.id))
-    @games = get_game_presenters(game_models)
+    games = get_game_presenters(game_models)
+    bots = User.where(is_bot: true)
+    render "games/index", locals: { gvms: games, bots: bots }
   end
 
   def admin
-    @users = User.all
-    @games = get_game_presenters(Game.all)
+    users = User.where(is_bot: false)
+    games = get_game_presenters(Game.all)
+    render "games/admin", locals: { gvms: games, users: users }
   end
 
   def game_view_model
@@ -54,8 +57,8 @@ class GamesController < ApplicationController
 
   def update
     type_of_update = params[:type_of_update]
-    your_score = player && player.total_score
-    opponents_score = opponent && opponent.total_score
+    your_score = @player && @player.total_score
+    opponents_score = @opponent && @opponent.total_score
 
     begin
       if type_of_update == "join_game"
@@ -87,11 +90,11 @@ class GamesController < ApplicationController
       end
 
       # if there's an opponent, update their view
-      if !opponent_user.nil? && !opponent_user.is_bot
-        opponent_gvm = GamePresenter.new(@game_model, @game, opponent_user, opponents_score, your_score)
-        opponent_stream_id = opponent_gvm.get_stream_id_for_user(opponent_user)
+      if !@opponent_user.nil? && !@opponent_user.is_bot
+        opponent_gvm = GamePresenter.new(@game_model, @game, @opponent_user, opponents_score, your_score)
+        opponent_stream_id = opponent_gvm.get_stream_id_for_user(@opponent_user)
 
-        Turbo::StreamsChannel.broadcast_render_to(opponent_stream_id, partial: "games/update", locals: { gvm: opponent_gvm, app: AppPresenter.new(opponent_user) })
+        Turbo::StreamsChannel.broadcast_render_to(opponent_stream_id, partial: "games/update", locals: { gvm: opponent_gvm, app: AppPresenter.new(@opponent_user) })
       end
 
       # if any guests are watching the game, update their views
@@ -137,7 +140,7 @@ class GamesController < ApplicationController
   private
 
   def is_single_player_game
-    !opponent_user.nil? && opponent_user.is_bot
+    !@opponent_user.nil? && @opponent_user.is_bot
   end
 
   def get_game_presenters(game_models)
@@ -148,17 +151,18 @@ class GamesController < ApplicationController
   end
 
   def get_game
-    @game_model = get_game_model()
+    @game_model = Game.find_by_id(params[:id])
 
     # TODO how to properly handle 404?
     throw "sorry can't find that game" if @game_model.nil?
 
     @game = get_cribbage_game(@game_model)
-  end
 
-  def get_game_model
-    game_id = params[:id]
-    Game.find_by_id(game_id)
+    is_user_player_two = @user.id == @game_model.player_two_id
+
+    @player = is_user_player_two ? @game.players[1] : @game.players[0]
+    @opponent = is_user_player_two ? @game.players[0] : @game.players[1]
+    @opponent_user = @opponent.nil? ? nil : User.find_by_id(@opponent.id)
   end
 
   def get_cribbage_game(game_model)
@@ -180,27 +184,6 @@ class GamesController < ApplicationController
       redirect_to request.env['HTTP_REFERER'] || games_path
       return
     end
-  end
-
-  def player
-    return if @game_model.nil?
-
-    is_user_player_two = @user.id == @game_model.player_two_id
-
-    return is_user_player_two ? @game.players[1] : @game.players[0]
-  end
-
-  def opponent
-    return if @game_model.nil?
-
-    is_user_player_two = @user.id == @game_model.player_two_id
-
-    return is_user_player_two ? @game.players[0] : @game.players[1]
-  end
-
-  def opponent_user
-    # TODO we only need to load this user once per request
-    opponent.nil? ? nil : User.find_by_id(opponent.id)
   end
 
   def join_game()
@@ -235,7 +218,7 @@ class GamesController < ApplicationController
 
   def discard()
     cards = params[:cards] || []
-    cards_in_hand = player.hand.keys
+    cards_in_hand = @player.hand.keys
     num_of_cards_to_discard = cards_in_hand.size - 4
 
     if num_of_cards_to_discard <= 0
@@ -250,7 +233,7 @@ class GamesController < ApplicationController
       throw "You may only discard two cards"
     end
 
-    cards.each { |card_id| @game.discard(player, card_id) }
+    cards.each { |card_id| @game.discard(@player, card_id) }
 
     # automatically flip the top card. no need for manual user action
     @game.flip_top_card if @game.fsm.flipping_top_card?
@@ -263,7 +246,7 @@ class GamesController < ApplicationController
       throw "you must select a card to play"
     end
 
-    @game.play_card(player, card_id)
+    @game.play_card(@player, card_id)
   end
 
   def score_hands_and_crib()

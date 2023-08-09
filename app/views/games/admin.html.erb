@@ -1,9 +1,9 @@
 <%= link_to "home", games_path %>
 
 <div id="admin_games_table">
-  <%= render "table" %>
+  <%= render partial: "games/table", locals: { gvms: gvms } %>
 </div>
 
-<% @users.each do |user| %>
+<% users.each do |user| %>
   <%= button_to user.name, '/admin-login', { method: :post, params: { user_id: user.id } } %>
 <% end %>
