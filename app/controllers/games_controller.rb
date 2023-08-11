@@ -42,7 +42,7 @@ class GamesController < ApplicationController
       if !bot.nil?
         new_game.player_one_id = @user.id
         new_game.player_two_id = bot.id
-        new_game.current_fsm_state = :waiting_to_start
+        new_game.current_fsm_state = :cutting_for_deal
       end
 
       if !new_game.save
@@ -74,6 +74,7 @@ class GamesController < ApplicationController
         case type_of_update
         when "cut_for_deal"
           @game.cut_for_deal()
+          @game.deal() if is_single_player_game
         when "deal"
           @game.deal()
         when "discard"

@@ -92,17 +92,16 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     barbara, bot = start_bot_game_as('Barbara')
     cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
 
-    assert_equal :cut_for_deal, cribbage_game.fsm.aasm.current_state
+    assert_equal :cutting_for_deal, cribbage_game.fsm.aasm.current_state
   end
 
   test "should deal cards immediately after user cuts if is bot game" do
     barbara, bot = start_bot_game_as('Barbara')
 
-    game = Game.last
-    patch game_path(game.id), params: { type_of_update: "cut_for_deal" }
-    cribbage_game = Game.adapt_to_cribbage_game(game, barbara, bot)
+    patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
+    cribbage_game = Game.last.adapt_to_cribbage_game(game, barbara, bot)
 
-    assert_equal :discard, cribbage_game.fsm.aasm.current_state
+    assert_equal :discarding, cribbage_game.fsm.aasm.current_state
     assert_equal 6, cribbage_game.players[1].hand.size
     assert_equal 0, cribbage_game.crib.size
   end
