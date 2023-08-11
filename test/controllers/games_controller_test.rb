@@ -79,12 +79,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should allow user to create a bot game" do
-    sign_in_as_barbara()
-    barbara = User.find_by_name('Barbara')
-    bot = User.where(is_bot: true).first
-
-    post games_path, params: { bot_id: bot.id }
-
+    barbara, bot = start_bot_game_as('Barbara')
     cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
 
     assert_equal cribbage_game.players[0].id, barbara.id
@@ -94,13 +89,21 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should automatically start game if bot is selected" do
-    sign_in_as_barbara()
-    bot = User.where(is_bot: true).first
+    barbara, bot = start_bot_game_as('Barbara')
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
 
-    post games_path, params: { bot_id: bot.id }
+    assert_equal :cut_for_deal, cribbage_game.fsm.aasm.current_state
+  end
+
+  test "should deal cards immediately after user cuts if is bot game" do
+    barbara, bot = start_bot_game_as('Barbara')
 
     game = Game.last
+    patch game_path(game.id), params: { type_of_update: "cut_for_deal" }
+    cribbage_game = Game.adapt_to_cribbage_game(game, barbara, bot)
 
-    assert_equal :cut_for_deal, game.current_fsm_state.to_sym
+    assert_equal :discard, cribbage_game.fsm.aasm.current_state
+    assert_equal 6, cribbage_game.players[1].hand.size
+    assert_equal 0, cribbage_game.crib.size
   end
 end

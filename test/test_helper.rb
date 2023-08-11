@@ -21,4 +21,14 @@ class ActiveSupport::TestCase
   def sign_in_as_barbara()
     sign_in_as(User.find_by_name('Barbara').id)
   end
+
+  def start_bot_game_as(user_name)
+    user = User.find_by_name(user_name)
+    sign_in_as(user.id)
+    bot = User.where(is_bot: true).first
+
+    post games_path, params: { bot_id: bot.id }
+
+    return [user, bot]
+  end
 end
