@@ -99,10 +99,28 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     barbara, bot = start_bot_game_as('Barbara')
 
     patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
-    cribbage_game = Game.last.adapt_to_cribbage_game(game, barbara, bot)
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
 
     assert_equal :discarding, cribbage_game.fsm.aasm.current_state
+    assert_equal 6, cribbage_game.players[0].hand.size
     assert_equal 6, cribbage_game.players[1].hand.size
     assert_equal 0, cribbage_game.crib.size
+  end
+
+  test "should discard bot's cards after user has discarded" do
+    barbara, bot = start_bot_game_as('Barbara')
+
+    patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
+
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
+    cards_to_discard = cribbage_game.players[0].hand.keys[0..1]
+
+    patch game_path(Game.last.id), params: { type_of_update: "discard", cards: cards_to_discard }
+
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
+    assert_equal :pegging, cribbage_game.fsm.aasm.current_state
+    assert_equal 4, cribbage_game.players[0].hand.size
+    assert_equal 4, cribbage_game.players[1].hand.size
+    assert_equal 4, cribbage_game.crib.size
   end
 end
