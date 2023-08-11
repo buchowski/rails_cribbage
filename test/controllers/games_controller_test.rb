@@ -77,4 +77,30 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_equal flash[:error_msg], "uncaught throw \"You are not a member of this game\""
     assert_equal session[:user_id], 3
   end
+
+  test "should allow user to create a bot game" do
+    sign_in_as_barbara()
+    barbara = User.find_by_name('Barbara')
+    bot = User.where(is_bot: true).first
+
+    post games_path, params: { bot_id: bot.id }
+
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
+
+    assert_equal cribbage_game.players[0].id, barbara.id
+    assert_equal cribbage_game.players[1].id, bot.id
+    assert_equal cribbage_game.players[1].hand.size, 0
+    assert_equal cribbage_game.crib.size, 0
+  end
+
+  test "should automatically start game if bot is selected" do
+    sign_in_as_barbara()
+    bot = User.where(is_bot: true).first
+
+    post games_path, params: { bot_id: bot.id }
+
+    game = Game.last
+
+    assert_equal :cut_for_deal, game.current_fsm_state.to_sym
+  end
 end
