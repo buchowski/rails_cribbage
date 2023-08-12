@@ -118,7 +118,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     patch game_path(Game.last.id), params: { type_of_update: "discard", cards: cards_to_discard }
 
     cribbage_game = Game.adapt_to_cribbage_game(Game.last)
-    assert_equal :pegging, cribbage_game.fsm.aasm.current_state
+    assert_equal :playing, cribbage_game.fsm.aasm.current_state
     assert_equal 4, cribbage_game.players[0].hand.size
     assert_equal 4, cribbage_game.players[1].hand.size
     assert_equal 4, cribbage_game.crib.size

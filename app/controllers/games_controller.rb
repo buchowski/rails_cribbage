@@ -79,6 +79,7 @@ class GamesController < ApplicationController
           @game.deal()
         when "discard"
           discard()
+          discard_bot_cards() if is_single_player_game
         when "play_card"
           play_card()
           # if all cards have been played then we score the hands and crib
@@ -142,6 +143,13 @@ class GamesController < ApplicationController
 
   def is_single_player_game
     !@opponent_user.nil? && @opponent_user.is_bot
+  end
+
+  def discard_bot_cards
+    bot_cards = @opponent.hand.keys
+    cards_to_discard = bot_cards[0..1]
+    cards_to_discard.each { |card_id| @game.discard(@opponent, card_id) }
+    @game.flip_top_card if @game.fsm.flipping_top_card?
   end
 
   def get_game_presenters(game_models)
