@@ -61,12 +61,14 @@ class Game < ApplicationRecord
     return true
   end
 
-  def self.adapt_to_cribbage_game(game_model, user_one, user_two)
+  def self.adapt_to_cribbage_game(game_model)
     game = CribbageGame::Game.new
     player_one = game.players[0]
     player_two = game.players[1]
+    user_one = User.find_by_id(game_model.player_one_id)
+    user_two = User.find_by_id(game_model.player_two_id)
 
-    throw "users do not match game.players" if !self.are_users_valid(game_model, user_one, user_two)
+    throw "cannot find user #{game_model.player_one_id}" if user_one.nil?
 
     player_one.id = game_model.player_one_id
     player_one.hand = game_model.player_one_cards

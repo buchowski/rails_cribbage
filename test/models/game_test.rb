@@ -22,9 +22,7 @@ class GameTest < ActiveSupport::TestCase
   test "should convert an ActiveRecord Game model to a CribbageGame::Game instance" do
     barbaras_id = 1
     game_model = Game.new(barbaras_id)
-    user_one = User.find_by_id(barbaras_id)
-
-    game = Game.adapt_to_cribbage_game(game_model, user_one, nil)
+    game = Game.adapt_to_cribbage_game(game_model)
 
     assert_equal(game.players[0].id, barbaras_id)
     assert_equal(game.players[0].name, "Barbara")

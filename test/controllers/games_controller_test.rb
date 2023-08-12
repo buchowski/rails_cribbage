@@ -80,7 +80,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
   test "should allow user to create a bot game" do
     barbara, bot = start_bot_game_as('Barbara')
-    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last)
 
     assert_equal cribbage_game.players[0].id, barbara.id
     assert_equal cribbage_game.players[1].id, bot.id
@@ -89,17 +89,17 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should automatically start game if bot is selected" do
-    barbara, bot = start_bot_game_as('Barbara')
-    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
+    start_bot_game_as('Barbara')
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last)
 
     assert_equal :cutting_for_deal, cribbage_game.fsm.aasm.current_state
   end
 
   test "should deal cards immediately after user cuts if is bot game" do
-    barbara, bot = start_bot_game_as('Barbara')
+    start_bot_game_as('Barbara')
 
     patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
-    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last)
 
     assert_equal :discarding, cribbage_game.fsm.aasm.current_state
     assert_equal 6, cribbage_game.players[0].hand.size
@@ -108,16 +108,16 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should discard bot's cards after user has discarded" do
-    barbara, bot = start_bot_game_as('Barbara')
+    start_bot_game_as('Barbara')
 
     patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
 
-    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last)
     cards_to_discard = cribbage_game.players[0].hand.keys[0..1]
 
     patch game_path(Game.last.id), params: { type_of_update: "discard", cards: cards_to_discard }
 
-    cribbage_game = Game.adapt_to_cribbage_game(Game.last, barbara, bot)
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last)
     assert_equal :pegging, cribbage_game.fsm.aasm.current_state
     assert_equal 4, cribbage_game.players[0].hand.size
     assert_equal 4, cribbage_game.players[1].hand.size

@@ -167,10 +167,7 @@ class GamesController < ApplicationController
   end
 
   def get_cribbage_game(game_model)
-    user_one = User.find_by_id(game_model.player_one_id)
-    user_two = User.find_by_id(game_model.player_two_id)
-
-    Game.adapt_to_cribbage_game(game_model, user_one, user_two)
+    Game.adapt_to_cribbage_game(game_model)
   end
 
   def check_membership
