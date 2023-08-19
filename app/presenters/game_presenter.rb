@@ -21,6 +21,10 @@ class GamePresenter < SimpleDelegator
     end
   end
 
+  def who_is_the_dealer
+    are_you_dealer ? "You are the dealer" : "#{opponent_name} is the dealer"
+  end
+
   def player_has_n_points_label
     @t.call("you_have_n_points", {points: player_total_score})
   end
