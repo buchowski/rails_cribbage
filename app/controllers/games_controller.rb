@@ -147,6 +147,9 @@ class GamesController < ApplicationController
 
   def discard_bot_cards
     bot_cards = @opponent.hand.keys
+
+    return if bot_cards.size == 4
+
     cards_to_discard = bot_cards[0..1]
     cards_to_discard.each { |card_id| @game.discard(@opponent, card_id) }
     @game.flip_top_card if @game.fsm.flipping_top_card?
