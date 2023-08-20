@@ -90,8 +90,11 @@ class GamesController < ApplicationController
         @game_model.update(Game.adapt_to_active_record(@game))
       end
 
+      # after we update @game_modal, ensure the rest of the instance vars are up to date
+      set_instance_vars()
+
       # if there's an opponent, update their view
-      if !is_single_player_game
+      if !is_broadcast_to_opponent
         opponent_gvm = GamePresenter.new(@game_model, @game, @opponent_user, opponents_score, your_score)
         opponent_stream_id = opponent_gvm.get_stream_id_for_user(@opponent_user)
 
@@ -144,6 +147,10 @@ class GamesController < ApplicationController
     !@opponent_user.nil? && @opponent_user.is_bot
   end
 
+  def is_broadcast_to_opponent
+    !@opponent_user.nil? && !@opponent_user.is_bot
+  end
+
   def discard_bot_cards
     bot_cards = @opponent.hand.keys
 
@@ -167,6 +174,10 @@ class GamesController < ApplicationController
     # TODO how to properly handle 404?
     throw "sorry can't find that game" if @game_model.nil?
 
+    set_instance_vars()
+  end
+
+  def set_instance_vars
     @game = get_cribbage_game(@game_model)
 
     is_user_player_two = @user.id == @game_model.player_two_id
