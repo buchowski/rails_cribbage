@@ -32,7 +32,6 @@ class GamesController < ApplicationController
   end
 
   def create
-    # User.is_bot ultimately determines if the game is_single_player_game
     bot_id = params[:bot_id]
     bot = User.find_by_id(bot_id) if !bot_id.nil?
 
@@ -92,7 +91,7 @@ class GamesController < ApplicationController
       end
 
       # if there's an opponent, update their view
-      if !@opponent_user.nil? && !@opponent_user.is_bot
+      if !is_single_player_game
         opponent_gvm = GamePresenter.new(@game_model, @game, @opponent_user, opponents_score, your_score)
         opponent_stream_id = opponent_gvm.get_stream_id_for_user(@opponent_user)
 

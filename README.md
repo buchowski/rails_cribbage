@@ -10,4 +10,5 @@ This is a Rails wrapper for https://github.com/buchowski/ruby-cribbage
 ## Tests
 
 * rails t
+* rails test:system
 * rspec
