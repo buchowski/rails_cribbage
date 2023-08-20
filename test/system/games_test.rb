@@ -9,7 +9,7 @@ class GamesTest < ApplicationSystemTestCase
     fill_in "Password", with: "secret"
     click_on "Sign in"
 
-    click_on "New Game"
+    click_on "New Bot Game"
 
     assert_text "Spookey-Bot"
     click_on "open"
