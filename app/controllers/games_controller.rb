@@ -49,7 +49,7 @@ class GamesController < ApplicationController
       if !new_game.save
         flash[:error_msg] = "error: failed to save game"
       end
-    rescue => exception
+    rescue StandardError => exception
       flash[:error_msg] = exception.message[0, 100]
     ensure
       redirect_to games_path
@@ -137,7 +137,7 @@ class GamesController < ApplicationController
       elsif !@game_model.destroy
         flash[:error_msg] = "error: failed to delete game"
       end
-    rescue => exception
+    rescue StandardError => exception
         flash[:error_msg] = exception.message[0, 100]
     ensure
       redirect_to games_path
@@ -270,7 +270,7 @@ class GamesController < ApplicationController
       @game.submit_hand_scores(@game.opponent)
       @game.submit_hand_scores(@game.dealer)
       @game.submit_crib_scores()
-    rescue => exception
+    rescue StandardError => exception
       throw exception unless @game.fsm.game_over?
     end
   end
