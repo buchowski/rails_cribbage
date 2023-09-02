@@ -3,6 +3,7 @@ class GamesController < ApplicationController
   before_action :require_user_id, except: [:index, :show, :cards, :admin]
 
   include BotLogic
+  include Broadcast
 
   def index
     game_models = Game.where(player_one_id: @user.id).or(Game.where(player_two_id: @user.id))
@@ -100,34 +101,11 @@ class GamesController < ApplicationController
       # after we update @game_modal, ensure the rest of the instance vars are up to date
       set_instance_vars()
 
-      # if there's an opponent, update their view
       if is_broadcast_to_opponent
-        opponent_gvm = GamePresenter.new(
-          @game_model,
-          @game,
-          @opponent_user,
-          opponents_score,
-          your_score
-        )
-        opponent_stream_id = opponent_gvm.get_stream_id_for_user(@opponent_user)
-
-        Turbo::StreamsChannel.broadcast_render_to(
-          opponent_stream_id,
-          partial: "games/update",
-          locals: { gvm: opponent_gvm, app: AppPresenter.new(@opponent_user) }
-        )
+        broadcast_to_opponent(opponents_score, your_score)
       end
 
-      # if any guests are watching the game, update their views
-      anon_user = AnonUser.new
-      guest_gvm = AnonGamePresenter.new(@game_model, @game, anon_user)
-      guest_stream_id = guest_gvm.get_stream_id_for_user(anon_user)
-      Turbo::StreamsChannel.broadcast_render_to(
-        guest_stream_id,
-        partial: "games/update",
-        locals: { gvm: guest_gvm, app: AppPresenter.new(anon_user) }
-      )
-
+      broadcast_to_guests()
     # TODO improve error handling. remove "uncaught..." from error msg we render in UI
     rescue StandardError => exception
       # truncate exception.message to prevent cookieoverflow
