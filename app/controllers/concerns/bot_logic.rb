@@ -16,9 +16,12 @@ module BotLogic
     end
 
     def play_bot_card
-      playable_card = @opponent.hand.keys.find do |card_id|
-        @game.can_play_card?(card_id)
+      playable_card = @opponent.hand.entries.find do |card_id, is_playable|
+        return card_id if is_playable && @game.can_play_card?(card_id)
       end
+
+      throw "#{@opponent.name} has no playable cards" if playable_card.nil?
+
       @game.play_card(@opponent, playable_card)
     end
 
