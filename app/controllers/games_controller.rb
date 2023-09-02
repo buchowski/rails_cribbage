@@ -13,19 +13,18 @@ class GamesController < ApplicationController
   end
 
   def admin
-    users = User.where(is_bot: false)
+    users = User.all
     games = get_game_presenters(Game.all)
     render "games/admin", locals: { gvms: games, users: users }
   end
 
-  def game_view_model
-    # make sure @game is up to date
-    @game = get_cribbage_game(@game_model)
+  def game_view_model(game_model = @game_model)
+    game = get_cribbage_game(game_model)
 
     if @user.is_member(@game_model)
-      return GamePresenter.new(@game_model, @game, @user, flash[:your_score], flash[:opponents_score])
+      return GamePresenter.new(game_model, game, @user, flash[:your_score], flash[:opponents_score])
     else
-      return AnonGamePresenter.new(@game_model, @game, @user)
+      return AnonGamePresenter.new(game_model, game, @user)
     end
   end
 
@@ -84,11 +83,10 @@ class GamesController < ApplicationController
           play_card()
         end
 
-        # 1. create a pre-bot-update gvm
-        # 2. do bot update
-        # 3. create a post-bot-update gvm
-
-        update_game_with_bot_move(type_of_update) if is_single_player_game
+        if is_single_player_game
+          pre_bot_update_gvm = game_view_model()
+          update_game_with_bot_move(type_of_update)
+        end
 
         # if all cards have been played then we score the hands and crib
         if @game.fsm.scoring_opponent_hand?
@@ -98,7 +96,7 @@ class GamesController < ApplicationController
         @game_model.update(Game.adapt_to_active_record(@game))
       end
 
-      # after we update @game_modal, ensure the rest of the instance vars are up to date
+      # after we update @game_model, ensure the rest of the instance vars are up to date
       set_instance_vars()
 
       if is_broadcast_to_opponent
@@ -114,8 +112,14 @@ class GamesController < ApplicationController
       respond_to do |format|
         format.turbo_stream {
           flash.discard(:error_msg)
-
-          render partial: "games/update", locals: { gvm: game_view_model, app: @app }
+          render(
+            partial: "games/update",
+            locals: {
+              gvm: game_view_model,
+              pre_bot_update_gvm: pre_bot_update_gvm,
+              app: @app
+            }
+          )
         }
         format.html {
           redirect_to game_path,
@@ -256,7 +260,6 @@ class GamesController < ApplicationController
     if card_id.nil? || card_id.empty?
       throw "you must select a card to play"
     end
-
     @game.play_card(@player, card_id)
   end
 
