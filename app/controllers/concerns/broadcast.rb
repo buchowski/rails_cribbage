@@ -15,7 +15,11 @@ module Broadcast
       Turbo::StreamsChannel.broadcast_render_to(
         opponent_stream_id,
         partial: "games/update",
-        locals: { gvm: opponent_gvm, app: AppPresenter.new(@opponent_user) }
+        locals: {
+          gvm: opponent_gvm,
+          pre_bot_update_gvm: nil,
+          app: AppPresenter.new(@opponent_user)
+        }
       )
     end
   end
@@ -28,7 +32,11 @@ module Broadcast
     Turbo::StreamsChannel.broadcast_render_to(
       guest_stream_id,
       partial: "games/update",
-      locals: { gvm: guest_gvm, app: AppPresenter.new(anon_user) }
+      locals: {
+        gvm: guest_gvm,
+        pre_bot_update_gvm: nil,
+        app: AppPresenter.new(anon_user)
+      }
     )
   end
 end
