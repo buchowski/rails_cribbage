@@ -101,18 +101,32 @@ class GamesController < ApplicationController
       set_instance_vars()
 
       # if there's an opponent, update their view
-      if !is_broadcast_to_opponent
-        opponent_gvm = GamePresenter.new(@game_model, @game, @opponent_user, opponents_score, your_score)
+      if is_broadcast_to_opponent
+        opponent_gvm = GamePresenter.new(
+          @game_model,
+          @game,
+          @opponent_user,
+          opponents_score,
+          your_score
+        )
         opponent_stream_id = opponent_gvm.get_stream_id_for_user(@opponent_user)
 
-        Turbo::StreamsChannel.broadcast_render_to(opponent_stream_id, partial: "games/update", locals: { gvm: opponent_gvm, app: AppPresenter.new(@opponent_user) })
+        Turbo::StreamsChannel.broadcast_render_to(
+          opponent_stream_id,
+          partial: "games/update",
+          locals: { gvm: opponent_gvm, app: AppPresenter.new(@opponent_user) }
+        )
       end
 
       # if any guests are watching the game, update their views
       anon_user = AnonUser.new
       guest_gvm = AnonGamePresenter.new(@game_model, @game, anon_user)
       guest_stream_id = guest_gvm.get_stream_id_for_user(anon_user)
-      Turbo::StreamsChannel.broadcast_render_to(guest_stream_id, partial: "games/update", locals: { gvm: guest_gvm, app: AppPresenter.new(anon_user) })
+      Turbo::StreamsChannel.broadcast_render_to(
+        guest_stream_id,
+        partial: "games/update",
+        locals: { gvm: guest_gvm, app: AppPresenter.new(anon_user) }
+      )
 
     # TODO improve error handling. remove "uncaught..." from error msg we render in UI
     rescue StandardError => exception
@@ -125,7 +139,10 @@ class GamesController < ApplicationController
 
           render partial: "games/update", locals: { gvm: game_view_model, app: @app }
         }
-        format.html { redirect_to game_path, flash: { your_score: your_score, opponents_score: opponents_score } }
+        format.html {
+          redirect_to game_path,
+          flash: { your_score: your_score, opponents_score: opponents_score }
+        }
       end
     end
   end
