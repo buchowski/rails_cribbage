@@ -19,4 +19,10 @@ class User < ApplicationRecord
 
     self.id == game_model.player_one_id
   end
+
+  def is_dealer(game_model)
+    return false if game_model.nil?
+
+    self.id == game_model.dealer_id
+  end
 end

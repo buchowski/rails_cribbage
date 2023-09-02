@@ -68,14 +68,14 @@ class GamesController < ApplicationController
         check_membership()
         start_game()
       else
-        # TODO only allow creator to perform cut_for_deal & deal?
-        # perform these actions as part of start_game?
         check_membership()
 
         case type_of_update
         when "cut_for_deal"
+        # TODO only allow creator to perform deal?
           @game.cut_for_deal()
         when "deal"
+          throw "You are not the dealer" unless @user.is_dealer(@game_model)
           @game.deal()
         when "discard"
           discard()
