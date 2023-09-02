@@ -76,3 +76,33 @@ th, td {
     }
   }
 }
+
+.hide_in_n_seconds {
+  animation-name: hide_in_n_seconds;
+  animation-fill-mode: forwards;
+  animation-delay: 1.5s;
+}
+
+@keyframes hide_in_n_seconds {
+  0% {
+    display: inherit;
+  }
+  100% {
+    display: none;
+  }
+}
+
+.show_in_n_seconds {
+  animation-name: show_in_n_seconds;
+  animation-fill-mode: forwards;
+  animation-delay: 1.5s;
+}
+
+@keyframes show_in_n_seconds {
+  0% {
+    display: none;
+  }
+  100% {
+    display: inherit;
+  }
+}
