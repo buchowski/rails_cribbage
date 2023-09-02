@@ -76,24 +76,24 @@ class GamesController < ApplicationController
         case type_of_update
         when "cut_for_deal"
           @game.cut_for_deal()
-          @game.deal() if is_single_player_game
         when "deal"
           @game.deal()
         when "discard"
           discard()
         when "play_card"
           play_card()
-          # if all cards have been played then we score the hands and crib
-          if @game.fsm.scoring_opponent_hand?
-            score_hands_and_crib()
-          end
         end
 
         # 1. create a pre-bot-update gvm
         # 2. do bot update
         # 3. create a post-bot-update gvm
 
-        update_game_with_bot_move() if is_single_player_game
+        update_game_with_bot_move(type_of_update) if is_single_player_game
+
+        # if all cards have been played then we score the hands and crib
+        if @game.fsm.scoring_opponent_hand?
+          score_hands_and_crib()
+        end
 
         @game_model.update(Game.adapt_to_active_record(@game))
       end
