@@ -86,7 +86,14 @@ class GamesController < ApplicationController
         end
 
         if is_single_player_game && type_of_update != "hurry_up_bot"
-          pre_bot_update_gvm = game_view_model()
+          pre_bot_update_html_string = render_to_string(
+            partial: "games/game_play_container",
+            locals: {
+              gvm: game_view_model,
+              app: @app
+            }
+          )
+
           update_game_with_bot_move(type_of_update)
         end
 
@@ -118,7 +125,7 @@ class GamesController < ApplicationController
             partial: "games/update",
             locals: {
               gvm: game_view_model,
-              pre_bot_update_gvm: pre_bot_update_gvm,
+              pre_bot_update_html_string: pre_bot_update_html_string,
               app: @app
             }
           )

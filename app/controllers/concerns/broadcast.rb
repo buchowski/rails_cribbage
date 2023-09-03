@@ -17,7 +17,7 @@ module Broadcast
         partial: "games/update",
         locals: {
           gvm: opponent_gvm,
-          pre_bot_update_gvm: nil,
+          pre_bot_update_html_string: nil,
           app: AppPresenter.new(@opponent_user)
         }
       )
@@ -34,7 +34,7 @@ module Broadcast
       partial: "games/update",
       locals: {
         gvm: guest_gvm,
-        pre_bot_update_gvm: nil,
+        pre_bot_update_html_string: nil,
         app: AppPresenter.new(anon_user)
       }
     )

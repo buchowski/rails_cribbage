@@ -9,7 +9,15 @@
 <turbo-stream action="replace" target="<%= dom_id(gvm) %>">
   <template>
     <div id="<%= dom_id(gvm) %>">
-      <%= render partial: "games/game_play_container", formats: [:html], locals: { gvm: gvm, app: app } %>
+      <div class="">
+        <%= render(
+          partial: "games/game_play_container",
+          formats: [:html],
+          locals: { gvm: gvm, app: app }
+        ) %>
+      </div>
+      <%= pre_bot_update_html_string %>
     </div>
   </template>
 </turbo-stream>
+
