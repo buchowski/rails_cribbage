@@ -75,15 +75,17 @@ class GamesController < ApplicationController
         # TODO only allow creator to perform deal?
           @game.cut_for_deal()
         when "deal"
-          throw "You are not the dealer" unless @user.is_dealer(@game_model)
+          throw "You are not the dealer" unless @user.is_dealer(@game_model) || is_single_player_game
           @game.deal()
         when "discard"
           discard()
         when "play_card"
           play_card()
+        when "hurry_up_bot"
+          get_bot_unstuck();
         end
 
-        if is_single_player_game
+        if is_single_player_game && type_of_update != "hurry_up_bot"
           pre_bot_update_gvm = game_view_model()
           update_game_with_bot_move(type_of_update)
         end
