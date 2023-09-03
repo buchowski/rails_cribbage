@@ -20,12 +20,17 @@ class GameTest < ActiveSupport::TestCase
   end
 
   test "should convert an ActiveRecord Game model to a CribbageGame::Game instance" do
-    barbaras_id = 1
-    game_model = Game.new(barbaras_id)
+    spookeys_id = 4
+    cribbage_game = CribbageGame::Game.new()
+    cribbage_game.players[0].id = spookeys_id
+    adapted_game = Game.adapt_to_active_record(cribbage_game)
+    adapted_game[:player_two_id] = nil
+    adapted_game[:current_fsm_state] = :waiting_for_player_two
+    game_model = Game.new(adapted_game)
     game = Game.adapt_to_cribbage_game(game_model)
 
-    assert_equal(game.players[0].id, barbaras_id)
-    assert_equal(game.players[0].name, "Barbara")
+    assert_equal(game.players[0].id, spookeys_id)
+    assert_equal(game.players[0].name, "Spookey-Bot")
     assert_nil(game.players[1].id)
     assert_equal(game.players[1].name, "")
     assert_equal(game.fsm.aasm.current_state, :waiting_for_player_two)

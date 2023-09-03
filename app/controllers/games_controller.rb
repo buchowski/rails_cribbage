@@ -38,13 +38,18 @@ class GamesController < ApplicationController
     bot = User.find_by_id(bot_id) if !bot_id.nil?
 
     begin
-      new_game = Game.new(@user.id)
+      cribbage_game = CribbageGame::Game.new
+      adapted_game = Game.adapt_to_active_record(cribbage_game)
+      adapted_game[:player_one_id] = @user.id
+      adapted_game[:player_two_id] = nil
+      adapted_game[:current_fsm_state] = :waiting_for_player_two
 
       if !bot.nil?
-        new_game.player_one_id = @user.id
-        new_game.player_two_id = bot.id
-        new_game.current_fsm_state = :cutting_for_deal
+        adapted_game[:player_two_id] = bot.id
+        adapted_game[:current_fsm_state] = :cutting_for_deal
       end
+
+      new_game = Game.new(adapted_game)
 
       if !new_game.save
         flash[:error_msg] = "error: failed to save game"
