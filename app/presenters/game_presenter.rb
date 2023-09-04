@@ -1,16 +1,15 @@
 class GamePresenter < SimpleDelegator
   attr_reader :player_name
 
-  def initialize(game_model, game, user, your_previous_score, opponents_previous_score)
+  def initialize(game_model, game, user, your_previous_score = 0, opponents_previous_score = 0)
     @t = Proc.new do |key, data| Translations.en(key, data) end
-    @game_model = game_model
     @game = game
     @user = user
     # the previous scores are what the user last saw in the UI.
     # we diff against these to determine if we should alert the user that points were scored
     @your_previous_score = your_previous_score
     @opponents_previous_score = opponents_previous_score
-    super(@game_model)
+    super(game_model)
   end
 
   def crib_label
@@ -104,14 +103,14 @@ class GamePresenter < SimpleDelegator
 
   # this is the authenticated user
   def player
-    is_user_player_two = @user.id == @game_model.player_two_id
+    is_user_player_two = @user.id == self.player_two_id
 
     return is_user_player_two ? @game.players[1] : @game.players[0]
   end
 
   # this is the authenticated user's opponent
   def opponent
-    is_user_player_two = @user.id == @game_model.player_two_id
+    is_user_player_two = @user.id == self.player_two_id
 
     return is_user_player_two ? @game.players[0] : @game.players[1]
   end
