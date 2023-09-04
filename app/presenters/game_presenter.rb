@@ -13,14 +13,12 @@ class GamePresenter < SimpleDelegator
   end
 
   def crib_label
-    if are_you_dealer
-      return @t.call("your_crib")
-    else
-      return @t.call("player_crib", {player_name: opponent_name})
-    end
+    return "TODO" unless have_cards_been_dealt
+    are_you_dealer ? @t.call("your_crib") : @t.call("player_crib", {player_name: opponent_name})
   end
 
   def who_is_the_dealer
+    return "TODO" unless have_cards_been_dealt
     are_you_dealer ? "You are the dealer" : "#{opponent_name} is the dealer"
   end
 
@@ -174,15 +172,12 @@ class GamePresenter < SimpleDelegator
     false
   end
 
+  def have_cards_been_dealt
+    ![:waiting_for_player_two, :waiting_to_start, :cutting_for_deal].include? current_state
+  end
+
   def has_game_started
-    case current_state
-    when :waiting_for_player_two
-      return false
-    when :waiting_to_start
-      return false
-    else
-      return true
-    end
+    ![:waiting_for_player_two, :waiting_to_start].include? current_state
   end
 
   def labels
