@@ -18,13 +18,11 @@ class GamesController < ApplicationController
     render "games/admin", locals: { gvms: games, users: users }
   end
 
-  def game_view_model(game_model = @game_model)
-    game = get_cribbage_game(game_model)
-
+  def game_view_model(game = @game)
     if @user.is_member(@game_model)
-      return GamePresenter.new(game_model, game, @user, flash[:your_score], flash[:opponents_score])
+      return GamePresenter.new(@game_model, game, @user, flash[:your_score], flash[:opponents_score])
     else
-      return AnonGamePresenter.new(game_model, game, @user)
+      return AnonGamePresenter.new(@game_model, game, @user)
     end
   end
 

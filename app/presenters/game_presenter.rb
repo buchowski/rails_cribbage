@@ -1,15 +1,24 @@
 class GamePresenter < SimpleDelegator
   attr_reader :player_name
 
-  def initialize(game_model, game, user, your_previous_score = 0, opponents_previous_score = 0)
+  def initialize(game_model, cribbage_game, user, your_previous_score = 0, opponents_previous_score = 0)
     @t = Proc.new do |key, data| Translations.en(key, data) end
-    @game = game
+    @game = cribbage_game
     @user = user
+
+    adapted_game = Game.adapt_to_active_record(cribbage_game)
+    # dirty means this model contains data that may not yet be persisted in the database
+    dirty_game_model = Game.new(adapted_game)
+    dirty_game_model.assign_attributes(
+      id: game_model.id,
+      updated_at: game_model.updated_at,
+      created_at:  game_model.created_at
+    )
     # the previous scores are what the user last saw in the UI.
     # we diff against these to determine if we should alert the user that points were scored
     @your_previous_score = your_previous_score
     @opponents_previous_score = opponents_previous_score
-    super(game_model)
+    super(dirty_game_model)
   end
 
   def crib_label
