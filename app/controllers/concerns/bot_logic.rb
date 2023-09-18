@@ -9,6 +9,7 @@ module BotLogic
         # player has already cut
         @game.deal()
       when "discard"
+        # TODO if after discarding it's the bot's turn to play, then play a card
         discard_bot_cards() if has_player_discarded_all_cards()
       when "play_card"
         play_bot_card()
@@ -39,7 +40,7 @@ module BotLogic
     end
 
     def is_bots_turn
-      @game_model.whose_turn_id == @opponent.id
+      @game.whose_turn.id == @opponent.id
     end
 
     def discard_bot_cards
@@ -50,6 +51,7 @@ module BotLogic
       cards_to_discard = bot_cards[0..1]
       cards_to_discard.each { |card_id| @game.discard(@opponent, card_id) }
       @game.flip_top_card if @game.fsm.flipping_top_card?
+      play_bot_card() if is_bots_turn
     end
 
     def has_player_discarded_all_cards

@@ -31,4 +31,8 @@ class ActiveSupport::TestCase
 
     return [user, bot]
   end
+
+  def get_playable_cards(hand)
+    hand.filter { |card_id, is_playable| is_playable }
+  end
 end

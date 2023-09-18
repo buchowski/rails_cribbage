@@ -123,4 +123,57 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 4, cribbage_game.players[1].hand.size
     assert_equal 4, cribbage_game.crib.size
   end
+
+  test "should play bot's card after user has played" do
+    start_bot_game_as('Barbara')
+
+    patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
+
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last)
+    cards_to_discard = cribbage_game.players[0].hand.keys[0..1]
+    is_barbara_dealer = cribbage_game.dealer.id == cribbage_game.players[0].id
+
+    assert_not_equal cribbage_game.dealer.id, cribbage_game.whose_turn.id, "the non-dealer should play first"
+
+    patch game_path(Game.last.id), params: { type_of_update: "discard", cards: cards_to_discard }
+
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last)
+    barbaras_hand = cribbage_game.players[0].hand
+    bots_hand = cribbage_game.players[1].hand
+
+    assert_equal :playing, cribbage_game.fsm.aasm.current_state, "top card should have been flipped"
+
+    # TODO this test isn't deterministic. sometimes the bot is the dealer, sometimes not. cut_for_deal is random
+    if is_barbara_dealer
+      assert_equal 3, get_playable_cards(bots_hand).size, "bot should have played a card"
+    else
+      assert_equal 4, get_playable_cards(bots_hand).size, "bot should wait for barbara to play"
+    end
+
+    assert_equal cribbage_game.players[0].id, cribbage_game.whose_turn.id, "barbara should be next to play"
+    assert_equal barbaras_hand.size, 4, "barbara should have discarded"
+
+    patch(
+      game_path(Game.last.id),
+      params: {
+        type_of_update: "play_card",
+        card_to_play: get_playable_cards(barbaras_hand).keys.first
+      }
+    )
+
+    cribbage_game = Game.adapt_to_cribbage_game(Game.last)
+    barbaras_hand = cribbage_game.players[0].hand
+    bots_hand = cribbage_game.players[1].hand
+
+    assert_equal :playing, cribbage_game.fsm.aasm.current_state
+    assert_equal 3, get_playable_cards(barbaras_hand).size, "barbara played a card"
+
+    if is_barbara_dealer
+      assert_equal 2, get_playable_cards(bots_hand).size, "bot should have played a 2nd card"
+      assert_equal 3, cribbage_game.pile.size
+    else
+      assert_equal 3, get_playable_cards(bots_hand).size, "bot should have played a 1st card"
+      assert_equal 2, cribbage_game.pile.size
+    end
+  end
 end
