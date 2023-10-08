@@ -1,10 +1,11 @@
 class GamePresenter < SimpleDelegator
-  attr_reader :player_name
+  attr_reader :player_name, :play_by_play
 
-  def initialize(game_model, cribbage_game, user, your_previous_score = 0, opponents_previous_score = 0)
+  def initialize(game_model, cribbage_game, user, play_by_play, your_previous_score = 0, opponents_previous_score = 0)
     @t = Proc.new do |key, data| Translations.en(key, data) end
     @game = cribbage_game
     @user = user
+    @play_by_play = play_by_play
 
     adapted_game = Game.adapt_to_active_record(cribbage_game)
     # dirty means this model contains data that may not yet be persisted in the database

@@ -5,6 +5,12 @@ class GamesController < ApplicationController
   include BotLogic
   include Broadcast
 
+  def initialize
+    @your_play_by_play = []
+    @their_play_by_play = []
+    super()
+  end
+
   def index
     game_models = Game.where(player_one_id: @user.id).or(Game.where(player_two_id: @user.id))
     games = get_game_presenters(game_models)
@@ -20,9 +26,9 @@ class GamesController < ApplicationController
 
   def game_view_model(game = @game)
     if @user.is_member(@game_model)
-      return GamePresenter.new(@game_model, game, @user, flash[:your_score], flash[:opponents_score])
+      return GamePresenter.new(@game_model, game, @user, @your_play_by_play, flash[:your_score], flash[:opponents_score])
     else
-      return AnonGamePresenter.new(@game_model, game, @user)
+      return AnonGamePresenter.new(@game_model, game, @user, @their_play_by_play)
     end
   end
 
@@ -75,11 +81,9 @@ class GamesController < ApplicationController
 
         case type_of_update
         when "cut_for_deal"
-        # TODO only allow creator to perform deal?
-          @game.cut_for_deal()
+          cut_for_deal()
         when "deal"
-          throw "You are not the dealer" unless @user.is_dealer(@game_model) || is_single_player_game
-          @game.deal()
+          deal()
         when "discard"
           discard()
         when "play_card"
@@ -170,9 +174,10 @@ class GamesController < ApplicationController
   end
 
   def get_game_presenters(game_models)
+    empty_play_by_play = []
     game_models.map do |game_model|
       game = get_cribbage_game(game_model)
-      AnonGamePresenter.new(game_model, game, @user)
+      AnonGamePresenter.new(game_model, game, @user, empty_play_by_play)
     end
   end
 
@@ -241,6 +246,36 @@ class GamesController < ApplicationController
     @game_model.current_fsm_state = :cutting_for_deal
 
     if !@game_model.save then throw "unable to start game" end
+    @your_play_by_play.concat(["You have started the game", "Cut cards to see who deals first"])
+    @their_play_by_play.concat(["#{@user.name} has started the game", "Cut cards to see who deals first"])
+  end
+
+  def deal()
+    throw "You are not the dealer" unless @user.is_dealer(@game_model) || is_single_player_game
+    @game.deal()
+    # TODO it's possible the bot was the actual dealer
+    @your_play_by_play << "You have dealt the cards"
+    @their_play_by_play << "#{@user.name} has dealt the cards"
+  end
+
+  def cut_for_deal()
+    # TODO only allow creator to perform deal? wait for both players to cut?
+    @game.cut_for_deal()
+    are_you_the_dealer = @game.dealer.id == @user.id
+    dealer = are_you_the_dealer ? @user : @opponent_user
+    whose_turn = are_you_the_dealer ? @opponent_user : @user
+
+    you_are_the_dealer_msgs = ["You are the dealer", "It is #{whose_turn.name}'s turn to play"]
+    they_are_the_dealer_msgs = ["#{dealer.name} is the dealer", "It is your turn to play"]
+
+    # TODO show which cards the players cut?
+    if are_you_the_dealer
+      @your_play_by_play.concat(you_are_the_dealer_msgs)
+      @their_play_by_play.concat(they_are_the_dealer_msgs)
+    else
+      @your_play_by_play.concat(they_are_the_dealer_msgs)
+      @their_play_by_play.concat(you_are_the_dealer_msgs)
+    end
   end
 
   def discard()
@@ -262,8 +297,16 @@ class GamesController < ApplicationController
 
     cards.each { |card_id| @game.discard(@player, card_id) }
 
+    @your_play_by_play << "You have discarded #{cards.size} card(s): #{cards.join(', ')}"
+    @their_play_by_play << "#{@user.name} has discarded #{cards.size} card(s)"
+
     # automatically flip the top card. no need for manual user action
-    @game.flip_top_card if @game.fsm.flipping_top_card?
+    if @game.fsm.flipping_top_card?
+      @game.flip_top_card
+      msg = "#{@game.cut_card} was auto-selected as the cut card"
+      @your_play_by_play << msg
+      @their_play_by_play << msg
+    end
   end
 
   def play_card()
@@ -273,6 +316,8 @@ class GamesController < ApplicationController
       throw "you must select a card to play"
     end
     @game.play_card(@player, card_id)
+    @your_play_by_play << "You played a #{card_id}"
+    @their_play_by_play << "#{@user.name} played a #{card_id}"
   end
 
   def score_hands_and_crib()

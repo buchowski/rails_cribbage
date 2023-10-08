@@ -7,6 +7,7 @@ module Broadcast
         @game_model,
         @game,
         @opponent_user,
+        @their_play_by_play,
         opponents_score,
         your_score
       )
@@ -27,7 +28,7 @@ module Broadcast
   def broadcast_to_guests
     # if any guests are watching the game, update their views
     anon_user = AnonUser.new
-    guest_gvm = AnonGamePresenter.new(@game_model, @game, anon_user)
+    guest_gvm = AnonGamePresenter.new(@game_model, @game, anon_user, @their_play_by_play)
     guest_stream_id = guest_gvm.get_stream_id_for_user(anon_user)
     Turbo::StreamsChannel.broadcast_render_to(
       guest_stream_id,

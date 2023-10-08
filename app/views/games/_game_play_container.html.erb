@@ -13,9 +13,9 @@
   </div>
 <% end %>
 
-<% if !gvm.game_play_alert.blank? %>
+<% for msg in gvm.play_by_play do %>
   <div id="game_play_alert" class="notification is-secondary">
-    <%= gvm.game_play_alert %>
+    <%= msg %>
   </div>
 <% end %>
 
