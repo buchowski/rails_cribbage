@@ -24,7 +24,12 @@ module BotLogic
        end
       end
 
-      @game.play_card(@opponent, playable_card) if playable_card
+      if playable_card
+        @game.play_card(@opponent, playable_card)
+        play_msg = "#{@opponent.name} played #{playable_card}"
+        @your_play_by_play << play_msg
+        @their_play_by_play << play_msg
+      end
     end
 
     def get_bot_unstuck
@@ -50,7 +55,18 @@ module BotLogic
 
       cards_to_discard = bot_cards[0..1]
       cards_to_discard.each { |card_id| @game.discard(@opponent, card_id) }
-      @game.flip_top_card if @game.fsm.flipping_top_card?
+
+      discard_msg = "#{@opponent.name} has discarded #{cards_to_discard.size} cards"
+      @your_play_by_play << discard_msg
+      @their_play_by_play << discard_msg
+
+      if @game.fsm.flipping_top_card?
+        @game.flip_top_card
+        top_card_msg = "#{@game.cut_card} was auto-selected as the cut card"
+        @your_play_by_play << top_card_msg
+        @their_play_by_play << top_card_msg
+      end
+
       play_bot_card() if is_bots_turn
     end
 
