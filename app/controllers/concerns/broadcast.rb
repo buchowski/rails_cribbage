@@ -2,14 +2,12 @@ module Broadcast
   extend ActiveSupport::Concern
 
   included do
-    def broadcast_to_opponent(opponents_score, your_score)
+    def broadcast_to_opponent()
       opponent_gvm = GamePresenter.new(
         @game_model,
         @game,
         @opponent_user,
         @their_play_by_play,
-        opponents_score,
-        your_score
       )
       opponent_stream_id = opponent_gvm.get_stream_id_for_user(@opponent_user)
 

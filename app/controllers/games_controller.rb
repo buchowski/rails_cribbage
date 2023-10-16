@@ -26,13 +26,14 @@ class GamesController < ApplicationController
 
   def game_view_model(game = @game)
     if @user.is_member(@game_model)
-      return GamePresenter.new(@game_model, game, @user, @your_play_by_play, flash[:your_score], flash[:opponents_score])
+      return GamePresenter.new(@game_model, game, @user, @your_play_by_play)
     else
       return AnonGamePresenter.new(@game_model, game, @user, @their_play_by_play)
     end
   end
 
   def show
+    @your_play_by_play = flash[:your_play_by_play] || []
     gvm = game_view_model()
     render "games/show", { locals: { gvm: gvm, app: @app, user: @user } }
   end
@@ -116,7 +117,7 @@ class GamesController < ApplicationController
       set_instance_vars()
 
       if is_broadcast_to_opponent
-        broadcast_to_opponent(opponents_score, your_score)
+        broadcast_to_opponent()
       end
 
       broadcast_to_guests()
@@ -139,7 +140,7 @@ class GamesController < ApplicationController
         }
         format.html {
           redirect_to game_path,
-          flash: { your_score: your_score, opponents_score: opponents_score }
+          flash: { your_play_by_play: @your_play_by_play }
         }
       end
     end

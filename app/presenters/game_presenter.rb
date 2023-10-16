@@ -1,7 +1,7 @@
 class GamePresenter < SimpleDelegator
   attr_reader :player_name, :play_by_play
 
-  def initialize(game_model, cribbage_game, user, play_by_play, your_previous_score = 0, opponents_previous_score = 0)
+  def initialize(game_model, cribbage_game, user, play_by_play)
     @t = Proc.new do |key, data| Translations.en(key, data) end
     @game = cribbage_game
     @user = user
@@ -15,10 +15,7 @@ class GamePresenter < SimpleDelegator
       updated_at: game_model.updated_at,
       created_at:  game_model.created_at
     )
-    # the previous scores are what the user last saw in the UI.
-    # we diff against these to determine if we should alert the user that points were scored
-    @your_previous_score = your_previous_score
-    @opponents_previous_score = opponents_previous_score
+
     super(dirty_game_model)
   end
 
@@ -76,25 +73,6 @@ class GamePresenter < SimpleDelegator
     when :game_over
       @t.call("game.over")
     end
-  end
-
-  def game_play_alert
-    alerts = []
-
-    unless @your_previous_score.nil?
-      points_you_scored = player_total_score - @your_previous_score
-      alerts << @t.call("you.scored", {points: points_you_scored}) if points_you_scored > 0
-    end
-
-    unless @opponents_previous_score.nil?
-      points_opponent_scored = opponent_total_score - @opponents_previous_score
-      alerts << @t.call("opponent.scored", {points: points_opponent_scored}) if points_opponent_scored > 0
-    end
-
-    alerts << @t.call("you.won") if you_won()
-    alerts << @t.call("opponent.won", {opponent_name: opponent_name}) if opponent_won()
-
-    alerts.join(" ")
   end
 
   # this is the creator
