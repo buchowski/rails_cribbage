@@ -78,17 +78,19 @@ class GamesController < ApplicationController
       else
         check_membership()
 
-        case type_of_update
-        when "cut_for_deal"
-          cut_for_deal()
-        when "deal"
-          deal()
-        when "discard"
-          discard()
-        when "play_card"
-          play_card()
-        when "hurry_up_bot"
-          get_bot_unstuck();
+        add_score_to_play_by_play(@player) do
+          case type_of_update
+          when "cut_for_deal"
+            cut_for_deal()
+          when "deal"
+            deal()
+          when "discard"
+            discard()
+          when "play_card"
+            play_card()
+          when "hurry_up_bot"
+            get_bot_unstuck();
+          end
         end
 
         if is_single_player_game && type_of_update != "hurry_up_bot"
@@ -100,7 +102,10 @@ class GamesController < ApplicationController
             }
           )
 
-          update_game_with_bot_move(type_of_update)
+          add_score_to_play_by_play(@opponent) do
+            # TODO it may still be the bot's turn after the bot plays a card. need to check
+            update_game_with_bot_move(type_of_update)
+          end
         end
 
         # if all cards have been played then we score the hands and crib
@@ -315,11 +320,9 @@ class GamesController < ApplicationController
       throw "you must select a card to play"
     end
 
-    add_score_to_play_by_play do
-      @game.play_card(@player, card_id)
-      @your_play_by_play << "You played a #{card_id}"
-      @their_play_by_play << "#{@user.name} played a #{card_id}"
-    end
+    @game.play_card(@player, card_id)
+    @your_play_by_play << "You played a #{card_id}"
+    @their_play_by_play << "#{@user.name} played a #{card_id}"
   end
 
   def score_hands_and_crib()
@@ -332,17 +335,24 @@ class GamesController < ApplicationController
     end
   end
 
-  def add_score_to_play_by_play()
-    before_score = @player.total_score
+  def add_score_to_play_by_play(player)
+    before_score = player.total_score
     yield
-    score_diff = @player.total_score - before_score
+    score_diff = player.total_score - before_score
+    is_scoring_for_opponent = player.id == @opponent.id
 
-    if score_diff == 1
-      @your_play_by_play << "You scored one point"
-      @their_play_by_play << "#{@user.name} scored one point"
-    elsif score_diff > 1
-      @your_play_by_play << "You scored #{score_diff} points"
-      @their_play_by_play << "#{@user.name} scored #{score_diff} points"
+    return if score_diff == 0
+
+    their_msg = "#{player.name} scored #{score_diff} points"
+    your_msg = "You scored #{score_diff} points"
+
+    if score_diff === 1
+      their_msg = "#{player.name} scored one point"
+      your_msg = "You scored one point"
     end
+
+    @their_play_by_play << their_msg
+    msg = is_scoring_for_opponent ? their_msg : your_msg
+    @your_play_by_play << msg
   end
 end
