@@ -326,22 +326,48 @@ class GamesController < ApplicationController
   end
 
   def score_hands_and_crib()
+    are_you_the_dealer = @game.dealer.id == @user.id
+    is_log_zero_score = true
     begin
-      @game.submit_hand_scores(@game.opponent)
-      @game.submit_hand_scores(@game.dealer)
-      @game.submit_crib_scores()
+      add_score_to_play_by_play(@game.opponent, is_log_zero_score) do
+        their_msg = "Scoring #{@game.opponent.name}'s hand..."
+        msg = are_you_the_dealer ? their_msg : "Scoring your hand..."
+        @your_play_by_play << msg
+        @their_play_by_play << their_msg
+
+        @game.submit_hand_scores(@game.opponent)
+      end
+
+      add_score_to_play_by_play(@game.dealer, is_log_zero_score) do
+        their_msg = "Scoring #{@game.dealer.name}'s hand..."
+        msg = are_you_the_dealer ? "Scoring your hand..." : their_msg
+        @your_play_by_play << msg
+        @their_play_by_play << their_msg
+
+        @game.submit_hand_scores(@game.dealer)
+      end
+
+      # crib belongs to the dealer
+      add_score_to_play_by_play(@game.dealer, is_log_zero_score) do
+        their_msg = "Scoring #{@game.dealer.name}'s crib..."
+        msg = are_you_the_dealer ? "Scoring your crib..." : their_msg
+        @your_play_by_play << msg
+        @their_play_by_play << their_msg
+
+        @game.submit_crib_scores()
+      end
     rescue StandardError => exception
       throw exception unless @game.fsm.game_over?
     end
   end
 
-  def add_score_to_play_by_play(player)
+  def add_score_to_play_by_play(player, is_log_zero_score = false)
     before_score = player.total_score
     yield
     score_diff = player.total_score - before_score
     is_scoring_for_opponent = player.id == @opponent.id
 
-    return if score_diff == 0
+    return if score_diff == 0 && !is_log_zero_score
 
     their_msg = "#{player.name} scored #{score_diff} points"
     your_msg = "You scored #{score_diff} points"
