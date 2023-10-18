@@ -330,8 +330,9 @@ class GamesController < ApplicationController
     is_log_zero_score = true
     begin
       add_score_to_play_by_play(@game.opponent, is_log_zero_score) do
-        their_msg = "Scoring #{@game.opponent.name}'s hand..."
-        msg = are_you_the_dealer ? their_msg : "Scoring your hand..."
+        cards = "#{@game.opponent.hand.keys.join(', ')} + cut: #{@game.cut_card}"
+        their_msg = "Scoring #{@game.opponent.name}'s hand: #{cards}"
+        msg = are_you_the_dealer ? their_msg : "Scoring your hand: #{cards}"
         @your_play_by_play << msg
         @their_play_by_play << their_msg
 
@@ -339,8 +340,9 @@ class GamesController < ApplicationController
       end
 
       add_score_to_play_by_play(@game.dealer, is_log_zero_score) do
-        their_msg = "Scoring #{@game.dealer.name}'s hand..."
-        msg = are_you_the_dealer ? "Scoring your hand..." : their_msg
+        cards = "#{@game.dealer.hand.keys.join(', ')} + cut: #{@game.cut_card}"
+        their_msg = "Scoring #{@game.dealer.name}'s hand: #{cards}"
+        msg = are_you_the_dealer ? "Scoring your hand: #{cards}" : their_msg
         @your_play_by_play << msg
         @their_play_by_play << their_msg
 
@@ -349,8 +351,9 @@ class GamesController < ApplicationController
 
       # crib belongs to the dealer
       add_score_to_play_by_play(@game.dealer, is_log_zero_score) do
-        their_msg = "Scoring #{@game.dealer.name}'s crib..."
-        msg = are_you_the_dealer ? "Scoring your crib..." : their_msg
+        cards = "#{@game.crib.join(', ')} + cut: #{@game.cut_card}"
+        their_msg = "Scoring #{@game.dealer.name}'s crib: #{cards}"
+        msg = are_you_the_dealer ? "Scoring your crib: #{cards}" : their_msg
         @your_play_by_play << msg
         @their_play_by_play << their_msg
 
