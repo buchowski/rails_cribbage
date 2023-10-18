@@ -314,19 +314,11 @@ class GamesController < ApplicationController
     if card_id.nil? || card_id.empty?
       throw "you must select a card to play"
     end
-    before_score = @player.total_score
-    @game.play_card(@player, card_id)
-    score_diff = @player.total_score - before_score
 
-    @your_play_by_play << "You played a #{card_id}"
-    @their_play_by_play << "#{@user.name} played a #{card_id}"
-
-    if score_diff == 1
-      @your_play_by_play << "You scored one point"
-      @their_play_by_play << "#{@user.name} scored one point"
-    elsif score_diff > 1
-      @your_play_by_play << "You scored #{score_diff} points"
-      @their_play_by_play << "#{@user.name} scored #{score_diff} points"
+    add_score_to_play_by_play do
+      @game.play_card(@player, card_id)
+      @your_play_by_play << "You played a #{card_id}"
+      @their_play_by_play << "#{@user.name} played a #{card_id}"
     end
   end
 
@@ -337,6 +329,20 @@ class GamesController < ApplicationController
       @game.submit_crib_scores()
     rescue StandardError => exception
       throw exception unless @game.fsm.game_over?
+    end
+  end
+
+  def add_score_to_play_by_play()
+    before_score = @player.total_score
+    yield
+    score_diff = @player.total_score - before_score
+
+    if score_diff == 1
+      @your_play_by_play << "You scored one point"
+      @their_play_by_play << "#{@user.name} scored one point"
+    elsif score_diff > 1
+      @your_play_by_play << "You scored #{score_diff} points"
+      @their_play_by_play << "#{@user.name} scored #{score_diff} points"
     end
   end
 end
