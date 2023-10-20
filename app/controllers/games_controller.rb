@@ -329,6 +329,9 @@ class GamesController < ApplicationController
     are_you_the_dealer = @game.dealer.id == @user.id
     is_log_zero_score = true
     begin
+      # tally the score of both hands and the crib
+      @game.auto_score_hands_and_crib()
+
       add_score_to_play_by_play(@game.opponent, is_log_zero_score) do
         cards = "#{@game.opponent.hand.keys.join(', ')} + cut: #{@game.cut_card}"
         their_msg = "Scoring #{@game.opponent.name}'s hand: #{cards}"
@@ -336,6 +339,7 @@ class GamesController < ApplicationController
         @your_play_by_play << msg
         @their_play_by_play << their_msg
 
+        # save the tallied hand score to the opponent's total score
         @game.submit_hand_scores(@game.opponent)
       end
 
@@ -346,6 +350,7 @@ class GamesController < ApplicationController
         @your_play_by_play << msg
         @their_play_by_play << their_msg
 
+        # save the tallied hand score to the dealer's total score
         @game.submit_hand_scores(@game.dealer)
       end
 
@@ -357,6 +362,7 @@ class GamesController < ApplicationController
         @your_play_by_play << msg
         @their_play_by_play << their_msg
 
+        # save the tallied crib score to the dealer's total score
         @game.submit_crib_scores()
       end
     rescue StandardError => exception
