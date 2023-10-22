@@ -1,4 +1,4 @@
-<div class="row">
+<div class="game_grid">
   <% if gvm.are_you_anonymous %>
     <div>
       <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:player_cards] } %>
@@ -36,24 +36,22 @@
       <% end %>
     </div>
   </div>
-</div>
 
-<div id="pile_cards_section">
-  <div id="pile_score">
-    <%= render partial: "cards/card_section_title", locals: { title: "Pile score: #{gvm.pile_score}" } %>
-  </div>
-  <div>
-    <div class="row">
-      <% gvm.pile_cards.each do |card| %>
-        <div data-role="card">
-          <%= render partial: "cards/card_png", locals: { card: card } %>
-        </div>
-      <% end %>
+  <div id="pile_cards_section">
+    <div id="pile_score">
+      <%= render partial: "cards/card_section_title", locals: { title: "Pile score: #{gvm.pile_score}" } %>
+    </div>
+    <div>
+      <div class="row">
+        <% gvm.pile_cards.each do |card| %>
+          <div data-role="card">
+            <%= render partial: "cards/card_png", locals: { card: card } %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="row">
   <div id="opponent_cards_section">
     <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:opponents_cards]} %>
     <div>
