@@ -1,7 +1,7 @@
 <div class="game_grid">
   <% if gvm.are_you_anonymous %>
     <div>
-      <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:player_cards] } %>
+      <%= render partial: "cards/card_section_title", locals: { title: gvm.your_cards_section_header } %>
       <div>
         <div class="rotated_cards">
           <% gvm.player_cards.each do |card| %>
@@ -14,7 +14,7 @@
     </div>
   <% else %>
     <div>
-      <%= render partial: "cards/card_section_title", locals: { title: "Your cards" } %>
+      <%= render partial: "cards/card_section_title", locals: { title: gvm.your_cards_section_header } %>
       <div>
 
         <% if gvm.show_discard_checkboxes %>
@@ -53,7 +53,7 @@
   </div>
 
   <div id="opponent_cards_section">
-    <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:opponents_cards]} %>
+    <%= render partial: "cards/card_section_title", locals: { title: gvm.opponent_cards_section_header } %>
     <div>
       <div class="rotated_cards">
         <% gvm.opponent_cards.each do |card| %>

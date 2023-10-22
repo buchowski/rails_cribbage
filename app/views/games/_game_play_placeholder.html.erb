@@ -1,10 +1,6 @@
 <div class="game_grid">
   <div>
-    <% if gvm.are_you_anonymous %>
-      <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:player_cards] } %>
-    <% else %>
-      <%= render partial: "cards/card_section_title", locals: { title: "Your cards" } %>
-    <% end %>
+    <%= render partial: "cards/card_section_title", locals: { title: gvm.your_cards_section_header } %>
     <div data-role="card">
       <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
     </div>
@@ -27,7 +23,7 @@
   </div>
 
   <div id="opponent_cards_section">
-    <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:opponents_cards]} %>
+    <%= render partial: "cards/card_section_title", locals: { title: gvm.opponent_cards_section_header } %>
     <div data-role="card">
       <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
     </div>

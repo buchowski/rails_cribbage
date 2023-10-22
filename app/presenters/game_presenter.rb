@@ -168,6 +168,13 @@ class GamePresenter < SimpleDelegator
     false
   end
 
+  def is_opponent_dealer
+    if opponent && @game && @game.dealer
+      return opponent.id == @game.dealer.id
+    end
+    false
+  end
+
   def are_you_anonymous
     false
   end
@@ -184,10 +191,18 @@ class GamePresenter < SimpleDelegator
     are_you_dealer ? "players_crib" : "opponents_crib"
   end
 
+  def opponent_cards_section_header
+    header = "#{opponent_name}'s cards"
+    is_opponent_dealer ? header + " (Dealer)" : header
+  end
+
+  def your_cards_section_header
+    header = are_you_anonymous ? "#{player_name}'s cards" : "Your cards"
+    are_you_dealer ? header + " (Dealer)" : header
+  end
+
   def labels
     return {
-      player_cards: @t.call("player.cards", {player_name: player_name}),
-      opponents_cards: @t.call("player.cards", {player_name: opponent_name}),
       opponent_has_n_points: @t.call("player_has_n_points", {player_name: opponent_name, points: opponent_total_score}),
       your_crib: @t.call("your_crib"),
       player_crib: @t.call("player_crib", {player_name: player_name}),
