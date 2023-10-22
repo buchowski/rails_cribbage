@@ -28,12 +28,12 @@ class GamePresenter < SimpleDelegator
   end
 
   def crib_label
-    return "Dealer's crib" unless have_cards_been_dealt
+    return "Dealer's crib" if @game.dealer.nil?
     are_you_dealer ? @t.call("your_crib") : @t.call("player_crib", {player_name: opponent_name})
   end
 
   def who_is_the_dealer
-    return unless have_cards_been_dealt
+    return if @game.dealer.nil?
     are_you_dealer ? "You are the dealer" : "#{opponent_name} is the dealer"
   end
 
@@ -171,7 +171,7 @@ class GamePresenter < SimpleDelegator
   end
 
   def have_cards_been_dealt
-    ![:waiting_for_player_two, :waiting_to_start, :cutting_for_deal].include? current_state
+    ![:waiting_for_player_two, :waiting_to_start, :cutting_for_deal, :dealing].include? current_state
   end
 
   def has_game_started
