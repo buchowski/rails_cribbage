@@ -26,7 +26,7 @@ module Translations
     when "opponent.won"
       "#{opponent_name} won the game."
     when "player.cards"
-      "#{player_name}'s cards:"
+      "#{player_name}'s cards"
     when "game.over"
       "Game over"
     when "you_have_n_points"

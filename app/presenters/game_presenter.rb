@@ -28,12 +28,12 @@ class GamePresenter < SimpleDelegator
   end
 
   def crib_label
-    return "TODO" unless have_cards_been_dealt
+    return "Dealer's crib" unless have_cards_been_dealt
     are_you_dealer ? @t.call("your_crib") : @t.call("player_crib", {player_name: opponent_name})
   end
 
   def who_is_the_dealer
-    return "TODO" unless have_cards_been_dealt
+    return unless have_cards_been_dealt
     are_you_dealer ? "You are the dealer" : "#{opponent_name} is the dealer"
   end
 
@@ -71,6 +71,8 @@ class GamePresenter < SimpleDelegator
 
   def game_play_message
     case current_state
+    when :cutting_for_deal
+      'Click "Cut for deal" to see who deals first'
     when :discarding
       hand_count = player && player.hand.values.size
       left_to_discard_count = hand_count - 4
