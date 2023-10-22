@@ -33,7 +33,11 @@
       <progress class="progress is-danger" value="<%= gvm.opponent_total_score_percent %>" max="100"><%= gvm.opponent_total_score_percent %></progress>
     </div>
     <div>
+    <% if gvm.have_cards_been_dealt %>
       <%= render partial: "games/game_play", locals: { gvm: gvm } %>
+    <% else %>
+      <%= render partial: "games/game_play_placeholder", locals: { gvm: gvm } %>
+    <% end %>
     </div>
   </div>
 <% end %>

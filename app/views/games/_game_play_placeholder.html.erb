@@ -1,0 +1,41 @@
+<div class="game_grid">
+  <div>
+    <% if gvm.are_you_anonymous %>
+      <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:player_cards] } %>
+    <% else %>
+      <%= render partial: "cards/card_section_title", locals: { title: "Your cards" } %>
+    <% end %>
+    <div data-role="card">
+      <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
+    </div>
+  </div>
+
+  <div id="cut_card_section">
+    <%= render partial: "cards/card_section_title", locals: { title: "Cut card"} %>
+    <div data-role="card">
+      <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
+    </div>
+  </div>
+
+  <div id="pile_cards_section">
+    <div id="pile_score">
+      <%= render partial: "cards/card_section_title", locals: { title: "Pile score: #{gvm.pile_score}" } %>
+    </div>
+    <div data-role="card">
+      <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
+    </div>
+  </div>
+
+  <div id="opponent_cards_section">
+    <%= render partial: "cards/card_section_title", locals: { title: gvm.labels[:opponents_cards]} %>
+    <div data-role="card">
+      <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
+    </div>
+  </div>
+  <div id="crib_cards_section">
+    <%= render partial: "cards/card_section_title", locals: { title: gvm.crib_label } %>
+    <div data-role="card">
+      <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
+    </div>
+  </div>
+</div>
