@@ -13,9 +13,15 @@
   </div>
 <% end %>
 
-<% for msg in gvm.play_by_play do %>
-  <div id="game_play_alert" class="notification is-secondary">
-    <%= raw GamePresenter.format_cards_in_msg(msg) %>
+<% if !gvm.play_by_play.empty? %>
+  <div id="play_by_play_section">
+    <ul>
+      <% for msg in gvm.play_by_play do %>
+        <li>
+          <%= raw GamePresenter.format_cards_in_msg(msg) %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 <% end %>
 

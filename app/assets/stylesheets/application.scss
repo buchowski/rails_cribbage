@@ -123,3 +123,10 @@ th, td {
   grid-column: 2 / 3;
   grid-row: 3 / 4;
 }
+
+#play_by_play_section {
+  margin: 20px 0 28px 20px;
+  ul {
+    list-style-type: disclosure-closed;
+  }
+}
