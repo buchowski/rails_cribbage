@@ -30,7 +30,7 @@
 <% end %>
 
 <% if gvm.has_game_started %>
-  <div id="game-grid">
+  <div>
     <div>
       <div id="your_score"><%= gvm.player_has_n_points_label %></div>
       <progress class="progress is-success" value="<%= gvm.player_total_score_percent %>" max="100"><%= gvm.player_total_score_percent %></progress>
