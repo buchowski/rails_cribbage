@@ -19,6 +19,14 @@ class GamePresenter < SimpleDelegator
     super(dirty_game_model)
   end
 
+  def self.format_cards_in_msg(msg)
+    suit_map = {"h" => "&hearts;", "d" => "&diams;", "c" => "&clubs;", "s" => "&spades;"}
+    msg.gsub(/[ 1]{1}[0-9qkaj]{1}[hdcs]{1}/) do |card_id|
+      suit = card_id.last
+      "<span>" + card_id[0..-2].upcase + suit_map[suit] + "</span>"
+    end
+  end
+
   def crib_label
     return "TODO" unless have_cards_been_dealt
     are_you_dealer ? @t.call("your_crib") : @t.call("player_crib", {player_name: opponent_name})
