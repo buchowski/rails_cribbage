@@ -73,6 +73,8 @@ class GamePresenter < SimpleDelegator
     case current_state
     when :cutting_for_deal
       'Click "Cut for deal" to see who deals first'
+    when :dealing
+      are_you_dealer ? "Deal the cards" : "Deal the cards on #{opponent_name}'s behalf"
     when :discarding
       hand_count = player && player.hand.values.size
       left_to_discard_count = hand_count - 4
@@ -176,6 +178,10 @@ class GamePresenter < SimpleDelegator
 
   def has_game_started
     ![:waiting_for_player_two, :waiting_to_start].include? current_state
+  end
+
+  def crib_cards_section_class
+    are_you_dealer ? "players_crib" : "opponents_crib"
   end
 
   def labels
