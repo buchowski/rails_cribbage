@@ -5,9 +5,7 @@
       <div>
         <div class="rotated_cards">
           <% gvm.player_cards.each do |card| %>
-            <div data-role="card">
-              <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
-            </div>
+            <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
           <% end %>
         </div>
       </div>
@@ -44,9 +42,7 @@
     <div>
       <div class="row">
         <% gvm.pile_cards.each do |card| %>
-          <div data-role="card">
-            <%= render partial: "cards/card_png", locals: { card: card } %>
-          </div>
+          <%= render partial: "cards/card_png", locals: { card: card } %>
         <% end %>
       </div>
     </div>
@@ -57,9 +53,7 @@
     <div>
       <div class="rotated_cards">
         <% gvm.opponent_cards.each do |card| %>
-          <div data-role="card">
-            <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
-          </div>
+          <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
         <% end %>
       </div>
     </div>
@@ -69,9 +63,7 @@
     <div>
       <div class="rotated_cards">
         <% gvm.crib_cards.each do |card| %>
-          <div data-role="card">
-            <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
-          </div>
+          <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
         <% end %>
       </div>
     </div>
