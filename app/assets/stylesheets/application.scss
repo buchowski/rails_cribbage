@@ -139,7 +139,7 @@ th, td {
 #crib_cards_section {
   grid-column: 2 / 3;
   &.players_crib {
-    grid-row: 1 / 2;
+    grid-row: 2 / 3;
   }
   &.opponents_crib {
     grid-row: 3 / 4;
