@@ -8,15 +8,25 @@
 
 <turbo-stream action="replace" target="<%= dom_id(gvm) %>">
   <template>
-    <div id="<%= dom_id(gvm) %>">
-      <div class="">
-        <%= render(
-          partial: "games/game_play_container",
-          formats: [:html],
-          locals: { gvm: gvm, app: app }
-        ) %>
-      </div>
-      <%= pre_bot_update_html_string %>
+    <div id="<%= dom_id(gvm) %>" class="relative_game_container">
+      <% if pre_bot_update_html_string.nil? %>
+          <%= render(
+            partial: "games/game_play_container",
+            formats: [:html],
+            locals: { gvm: gvm, app: app }
+          ) %>
+      <% else %>
+        <div class="show_in_n_seconds absolute_game_container">
+          <%= render(
+            partial: "games/game_play_container",
+            formats: [:html],
+            locals: { gvm: gvm, app: app }
+          ) %>
+        </div>
+        <div class="hide_in_n_seconds absolute_game_container">
+          <%= pre_bot_update_html_string %>
+        </div>
+      <% end %>
     </div>
   </template>
 </turbo-stream>
