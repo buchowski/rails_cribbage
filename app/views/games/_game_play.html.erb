@@ -1,28 +1,30 @@
 <div class="game_grid">
-  <% if gvm.are_you_anonymous %>
-    <%= render partial: "cards/card_section_title", locals: { title: gvm.your_cards_section_header } %>
-    <% if gvm.player_cards.empty? %>
-      <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
+  <div id="your_cards_section">
+    <% if gvm.are_you_anonymous %>
+      <%= render partial: "cards/card_section_title", locals: { title: gvm.your_cards_section_header } %>
+      <% if gvm.player_cards.empty? %>
+        <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
+      <% else %>
+        <div class="rotated_cards">
+          <% gvm.player_cards.each do |card| %>
+            <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
+          <% end %>
+        </div>
+      <% end %>
     <% else %>
-      <div class="rotated_cards">
-        <% gvm.player_cards.each do |card| %>
-          <%= render partial: "cards/card_png", locals: { card: "sleeve_1" } %>
+      <div>
+        <%= render partial: "cards/card_section_title", locals: { title: gvm.your_cards_section_header } %>
+
+        <% if gvm.show_discard_checkboxes %>
+          <%= render partial: "cards/card_checkboxes_section", locals: { gvm: gvm } %>
+        <% end %>
+
+        <% if gvm.show_play_card_radios %>
+          <%= render partial: "cards/card_radios_section", locals: { gvm: gvm } %>
         <% end %>
       </div>
     <% end %>
-  <% else %>
-    <div>
-      <%= render partial: "cards/card_section_title", locals: { title: gvm.your_cards_section_header } %>
-
-      <% if gvm.show_discard_checkboxes %>
-        <%= render partial: "cards/card_checkboxes_section", locals: { gvm: gvm } %>
-      <% end %>
-
-      <% if gvm.show_play_card_radios %>
-        <%= render partial: "cards/card_radios_section", locals: { gvm: gvm } %>
-      <% end %>
-    </div>
-  <% end %>
+  </div>
 
   <div id="cut_card_section">
     <%= render partial: "cards/card_section_title", locals: { title: "Cut card"} %>
