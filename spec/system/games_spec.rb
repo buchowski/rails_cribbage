@@ -125,8 +125,8 @@ RSpec.describe "Games", type: :system do
       end
 
       expect(page.find("#game_play_message").text).to eq("Waiting for Barbara to play a card")
-      # TODO let's only show the refresh button if it's a bot game
-      expect(page).to have_selector("#refresh_btn")
+      # TODO write test to only show the refresh button if it's a bot game
+      expect(page).not_to have_selector("#refresh_btn")
 
       play_card_as("barbara", "6h")
       should_be_opponents_turn("Cindy")

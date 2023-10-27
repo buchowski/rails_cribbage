@@ -26,9 +26,9 @@ class GamesController < ApplicationController
 
   def game_view_model(game = @game)
     if @user.is_member(@game_model)
-      return GamePresenter.new(@game_model, game, @user, @your_play_by_play)
+      return GamePresenter.new(@game_model, game, @user, @your_play_by_play, is_bot_game)
     else
-      return AnonGamePresenter.new(@game_model, game, @user, @their_play_by_play)
+      return AnonGamePresenter.new(@game_model, game, @user, @their_play_by_play, is_bot_game)
     end
   end
 
@@ -93,7 +93,7 @@ class GamesController < ApplicationController
           end
         end
 
-        if is_single_player_game && type_of_update != "hurry_up_bot"
+        if is_bot_game && type_of_update != "hurry_up_bot"
           pre_bot_update_html_string = render_to_string(
             partial: "games/game_play_container",
             locals: {
@@ -169,7 +169,7 @@ class GamesController < ApplicationController
 
   private
 
-  def is_single_player_game
+  def is_bot_game
     !@opponent_user.nil? && @opponent_user.is_bot
   end
 
@@ -181,7 +181,7 @@ class GamesController < ApplicationController
     empty_play_by_play = []
     game_models.map do |game_model|
       game = get_cribbage_game(game_model)
-      AnonGamePresenter.new(game_model, game, @user, empty_play_by_play)
+      AnonGamePresenter.new(game_model, game, @user, empty_play_by_play, is_bot_game)
     end
   end
 
@@ -255,7 +255,7 @@ class GamesController < ApplicationController
   end
 
   def deal()
-    throw "You are not the dealer" unless @user.is_dealer(@game_model) || is_single_player_game
+    throw "You are not the dealer" unless @user.is_dealer(@game_model) || is_bot_game
     @game.deal()
     # TODO it's possible the bot was the actual dealer
     @your_play_by_play << "You have dealt the cards"

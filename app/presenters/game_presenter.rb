@@ -1,11 +1,12 @@
 class GamePresenter < SimpleDelegator
   attr_reader :player_name, :play_by_play
 
-  def initialize(game_model, cribbage_game, user, play_by_play)
+  def initialize(game_model, cribbage_game, user, play_by_play, is_bot_game = false)
     @t = Proc.new do |key, data| Translations.en(key, data) end
     @game = cribbage_game
     @user = user
     @play_by_play = play_by_play
+    @is_bot_game = is_bot_game
 
     adapted_game = Game.adapt_to_active_record(cribbage_game)
     # dirty means this model contains data that may not yet be persisted in the database
@@ -159,7 +160,7 @@ class GamePresenter < SimpleDelegator
   end
 
   def show_refresh_btn
-    !is_your_turn && current_state == :playing
+    !is_your_turn && current_state == :playing && @is_bot_game
   end
 
   def are_you_dealer
