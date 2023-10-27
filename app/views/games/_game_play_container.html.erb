@@ -2,10 +2,12 @@
   <div id="game_play_message_container" class="notification is-primary is-light">
     <h1 id="game_play_message" class="title"><%= gvm.game_play_message %></h1>
     <% if gvm.show_refresh_btn %>
-      <%= render(
-        partial: "games/update_btn",
-        locals: { gvm: gvm, label: "Hurry up, Bot!", type_of_update: "hurry_up_bot"}
-      )%>
+      <div id="refresh_btn">
+        <%= render(
+          partial: "games/update_btn",
+          locals: { gvm: gvm, label: "Hurry up, Bot!", type_of_update: "hurry_up_bot"}
+        )%>
+      </div>
     <% end %>
   </div>
 <% end %>
@@ -15,7 +17,7 @@
     <ul>
       <% for msg in gvm.play_by_play do %>
         <li>
-          <%= raw GamePresenter.format_cards_in_msg(msg) %>
+          <%= msg %>
         </li>
       <% end %>
     </ul>

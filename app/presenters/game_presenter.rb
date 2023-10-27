@@ -19,6 +19,7 @@ class GamePresenter < SimpleDelegator
     super(dirty_game_model)
   end
 
+  # TODO we're currently not using this
   def self.format_cards_in_msg(msg)
     suit_map = {"h" => "&hearts;", "d" => "&diams;", "c" => "&clubs;", "s" => "&spades;"}
     msg.gsub(/[ 1]{1}[0-9qkaj]{1}[hdcs]{1}/) do |card_id|

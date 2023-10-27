@@ -24,10 +24,21 @@ def should_be_opponents_turn(opponent_name)
   expect(page.find("#game_play_message").text).to eq(t.call("playing.opponent", {opponent_name: opponent_name}))
 end
 
-def expect_scores_to_be(your_score, opponent_score, opponent_name, score_msg)
+def expect_scores_to_be(your_score, opponent_score, opponent_name, expected_play_by_play)
   expect(page.find("#your_score").text).to eq("You have #{your_score} points")
   expect(page.find("#opponent_score").text).to eq("#{opponent_name} has #{opponent_score} points")
-  expect(page.find("#game_play_alert").text).to eq(score_msg)
+
+  play_by_play = page.all("#play_by_play_section li").map(&:text)
+  p "expected #{expected_play_by_play} got #{play_by_play}"
+  expect(play_by_play.size).to eq(expected_play_by_play.size)
+
+  if expected_play_by_play.empty?
+    expect(play_by_play.size).to eq(0)
+  else
+    expected_play_by_play.each_with_index do |msg, i|
+      expect(play_by_play[i]).to eq(msg)
+    end
+  end
 end
 
 def expect_pile_score_to_be(pile_score)
@@ -48,10 +59,10 @@ RSpec.describe "Games", type: :system do
     it "should display all games in the table" do
       visit admin_path
 
-      expect(page).to have_selector "tbody tr", count: 2
+      expect(page).to have_selector "tbody tr", count: 3
       expect(page.find("#{last_row} td:nth-child(2)")).to have_content("Barbara")
       expect(page.find("#{last_row} td:nth-child(3)").text).to eq("Cindy")
-      expect(page.find("#{last_row} td:nth-child(4)")).to have_content("discarding")
+      expect(page.find("#{last_row} td:nth-child(4)")).to have_content("playing")
 
       expect(page.find("#{first_row} td:nth-child(2)")).to have_content("Barbara")
       expect(page.find("#{first_row} td:nth-child(3)")).to have_content("")
@@ -114,6 +125,7 @@ RSpec.describe "Games", type: :system do
       end
 
       expect(page.find("#game_play_message").text).to eq("Waiting for Barbara to play a card")
+      # TODO let's only show the refresh button if it's a bot game
       expect(page).to have_selector("#refresh_btn")
 
       play_card_as("barbara", "6h")
@@ -123,7 +135,7 @@ RSpec.describe "Games", type: :system do
       play_card_as("cindy", "9c")
       should_be_opponents_turn("Barbara")
       expect_pile_score_to_be(15)
-      expect_scores_to_be(2, 0, "Barbara", "You scored 2 points!")
+      expect_scores_to_be(2, 0, "Barbara", ["You played a 9c", "You scored 2 points"])
 
       play_card_as("barbara", "jh")
       should_be_opponents_turn("Cindy")
@@ -132,7 +144,7 @@ RSpec.describe "Games", type: :system do
       play_card_as("cindy", "6s") #31
       should_be_opponents_turn("Barbara")
       expect_pile_score_to_be(0)
-      expect_scores_to_be(4, 0, "Barbara", "You scored 2 points!")
+      expect_scores_to_be(4, 0, "Barbara", ["You played a 6s", "You scored 2 points"])
 
       play_card_as("barbara", "5c")
       should_be_opponents_turn("Cindy")
@@ -143,12 +155,11 @@ RSpec.describe "Games", type: :system do
       expect_pile_score_to_be(11)
 
       play_card_as("barbara", "4h") #15 & 3-card run (4h, 5c, 6c) gives us 5 points
-      expect_scores_to_be(5, 4, "Cindy", "You scored 5 points! You won the game!")
+      expect_scores_to_be(5, 4, "Cindy", ["You played a 4h", "You scored 5 points"])
       expect(page.find("#game_play_message").text).to eq("Game over")
 
       access_page_as("cindy", game_path(2))
       expect(page.find("#game_play_message").text).to eq("Game over")
-      expect(page.find("#game_play_alert").text).to eq("Barbara won the game.")
     end
   end
 end

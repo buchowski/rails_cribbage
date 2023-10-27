@@ -35,3 +35,21 @@ two:
   round: 1
   points_to_win: 5
   winner_id:
+
+three:
+  id: 3
+  player_one_id: 1
+  player_two_id: 2
+  player_one_cards: {5c: true, 4h: true, jh: true, 6h: true}
+  player_two_cards: {6c: true, 6s: true, 8h: true, 8d: true}
+  pile_cards: []
+  crib_cards: ["2h", "3h", "as", "9c"]
+  cut_card: "jd"
+  dealer_id: 2
+  whose_turn_id: 1
+  current_fsm_state: playing
+  player_one_points: 0
+  player_two_points: 0
+  round: 1
+  points_to_win: 12
+  winner_id:
