@@ -37,10 +37,6 @@ class AnonGamePresenter < GamePresenter
     }
   end
 
-  def game_play_alert
-    nil
-  end
-
   def show_play_card_radios
     false
   end

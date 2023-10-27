@@ -307,7 +307,7 @@ class GamesController < ApplicationController
     # automatically flip the top card. no need for manual user action
     if @game.fsm.flipping_top_card?
       @game.flip_top_card
-      msg = "the auto-selected cut card is #{@game.cut_card}"
+      msg = "#{@game.cut_card} was auto-selected as the cut card"
       @your_play_by_play << msg
       @their_play_by_play << msg
     end

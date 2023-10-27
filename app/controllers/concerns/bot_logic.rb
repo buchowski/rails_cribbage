@@ -9,7 +9,6 @@ module BotLogic
         # player has already cut
         @game.deal()
       when "discard"
-        # TODO if after discarding it's the bot's turn to play, then play a card
         discard_bot_cards() if has_player_discarded_all_cards()
       when "play_card"
         play_bot_card()
