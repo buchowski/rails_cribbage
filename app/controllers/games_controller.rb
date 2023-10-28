@@ -24,12 +24,20 @@ class GamesController < ApplicationController
     render "games/admin", locals: { gvms: games, users: users }
   end
 
-  def game_view_model(game = @game)
-    if @user.is_member(@game_model)
-      return GamePresenter.new(@game_model, game, @user, @your_play_by_play, is_bot_game)
-    else
-      return AnonGamePresenter.new(@game_model, game, @user, @their_play_by_play, is_bot_game)
-    end
+  def game_view_model()
+    @user.is_member(@game_model) ? your_gvm : anon_gvm(@user)
+  end
+
+  def your_gvm
+    GamePresenter.new(@game_model, @game, @user, @your_play_by_play, is_bot_game)
+  end
+
+  def opponent_gvm
+    GamePresenter.new(@game_model, @game, @opponent_user, @their_play_by_play, is_bot_game)
+  end
+
+  def anon_gvm(user)
+    AnonGamePresenter.new(@game_model, @game, user, @their_play_by_play, is_bot_game)
   end
 
   def show
@@ -120,10 +128,11 @@ class GamesController < ApplicationController
       set_instance_vars()
 
       if is_broadcast_to_opponent
-        broadcast_to_opponent()
+        broadcast_to_opponent(opponent_gvm, @opponent_user)
       end
 
-      broadcast_to_guests()
+      anon_user = AnonUser.new
+      broadcast_to_guests(anon_gvm(anon_user), anon_user)
     # TODO improve error handling. remove "uncaught..." from error msg we render in UI
     rescue StandardError => exception
       # truncate exception.message to prevent cookieoverflow
