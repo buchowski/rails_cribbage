@@ -151,6 +151,10 @@ class GamePresenter < SimpleDelegator
     @game.pile_score
   end
 
+  def pile_cards_formatted
+    self.pile_cards
+  end
+
   def show_play_card_radios
     current_state == :playing && self.player_cards.size > 0
   end

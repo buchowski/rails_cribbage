@@ -39,11 +39,11 @@
     <div id="pile_score">
       <%= render partial: "cards/card_section_title", locals: { title: "Pile score: #{gvm.pile_score}" } %>
     </div>
-    <% if gvm.pile_cards.empty? %>
+    <% if gvm.pile_cards_formatted.empty? %>
       <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
     <% else %>
       <div class="row">
-        <% gvm.pile_cards.each do |card| %>
+        <% gvm.pile_cards_formatted.each do |card| %>
           <%= render partial: "cards/card_png", locals: { card: card } %>
         <% end %>
       </div>
