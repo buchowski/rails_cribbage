@@ -17,10 +17,10 @@
 
         <% if gvm.show_discard_checkboxes %>
           <%= render partial: "cards/card_checkboxes_section", locals: { gvm: gvm } %>
-        <% end %>
-
-        <% if gvm.show_play_card_radios %>
+        <% elsif gvm.show_play_card_radios %>
           <%= render partial: "cards/card_radios_section", locals: { gvm: gvm } %>
+        <% else %>
+          <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
         <% end %>
       </div>
     <% end %>
