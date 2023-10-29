@@ -59,6 +59,20 @@ input[type="radio"]:checked ~ label {
   border: 5px solid red;
 }
 
+.card_checkbox {
+  display: flex;
+  flex-direction: column;
+  flex-flow: column-reverse;
+  margin: 4px;
+  input[type="checkbox"] {
+    margin: 10px 0;
+    &:checked ~ label .png_card {
+      background-color: antiquewhite;
+      background-blend-mode: difference;
+    }
+  }
+}
+
 th, td {
   border: 1px solid black;
   padding: 0.5rem;
