@@ -26,6 +26,13 @@
   height: 135px;
 }
 
+#header_logo {
+  background-image: url("cribbage_logo.png");
+  background-repeat: no-repeat;
+  width: 246px;
+  height: 62px;
+}
+
 .png_card {
   background-image: url("pc_computer_playing_cards.png");
   width: 71px;
@@ -60,6 +67,7 @@ th, td {
 #header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .rotated_cards {
