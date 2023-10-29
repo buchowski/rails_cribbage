@@ -45,26 +45,12 @@
   }
 }
 
-input[type="radio"] {
-  border: none;
-}
-
-input[type="radio"] ~ label {
-  display: flex;
-  border: 5px solid white;
-  border-radius: 12px;
-}
-
-input[type="radio"]:checked ~ label {
-  border: 5px solid red;
-}
-
-.card_checkbox {
+.selectable_card {
   display: flex;
   flex-direction: column;
   flex-flow: column-reverse;
   margin: 4px;
-  input[type="checkbox"] {
+  input[type="checkbox"], input[type="radio"] {
     margin: 10px 0;
     &:checked ~ label .png_card {
       background-color: antiquewhite;
