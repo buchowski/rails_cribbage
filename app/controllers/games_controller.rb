@@ -276,10 +276,9 @@ class GamesController < ApplicationController
     @game.cut_for_deal()
     are_you_the_dealer = @game.dealer.id == @user.id
     dealer = are_you_the_dealer ? @user : @opponent_user
-    whose_turn = are_you_the_dealer ? @opponent_user : @user
 
-    you_are_the_dealer_msgs = ["You are the dealer", "It is #{whose_turn.name}'s turn to play"]
-    they_are_the_dealer_msgs = ["#{dealer.name} is the dealer", "It is your turn to play"]
+    you_are_the_dealer_msgs = ["You are the dealer"]
+    they_are_the_dealer_msgs = ["#{dealer.name} is the dealer"]
 
     # TODO show which cards the players cut?
     if are_you_the_dealer
