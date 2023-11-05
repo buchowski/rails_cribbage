@@ -10,7 +10,7 @@ one:
 two:
   id: 2
   password_digest: <%= BCrypt::Password.create("secret") %>
-  is_admin: false
+  is_admin: true
   name: Cindy
   email: cinder88@mallcart.net
 

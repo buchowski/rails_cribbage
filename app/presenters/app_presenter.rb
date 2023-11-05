@@ -7,4 +7,8 @@ class AppPresenter
   def welcome_msg
     @t.call("welcome", {player_name: @user.name})
   end
+
+  def is_show_admin_link
+    ['development'].include? ENV['RAILS_ENV']
+  end
 end

@@ -7,7 +7,9 @@
     <div><%= @app.welcome_msg %></div>
     <%= link_to "Login", login_path %>
     <%= link_to "Sign up", users_new_path %>
-    <%= link_to "Admin", admin_path %>
+    <% if @app.is_show_admin_link %>
+      <%= link_to "Admin", admin_path %>
+    <% end %>
     <%= button_to "Log out", logout_path, method: :delete %>
   </div>
 </div>

@@ -7,6 +7,18 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should allow admin to view admin page" do
+    sign_in_as_cindy()
+    get admin_path
+    assert_response :success
+  end
+
+  test "should not allow non-admin to view admin page" do
+    sign_in_as_barbara()
+    get admin_path
+    assert_response 403
+  end
+
   test "should allow anonymous users to view game" do
     get game_path(Game.last.id)
     assert_response :success
