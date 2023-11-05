@@ -11,6 +11,10 @@ class AnonUser
     true
   end
 
+  def is_admin?
+    false
+  end
+
   def games
     []
   end

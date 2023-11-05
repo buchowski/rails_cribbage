@@ -5,11 +5,15 @@
 
   <div id="header_actions">
     <div><%= @app.welcome_msg %></div>
-    <%= link_to "Login", login_path %>
-    <%= link_to "Sign up", users_new_path %>
+    <% if @app.is_show_login_sign_up %>
+      <%= link_to "Login", login_path %>
+      <%= link_to "Sign up", users_new_path %>
+    <% end %>
     <% if @app.is_show_admin_link %>
       <%= link_to "Admin", admin_path %>
     <% end %>
-    <%= button_to "Log out", logout_path, method: :delete %>
+    <% if @app.is_show_log_out %>
+      <%= button_to "Log out", logout_path, method: :delete %>
+    <% end %>
   </div>
 </div>

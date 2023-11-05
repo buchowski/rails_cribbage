@@ -11,4 +11,12 @@ class AppPresenter
   def is_show_admin_link
     ['development'].include? ENV['RAILS_ENV']
   end
+
+  def is_show_log_out
+    @user.is_anon? == false
+  end
+
+  def is_show_login_sign_up
+    @user.is_anon? == true
+  end
 end
