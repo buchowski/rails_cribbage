@@ -1,12 +1,14 @@
-
-<%= form_with url: "/login" do |form| %>
-  <div>
-    <%= form.label :email, "Your email" %>
-    <%= form.text_field :email, required: true %>
-  </div>
-  <div>
-    <%= form.label :password, "Password" %>
-    <%= form.password_field :password, required: true %>
-  </div>
-    <%= form.submit "Sign in" %>
-<% end %>
+<h1 class="title">Log in</h1>
+<div class="form-container">
+  <%= form_with url: "/login" do |form| %>
+    <div class="field">
+      <%= form.label :email, "Your email", class: 'label' %>
+      <%= form.text_field :email, required: true, class: 'input' %>
+    </div>
+    <div class="field">
+      <%= form.label :password, "Password", class: 'label' %>
+      <%= form.password_field :password, required: true, class: 'input' %>
+    </div>
+      <%= form.submit "Sign in", class: 'button is-primary' %>
+  <% end %>
+</div>
