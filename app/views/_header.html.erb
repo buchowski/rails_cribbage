@@ -13,7 +13,7 @@
       <%= link_to "Admin", admin_path %>
     <% end %>
     <% if @app.is_show_log_out %>
-      <%= button_to "Log out", logout_path, method: :delete %>
+      <%= button_to "Log out", logout_path, method: :delete, class: 'button is-small' %>
     <% end %>
   </div>
 </div>
