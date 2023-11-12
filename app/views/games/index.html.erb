@@ -1,5 +1,26 @@
-<div id="user_games_table">
-  <%= render partial: "games/table", locals: { gvms: gvms } %>
+<div class="content box">
+  <h1 class="title">Your games</h1>
+  <div id="user_games_table">
+    <%= render partial: "games/table", locals: { gvms: gvms } %>
+  </div>
 </div>
-<%= button_to "New Bot Game", games_path, method: :post, params: { bot_id: bots.first.id } %>
-<%= button_to "New Multiplayer Game", games_path, method: :post %>
+
+<div class="box highlighted_container">
+  <h1 class="title">New Game</h1>
+  <div class="content">
+    <h2 class="title">Single-Player</h2>
+    <ul>
+      <li>Create a single-player game between you and a bot</li>
+    </ul>
+    <%= button_to "New Single-Player Game", games_path, method: :post, params: { bot_id: bots.first.id }, class: 'button is-primary' %>
+  </div>
+  <div class="content">
+    <h2 class="title">Multi-Player</h2>
+    <ul>
+      <li>Create a two player game</li>
+      <li>This generates an invitation URL you can share with another person</li>
+      <li>Once this person joins, the game will begin</li>
+    </ul>
+    <%= button_to "New Multi-Player Game", games_path, method: :post, class: 'button is-primary' %>
+  </div>
+</div>

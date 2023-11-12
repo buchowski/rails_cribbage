@@ -1,4 +1,3 @@
-<h1 class="title">Your games</h1>
 <table class="table">
   <thead>
     <tr>
@@ -19,10 +18,10 @@
         <td><%= game.current_fsm_state %></td>
         <td><%= game.created_at.strftime("%m-%d-%Y %T") %></td>
         <td>
-          <%= button_to "delete", game_path(game), method: :delete, class: 'button is-dark is-small'  %>
+          <%= button_to "delete", game_path(game), method: :delete, class: 'button is-danger is-small'  %>
         </td>
         <td>
-          <%= link_to 'open', game_path(game), class: 'button is-link is-small' %>
+          <%= link_to 'open', game_path(game), class: 'button is-primary is-small' %>
         </td>
       </tr>
     <% end %>
