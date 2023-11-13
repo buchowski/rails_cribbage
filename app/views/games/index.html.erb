@@ -1,8 +1,26 @@
 <div class="content box">
   <h1 class="title">Your games</h1>
-  <div id="user_games_table">
-    <%= render partial: "games/table", locals: { gvms: gvms } %>
-  </div>
+  <% if gvms.empty? %>
+    <% if @user.is_anon? %>
+      <p>
+        Welcome <%= @user.name %>, you must
+        <%= link_to "Log in", login_path %>
+        or
+        <%= link_to "Sign up", users_new_path %>
+        before you can create or join a game
+      </p>
+    <% else %>
+      <p>Hi <%= @user.name %>, you currently don't have any games</p>
+      <ul>
+        <li>Either create a new game below</li>
+        <li>Or join another user's game (Ask them to send you the game invitation link)</li>
+      </ul>
+    <% end %>
+  <% else %>
+    <div id="user_games_table">
+      <%= render partial: "games/table", locals: { gvms: gvms } %>
+    </div>
+  <% end %>
 </div>
 
 <div class="box highlighted_container">
@@ -12,7 +30,13 @@
     <ul>
       <li>Create a single-player game between you and a bot</li>
     </ul>
-    <%= button_to "New Single-Player Game", games_path, method: :post, params: { bot_id: bots.first.id }, class: 'button is-primary' %>
+    <% if @user.is_anon? %>
+      <button disabled class="button is-primary" title="You must log in to create a game">
+        New Single-Player Game
+      </button>
+    <% else %>
+      <%= button_to "New Single-Player Game", games_path, method: :post, params: { bot_id: bots.first.id }, class: 'button is-primary' %>
+    <% end %>
   </div>
   <div class="content">
     <h2 class="title">Multi-Player</h2>
@@ -21,6 +45,12 @@
       <li>This generates an invitation URL you can share with another person</li>
       <li>Once this person joins, the game will begin</li>
     </ul>
-    <%= button_to "New Multi-Player Game", games_path, method: :post, class: 'button is-primary' %>
+    <% if @user.is_anon? %>
+      <button disabled class="button is-primary" title="You must log in to create a game">
+        New Multi-Player Game
+      </button>
+    <% else %>
+      <%= button_to "New Multi-Player Game", games_path, method: :post, class: 'button is-primary' %>
+    <% end %>
   </div>
 </div>
