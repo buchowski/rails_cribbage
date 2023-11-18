@@ -3,19 +3,19 @@
   <%= form_with url: "/users" do |form| %>
     <div class="field">
       <%= form.label :name, "Your name", class: 'label' %>
-      <%= form.text_field :name, required: true, class: 'input' %>
+      <%= form.text_field :name, required: true, minlength: '3', maxlength: '12', class: 'input' %>
     </div>
     <div class="field">
       <%= form.label :email, "Your email", class: 'label' %>
-      <%= form.text_field :email, class: 'input' %>
+      <%= form.text_field :email, minlength: '5', maxlength: '22', class: 'input' %>
     </div>
     <div class="field">
       <%= form.label :password, "Password", class: 'label' %>
-      <%= form.password_field :password, class: 'input' %>
+      <%= form.password_field :password, minlength: '5', maxlength: '22', class: 'input' %>
     </div>
     <div class="field">
       <%= form.label :password_confirm, "Confirm Password", class: 'label' %>
-      <%= form.password_field :password_confirm, class: 'input' %>
+      <%= form.password_field :password_confirm, minlength: '5', maxlength: '22', class: 'input' %>
     </div>
     <%= form.submit "Create User", class: 'button is-primary' %>
   <% end %>
