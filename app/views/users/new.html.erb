@@ -1,6 +1,6 @@
 <h1 class="title">Sign up</h1>
 <div class="form-container">
-  <%= form_with url: "/users" do |form| %>
+  <%= form_with url: "/users", :html => { "data-controller" => "sign-up" } do |form| %>
     <div class="field" id="your_name_field">
       <%= form.label :name, "Your name", class: 'label' %>
       <%= form.text_field :name, required: true, minlength: '3', maxlength: '16', class: 'input', value: flash[:name] %>
@@ -14,13 +14,13 @@
       </div>
       <div class="field">
         <%= form.label :password, "Password", class: 'label' %>
-        <%= form.password_field :password, minlength: '5', maxlength: '16', class: 'input' %>
+        <%= form.password_field :password, minlength: '5', maxlength: '16', class: 'input', "data-sign-up-target": "password" %>
       </div>
       <div class="field">
         <%= form.label :password_confirm, "Confirm Password", class: 'label' %>
-        <%= form.password_field :password_confirm, minlength: '5', maxlength: '16', class: 'input' %>
+        <%= form.password_field :password_confirm, minlength: '5', maxlength: '16', class: 'input', "data-sign-up-target": "confirmPassword" %>
       </div>
     </div>
-    <%= form.submit "Create User", class: 'button is-primary' %>
+    <%= form.submit "Create User", class: 'button is-primary', "data-action": "click->sign-up#validate" %>
   <% end %>
 </div>
