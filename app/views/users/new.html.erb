@@ -3,7 +3,7 @@
   <%= form_with url: "/users" do |form| %>
     <div class="field" id="your_name_field">
       <%= form.label :name, "Your name", class: 'label' %>
-      <%= form.text_field :name, required: true, minlength: '3', maxlength: '12', class: 'input' %>
+      <%= form.text_field :name, required: true, minlength: '3', maxlength: '16', class: 'input' %>
     </div>
     <div class="box highlighted_container">
       <p class="title is-5">Optional fields</p>
@@ -14,11 +14,11 @@
       </div>
       <div class="field">
         <%= form.label :password, "Password", class: 'label' %>
-        <%= form.password_field :password, minlength: '5', maxlength: '22', class: 'input' %>
+        <%= form.password_field :password, minlength: '5', maxlength: '16', class: 'input' %>
       </div>
       <div class="field">
         <%= form.label :password_confirm, "Confirm Password", class: 'label' %>
-        <%= form.password_field :password_confirm, minlength: '5', maxlength: '22', class: 'input' %>
+        <%= form.password_field :password_confirm, minlength: '5', maxlength: '16', class: 'input' %>
       </div>
     </div>
     <%= form.submit "Create User", class: 'button is-primary' %>

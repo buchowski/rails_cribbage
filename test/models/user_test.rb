@@ -35,4 +35,22 @@ class UserTest < ActiveSupport::TestCase
     assert_not(user.is_member(game))
     assert_not(user.is_creator(game))
   end
+
+  test "should return valid? = false if name not present" do
+    user = User.new()
+    assert_not(user.valid?)
+  end
+
+  test "should return valid? = false if name has invalid length" do
+    user = User.new(:name => "a")
+    user_two = User.new(:name => 30.times.map { "a" }.join)
+    assert_not(user.valid?)
+    assert_not(user_two.valid?)
+  end
+
+  test "should return valid? = true if name has valid length" do
+    user = User.new(:name => "bman")
+    assert(user.valid?)
+  end
+
 end

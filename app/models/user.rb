@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  validates :name, presence: true
+  validates :name, presence: true, length: { minimum: 3, maximum: 16 }
   has_many :games, foreign_key: :player_one_id
 
   def is_anon?
