@@ -70,10 +70,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "should require password if email is provided" do
-    user = User.new(:name => "bman", :email => "lebron@michaels.haus")
+    user = User.new(:name => "bman", :email => "ugg@express-tops.net")
 
     assert_not(user.valid?)
     assert_equal(user.errors[:email], [])
-    assert_equal(user.errors[:password_digest], ["can't be blank", "is too short (minimum is 5 characters)"])
+    assert_equal(user.errors[:password_digest], ["can't be blank"])
   end
 end

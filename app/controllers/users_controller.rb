@@ -4,7 +4,10 @@ class UsersController < ApplicationController
   end
 
   def create
-    if !are_passwords_valid(params)
+    password = params[:password] || ""
+    password_confirm = params[:password_confirm] || ""
+
+    if !are_passwords_valid(password, password_confirm)
       flash[:error_msg] = "Sorry, your passwords do not match"
       redirect_back(fallback_location: root_path)
       return
@@ -12,8 +15,8 @@ class UsersController < ApplicationController
 
     user = User.new(name: params[:name], email: params[:email])
 
-    if !params[:password].empty?
-      user.password_digest = BCrypt::Password.create(params[:password])
+    if !password.empty?
+      user.password_digest = BCrypt::Password.create(password)
     end
 
     if user.save!
@@ -58,10 +61,10 @@ class UsersController < ApplicationController
 
   private
 
-  def are_passwords_valid(params)
-    return true if params[:password].empty? && params[:password_confirm].empty?
-    return false unless params[:password] == params[:password_confirm]
-    params[:password].length >= 5 && params[:password].length <= 16
+  def are_passwords_valid(password, password_confirm)
+    return true if password.blank? && password_confirm.blank?
+    return false unless password == password_confirm
+    password.length >= 5 && password.length <= 16
   end
 
   def does_password_match(user, password)
