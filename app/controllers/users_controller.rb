@@ -9,6 +9,8 @@ class UsersController < ApplicationController
 
     if !are_passwords_valid(password, password_confirm)
       flash[:error_msg] = "Sorry, your passwords do not match"
+      flash[:name] = params[:name]
+      flash[:email] = params[:email]
       redirect_back(fallback_location: root_path)
       return
     end

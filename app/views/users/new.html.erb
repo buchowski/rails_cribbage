@@ -3,14 +3,14 @@
   <%= form_with url: "/users" do |form| %>
     <div class="field" id="your_name_field">
       <%= form.label :name, "Your name", class: 'label' %>
-      <%= form.text_field :name, required: true, minlength: '3', maxlength: '16', class: 'input' %>
+      <%= form.text_field :name, required: true, minlength: '3', maxlength: '16', class: 'input', value: flash[:name] %>
     </div>
     <div class="box highlighted_container">
       <p class="title is-5">Optional fields</p>
       <p class="subtitle is-6">To save your games you must provide an email and password</p>
       <div class="field">
         <%= form.label :email, "Your email", class: 'label' %>
-        <%= form.text_field :email, minlength: '5', maxlength: '42', class: 'input' %>
+        <%= form.text_field :email, minlength: '5', maxlength: '42', class: 'input', value: flash[:email] %>
       </div>
       <div class="field">
         <%= form.label :password, "Password", class: 'label' %>
