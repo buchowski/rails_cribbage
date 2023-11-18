@@ -36,21 +36,44 @@ class UserTest < ActiveSupport::TestCase
     assert_not(user.is_creator(game))
   end
 
-  test "should return valid? = false if name not present" do
+  test "should be invalid if name not present" do
     user = User.new()
     assert_not(user.valid?)
   end
 
-  test "should return valid? = false if name has invalid length" do
+  test "should be invalid if name has invalid length" do
     user = User.new(:name => "a")
     user_two = User.new(:name => 30.times.map { "a" }.join)
     assert_not(user.valid?)
     assert_not(user_two.valid?)
   end
 
-  test "should return valid? = true if name has valid length" do
+  test "should be valid if name has valid length" do
     user = User.new(:name => "bman")
     assert(user.valid?)
   end
 
+  test "should ensure email is unique" do
+    user = User.new(:name => "bman", :email => "spookster@express-tops.net")
+
+    assert_not(user.valid?)
+    assert_equal(user.errors[:name], [])
+    assert_equal(user.errors[:email], ["has already been taken"])
+  end
+
+  test "should ensure email isn't too long" do
+    user = User.new(:name => "bman", :email => 100.times.map { 'b' }.join)
+
+    assert_not(user.valid?)
+    assert_equal(user.errors[:name], [])
+    assert_equal(user.errors[:email], ["is too long (maximum is 42 characters)"])
+  end
+
+  test "should require password if email is provided" do
+    user = User.new(:name => "bman", :email => "lebron@michaels.haus")
+
+    assert_not(user.valid?)
+    assert_equal(user.errors[:email], [])
+    assert_equal(user.errors[:password_digest], ["can't be blank", "is too short (minimum is 5 characters)"])
+  end
 end

@@ -60,9 +60,8 @@ class UsersController < ApplicationController
 
   def are_passwords_valid(params)
     return true if params[:password].empty? && params[:password_confirm].empty?
-
-    # TODO add length requirement
-    params[:password] == params[:password_confirm]
+    return false unless params[:password] == params[:password_confirm]
+    params[:password].length >= 5 && params[:password].length <= 16
   end
 
   def does_password_match(user, password)
