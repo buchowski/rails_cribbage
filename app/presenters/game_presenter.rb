@@ -54,9 +54,12 @@ class GamePresenter < SimpleDelegator
       label = "Deal cards"
       type_of_update = "deal"
     when :waiting_for_player_two
-      #TODO user cannot join their own game
+      if is_user_creator
+        is_show_update_btn = false
+      else
       label = "Join game"
       type_of_update = "join_game"
+      end
     when :waiting_to_start
       label = "Start game"
       type_of_update = "start_game"
@@ -87,6 +90,10 @@ class GamePresenter < SimpleDelegator
     when :game_over
       @t.call("game.over")
     end
+  end
+
+  def is_user_creator
+    self.player_one_id == @user.id
   end
 
   # this is the creator
