@@ -174,6 +174,10 @@ class GamePresenter < SimpleDelegator
     !is_your_turn && current_state == :playing && @is_bot_game
   end
 
+  def show_join_link
+    current_state == :waiting_for_player_two && is_user_creator
+  end
+
   def are_you_dealer
     if player && @game && @game.dealer
       return player.id == @game.dealer.id

@@ -46,3 +46,14 @@
     </div>
   </div>
 <% end %>
+
+<% if gvm.show_join_link %>
+  <div class="box highlighted_container">
+    <h1 class="title is-5">Invitation URL</h1>
+    <p class="block">
+      Copy the following URL and share it with a friend:
+    </p>
+    <p class="block has-text-weight-bold is-family-monospace"><%= game_url %></p>
+    <p class="block">After accessing the URL, your friend can join your game</p>
+  </div>
+<% end %>
