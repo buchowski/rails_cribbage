@@ -11,21 +11,24 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_08_054818) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "games", force: :cascade do |t|
-    t.integer "player_one_id"
-    t.integer "player_two_id"
+    t.string "player_one_id"
+    t.string "player_two_id"
     t.string "player_one_cards"
     t.string "player_two_cards"
     t.string "pile_cards"
     t.string "cut_card"
-    t.integer "dealer_id"
-    t.integer "whose_turn_id"
+    t.string "dealer_id"
+    t.string "whose_turn_id"
     t.string "current_fsm_state"
     t.integer "player_one_points"
     t.integer "player_two_points"
     t.integer "round"
     t.integer "points_to_win"
-    t.integer "winner_id"
+    t.string "winner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "crib_cards"
