@@ -1,9 +1,5 @@
 class Game < ApplicationRecord
   validates :player_one_id, presence: true
-  serialize :player_one_cards, Hash
-  serialize :player_two_cards, Hash
-  serialize :pile_cards, Array
-  serialize :crib_cards, Array
 
   def get_stream_id_for_user(user)
     user.is_member(self) ? "#{user.id}-#{self.id}" : "guest-#{self.id}"

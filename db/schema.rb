@@ -10,38 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_08_054818) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_09_034137) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "games", force: :cascade do |t|
-    t.string "player_one_id"
-    t.string "player_two_id"
-    t.string "player_one_cards"
-    t.string "player_two_cards"
-    t.string "pile_cards"
+  create_table "games", id: :serial, force: :cascade do |t|
+    t.serial "player_one_id", null: false
+    t.integer "player_two_id"
+    t.json "player_one_cards"
+    t.json "player_two_cards"
+    t.string "pile_cards", array: true
+    t.string "crib_cards", array: true
     t.string "cut_card"
-    t.string "dealer_id"
-    t.string "whose_turn_id"
+    t.integer "dealer_id"
+    t.integer "whose_turn_id"
     t.string "current_fsm_state"
     t.integer "player_one_points"
     t.integer "player_two_points"
     t.integer "round"
     t.integer "points_to_win"
-    t.string "winner_id"
+    t.integer "winner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "crib_cards"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :serial, force: :cascade do |t|
     t.string "password_digest"
-    t.boolean "is_admin"
+    t.boolean "is_admin", default: false
+    t.boolean "is_bot", default: false
     t.string "name", limit: 20
-    t.string "email", limit: 24
+    t.text "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_bot", default: false
   end
 
 end
