@@ -88,3 +88,4 @@ test:
 production:
   <<: *default
   database: rails_cribbage_production
+  url: <%= ENV['DATABASE_URL'] %>
