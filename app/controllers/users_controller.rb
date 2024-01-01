@@ -7,25 +7,27 @@ class UsersController < ApplicationController
     password = params[:password] || ""
     password_confirm = params[:password_confirm] || ""
 
-    if !are_passwords_valid(password, password_confirm)
-      flash[:error_msg] = "Sorry, your passwords do not match"
-      flash[:name] = params[:name]
-      flash[:email] = params[:email]
-      redirect_back(fallback_location: root_path)
-      return
-    end
+    begin
+      # if user wants to submit an email without a password, we'll let them
+      if !password.blank? || !password_confirm.blank?
+        throw "Sorry, your passwords do not match" if password != password_confirm
+        throw "Sorry, your password must be between 5 and 16 characters" unless password.length >= 5 && password.length <= 16
+      end
 
-    user = User.new(name: params[:name], email: params[:email])
+      user = User.new(name: params[:name], email: params[:email])
 
-    if !password.empty?
-      user.password_digest = BCrypt::Password.create(password)
-    end
+      if !password.empty?
+        user.password_digest = BCrypt::Password.create(password)
+      end
 
-    if user.save!
+      user.save!
       session[:user_id] = user.id
       redirect_to games_path
-    else
-      flash[:error_msg] = "Sorry, we weren't able to create a user for you"
+    rescue ActiveRecord::RecordInvalid, StandardError => exception
+      flash[:name] = params[:name]
+      flash[:email] = params[:email]
+      flash[:error_msg] = exception.message[0, 100]
+      redirect_back(fallback_location: users_new_path)
     end
   end
 
