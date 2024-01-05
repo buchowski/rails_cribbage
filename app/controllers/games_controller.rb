@@ -203,8 +203,7 @@ class GamesController < ApplicationController
   def get_game
     @game_model = Game.find_by_id(params[:id])
 
-    # TODO how to properly handle 404?
-    throw "sorry can't find that game" if @game_model.nil?
+    raise ActionController::RoutingError.new("Sorry, can't find that game") if @game_model.nil?
 
     set_instance_vars()
   end
