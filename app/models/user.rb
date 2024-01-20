@@ -2,10 +2,10 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+          :recoverable, :rememberable, :validatable,
+          :confirmable, :lockable, :trackable
   validates :name, presence: true, length: { minimum: 3, maximum: 16 }
   validates :email, uniqueness: true, length: { in: 5..42 }, unless: -> { email.blank? }
-  validates :password_digest, presence: true, unless: -> { email.blank? }
   has_many :games, foreign_key: :player_one_id
 
   def is_anon?
