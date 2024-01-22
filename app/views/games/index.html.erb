@@ -4,9 +4,9 @@
     <% if @user.is_anon? %>
       <p>
         Welcome <%= @user.name %>, you must
-        <%= link_to "Log in", login_path %>
+        <%= link_to "Login", new_user_session_path %>
         or
-        <%= link_to "Sign up", users_new_path %>
+        <%= link_to "Sign up", new_user_registration_path %>
         before you can create or join a game
       </p>
     <% else %>
