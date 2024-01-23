@@ -5,7 +5,6 @@ class User < ApplicationRecord
           :recoverable, :rememberable, :validatable,
           :confirmable, :lockable, :trackable
   validates :name, presence: true, length: { minimum: 3, maximum: 16 }
-  validates :email, uniqueness: true, length: { in: 5..42 }, unless: -> { email.blank? }
   has_many :games, foreign_key: :player_one_id
 
   def is_anon?
