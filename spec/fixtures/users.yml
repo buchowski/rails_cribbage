@@ -2,28 +2,28 @@
 
 one:
   id: 1
-  password_digest: <%= BCrypt::Password.create("secret") %>
+  encrypted_password: <%= BCrypt::Password.create("secret") %>
   is_admin: false
   name: Barbara
-  email:
+  email: barbie_777@mallcart.net
 
 two:
   id: 2
-  password_digest: <%= BCrypt::Password.create("secret") %>
+  encrypted_password: <%= BCrypt::Password.create("secret") %>
   is_admin: true
   name: Cindy
   email: cinder88@mallcart.net
 
 three:
   id: 3
-  password_digest: <%= BCrypt::Password.create("secret") %>
+  encrypted_password: <%= BCrypt::Password.create("secret") %>
   is_admin: false
   name: Martin
   email: martin@express-tops.net
 
 four:
   id: 4
-  password_digest: <%= BCrypt::Password.create("secret") %>
+  encrypted_password: <%= BCrypt::Password.create("secret") %>
   is_admin: false
   name: Spookey-Bot
   email: spookster@express-tops.net

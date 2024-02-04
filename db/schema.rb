@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_20_184830) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_04_021209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -39,10 +39,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_20_184830) do
     t.boolean "is_admin", default: false
     t.boolean "is_bot", default: false
     t.string "name", limit: 20
-    t.string "email"
+    t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "encrypted_password"
+    t.string "encrypted_password", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
