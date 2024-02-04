@@ -230,7 +230,7 @@ class GamesController < ApplicationController
 
   def require_user_id
     if @user.is_anon?
-      flash[:error_msg] = "you must must log in before you're able to play"
+      flash[:error_msg] = "you must log in before you're able to play"
       redirect_to request.env['HTTP_REFERER'] || games_path
       return
     end

@@ -30,11 +30,7 @@
     <ul>
       <li>Create a single-player game between you and a bot</li>
     </ul>
-    <% if @user.is_anon? %>
-      <button disabled class="button is-primary" title="You must log in to create a game">
-        New Single-Player Game
-      </button>
-    <% elsif !bots.first.blank? %>
+    <% if !bots.first.blank? %>
       <%= button_to "New Single-Player Game", games_path, method: :post, params: { bot_id: bots.first.id }, class: 'button is-primary' %>
     <% else %>
       <div class="notification is-danger">
@@ -49,12 +45,6 @@
       <li>This generates an invitation URL you can share with another person</li>
       <li>Once this person joins, the game will begin</li>
     </ul>
-    <% if @user.is_anon? %>
-      <button disabled class="button is-primary" title="You must log in to create a game">
-        New Multi-Player Game
-      </button>
-    <% else %>
-      <%= button_to "New Multi-Player Game", games_path, method: :post, class: 'button is-primary' %>
-    <% end %>
+    <%= button_to "New Multi-Player Game", games_path, method: :post, class: 'button is-primary' %>
   </div>
 </div>

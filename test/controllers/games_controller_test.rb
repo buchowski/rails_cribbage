@@ -32,7 +32,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to cereal_uri
-    assert_equal flash[:error_msg], "you must must log in before you're able to play"
+    assert_equal flash[:error_msg], "you must log in before you're able to play"
   end
 
   test "should create new game if player_name is provided" do
