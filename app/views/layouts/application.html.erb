@@ -16,6 +16,16 @@
       <div id="error_msg_container">
         <%= render partial: "/flash_errors", locals: { error_msg: flash[:error_msg] } %>
       </div>
+      <% if notice %>
+        <div class="notification is-success">
+          <p><%= notice %></p>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="notification is-danger">
+          <p><%= alert %></p>
+        </div>
+      <% end %>
       <%= yield %>
     </div>
   </body>
