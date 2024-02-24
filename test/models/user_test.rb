@@ -48,8 +48,13 @@ class UserTest < ActiveSupport::TestCase
     assert_not(user_two.valid?)
   end
 
-  test "should be valid if name has valid length" do
-    user = User.new(:name => "bman")
+  test "should be valid if has name, email and password" do
+    user = User.new(
+      :name => "bman",
+      :email => "bob@pancakes.net",
+      :password => "password",
+    )
+
     assert(user.valid?)
   end
 
@@ -61,12 +66,12 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(user.errors[:email], ["has already been taken"])
   end
 
-  test "should ensure email isn't too long" do
+  test "should ensure email is valid" do
     user = User.new(:name => "bman", :email => 100.times.map { 'b' }.join)
 
     assert_not(user.valid?)
     assert_equal(user.errors[:name], [])
-    assert_equal(user.errors[:email], ["is too long (maximum is 42 characters)"])
+    assert_equal(user.errors[:email], ["is invalid"])
   end
 
   test "should require password if email is provided" do
@@ -74,6 +79,6 @@ class UserTest < ActiveSupport::TestCase
 
     assert_not(user.valid?)
     assert_equal(user.errors[:email], [])
-    assert_equal(user.errors[:password_digest], ["can't be blank"])
+    assert_equal(user.errors[:password], ["can't be blank"])
   end
 end
