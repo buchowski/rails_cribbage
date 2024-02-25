@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users, module: 'users'
-  # TODO update admin-login to use devise
-  post 'admin-login', to: "users#admin_login"
+  devise_scope :user do
+    post 'admin-login', to: "users/sessions#admin_login"
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :games
 

@@ -19,9 +19,7 @@ class GamesController < ApplicationController
   end
 
   def admin
-    has_admin_access = @user.is_admin? || ['development'].include?(ENV['RAILS_ENV'])
-
-    if !has_admin_access
+    if !@user.has_admin_access?
       return render plain: "Not Authorized", status: :forbidden
     end
 

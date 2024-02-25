@@ -22,4 +22,8 @@ class AnonUser
   def is_member(game_model)
     false
   end
+
+  def has_admin_access?
+    ['development'].include?(ENV['RAILS_ENV'])
+  end
 end

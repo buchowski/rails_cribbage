@@ -30,4 +30,8 @@ class User < ApplicationRecord
 
     self.id == game_model.dealer_id
   end
+
+  def has_admin_access?
+    self.is_admin? || ['development'].include?(ENV['RAILS_ENV'])
+  end
 end
