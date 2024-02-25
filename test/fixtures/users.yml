@@ -27,6 +27,7 @@ three:
 four:
   id: 4
   encrypted_password: <%= BCrypt::Password.create("secret") %>
+  confirmed_at: <%= Time.now %>
   is_admin: false
   name: Spookey-Bot
   email: spookster@express-tops.net
