@@ -3,21 +3,27 @@ require "application_system_test_case"
 class GamesTest < ApplicationSystemTestCase
   test "single player happy path" do
     visit games_url
-    click_on "Login"
+    within "#header_actions" do
+      click_on "Login"
+    end
 
-    fill_in "Your email", with: "martin@express-tops.net"
+    fill_in "Email", with: "martin@express-tops.net"
     fill_in "Password", with: "secret"
-    click_on "Sign in"
+    click_on "Log in"
 
-    click_on "New Bot Game"
+    click_on "New Single-Player Game"
 
     assert_text "Spookey-Bot"
     click_on "open"
 
     click_on "Cut for deal"
-    assert_text "Select two cards to discard"
 
-    who_is_the_dealer = find_by_id "who-is-the-dealer"
+    # in a bot game we let the user deal even if they're not the dealer
+    assert_button "Deal cards"
+    # but the cards will be automatically dealt after a wait
+    assert_text "Select two cards to discard", wait: 0.2
+
+    who_is_the_dealer = find_by_id "who_is_the_dealer"
     are_you_the_dealer = who_is_the_dealer.text == "You are the dealer"
 
     cards = find_all "input[type='checkbox']"
@@ -34,10 +40,13 @@ class GamesTest < ApplicationSystemTestCase
     check cards.last[:id]
     click_on "Discard"
 
+    assert_text "Waiting for Spookey-bot to discard"
+
     if are_you_the_dealer
-      assert_text("Waiting for Spookey-bot to play a card")
+      # on the BE the bot plays a card immediately after discarding but it's rendered after the animation delay
+      assert_text "Spookey-Bot played", wait: 0.2
     else
-      assert_text("Select a card to play")
+      assert_text "Select a card to play", wait: 0.2
     end
 
     cards = find_all "input[type='checkbox']"
