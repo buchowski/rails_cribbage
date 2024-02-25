@@ -3,6 +3,7 @@
 one:
   id: 1
   encrypted_password: <%= BCrypt::Password.create("secret") %>
+  confirmed_at: <%= Time.now %>
   is_admin: false
   name: Barbara
   email: barbie_777@mallcart.net
@@ -10,6 +11,7 @@ one:
 two:
   id: 2
   encrypted_password: <%= BCrypt::Password.create("secret") %>
+  confirmed_at: <%= Time.now %>
   is_admin: true
   name: Cindy
   email: cinder88@mallcart.net

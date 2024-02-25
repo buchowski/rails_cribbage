@@ -4,12 +4,14 @@ class Users::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
 
   def admin_login
-    if !@user.has_admin_access?
-      return render plain: "Not Authorized", status: :forbidden
-    end
-    sign_in(:user, User.find(params[:user_id]), { :bypass => true })
+    if @user.is_admin? || ['development', 'test'].include?(ENV['RAILS_ENV'])
+      bypass_sign_in(User.find(params[:user_id]), scope: :user)
 
-    redirect_to admin_path
+      redirect_to admin_path
+    else
+      render plain: "Not Authorized", status: :forbidden
+    end
+
   end
 
   # GET /resource/sign_in

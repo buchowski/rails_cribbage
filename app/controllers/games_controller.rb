@@ -19,13 +19,13 @@ class GamesController < ApplicationController
   end
 
   def admin
-    if !@user.has_admin_access?
+    if @user.is_admin? || ENV['RAILS_ENV'] == 'development'
+      users = User.all
+      games = get_game_presenters(Game.all)
+      render "games/admin", locals: { gvms: games, users: users }
+    else
       return render plain: "Not Authorized", status: :forbidden
     end
-
-    users = User.all
-    games = get_game_presenters(Game.all)
-    render "games/admin", locals: { gvms: games, users: users }
   end
 
   def game_view_model()
