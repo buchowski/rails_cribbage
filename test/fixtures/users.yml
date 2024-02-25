@@ -19,6 +19,7 @@ two:
 three:
   id: 3
   encrypted_password: <%= BCrypt::Password.create("secret") %>
+  confirmed_at: <%= Time.now %>
   is_admin: false
   name: Martin
   email: martin@express-tops.net
