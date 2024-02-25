@@ -5,7 +5,9 @@ class GamePresenter < SimpleDelegator
     @t = Proc.new do |key, data| Translations.en(key, data) end
     @game = cribbage_game
     @user = user
-    @play_by_play = play_by_play
+    @play_by_play = (play_by_play || []).map do |msg|
+      msg.class == String ? {text: msg, id: nil} : msg
+    end
     @is_bot_game = is_bot_game
 
     adapted_game = Game.adapt_to_active_record(cribbage_game)

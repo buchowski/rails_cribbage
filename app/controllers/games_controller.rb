@@ -280,8 +280,8 @@ class GamesController < ApplicationController
     are_you_the_dealer = @game.dealer.id == @user.id
     dealer = are_you_the_dealer ? @user : @opponent_user
 
-    you_are_the_dealer_msgs = ["You are the dealer"]
-    they_are_the_dealer_msgs = ["#{dealer.name} is the dealer"]
+    you_are_the_dealer_msgs = [{text: "You are the dealer", id: "who_is_the_dealer"}]
+    they_are_the_dealer_msgs = [{text: "#{dealer.name} is the dealer", id: "who_is_the_dealer"}]
 
     # TODO show which cards the players cut?
     if are_you_the_dealer

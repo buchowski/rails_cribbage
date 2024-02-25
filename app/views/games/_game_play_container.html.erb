@@ -16,8 +16,8 @@
   <div id="play_by_play_section">
     <ul>
       <% for msg in gvm.play_by_play do %>
-        <li>
-          <%= msg %>
+        <li id="<%= msg[:id] %>">
+          <%= msg[:text] %>
         </li>
       <% end %>
     </ul>
