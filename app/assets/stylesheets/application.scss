@@ -99,6 +99,11 @@ th, td {
   visibility: visible;
 }
 
+.hide_in_n_seconds_test {
+  @extend .hide_in_n_seconds;
+  animation-delay: 100ms;
+}
+
 @keyframes hide_in_n_seconds {
   0% {
     visibility: visible;
@@ -113,6 +118,11 @@ th, td {
   animation-fill-mode: forwards;
   animation-delay: 3s;
   visibility: hidden;
+}
+
+.show_in_n_seconds_test {
+  @extend .show_in_n_seconds;
+  animation-delay: 100ms;
 }
 
 @keyframes show_in_n_seconds {

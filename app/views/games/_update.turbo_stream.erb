@@ -16,14 +16,14 @@
             locals: { gvm: gvm, app: app }
           ) %>
       <% else %>
-        <div class="show_in_n_seconds absolute_game_container">
+        <div class="<%= gvm.show_in_n_seconds_class %> absolute_game_container">
           <%= render(
             partial: "games/game_play_container",
             formats: [:html],
             locals: { gvm: gvm, app: app }
           ) %>
         </div>
-        <div class="hide_in_n_seconds absolute_game_container">
+        <div class="<%= gvm.hide_in_n_seconds_class %> absolute_game_container">
           <%= pre_bot_update_html_string %>
         </div>
       <% end %>

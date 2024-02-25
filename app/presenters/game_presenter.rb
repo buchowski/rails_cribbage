@@ -229,6 +229,14 @@ class GamePresenter < SimpleDelegator
     }
   end
 
+  def show_in_n_seconds_class
+    ENV['RAILS_ENV'] == 'test' ? "show_in_n_seconds_test" : "show_in_n_seconds"
+  end
+
+  def hide_in_n_seconds_class
+    ENV['RAILS_ENV'] == 'test' ? "hide_in_n_seconds_test" : "hide_in_n_seconds"
+  end
+
   private
 
   def is_game_over
