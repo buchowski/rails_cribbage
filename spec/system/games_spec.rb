@@ -1,8 +1,13 @@
 require 'rails_helper'
 
 def access_page_as(player_name, route = nil)
-  visit admin_path
-  page.find_button(player_name.capitalize).click()
+  click_button "Log out" if page.has_button? "Log out"
+  user = User.find_by(name: player_name.upcase_first)
+
+  visit new_user_session_path
+  fill_in "Email", with: user.email
+  fill_in "Password", with: "secret"
+  click_button "Log in"
   visit route if !route.nil?
 end
 
@@ -57,7 +62,7 @@ RSpec.describe "Games", type: :system do
     fixtures :games, :users
 
     it "should display all games in the table" do
-      visit admin_path
+      access_page_as "cindy", admin_path
 
       expect(page).to have_selector "tbody tr", count: 3
       expect(page.find("#{last_row} td:nth-child(2)")).to have_content("Barbara")
