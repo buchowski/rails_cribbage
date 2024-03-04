@@ -60,6 +60,7 @@ group :development do
   gem "web-console"
   gem "debase-ruby_core_source"
   gem "debase"
+  gem "letter_opener", "~> 1.9"
 
   gem "ruby-debug-ide"
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
