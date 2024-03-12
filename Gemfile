@@ -79,3 +79,5 @@ group :test do
 end
 
 gem "devise", "~> 4.9"
+
+gem "resend", "~> 0.11.0"
