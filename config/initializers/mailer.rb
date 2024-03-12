@@ -1,0 +1,1 @@
+Resend.api_key = ENV["RAILS_CRIBBAGE_RESEND_KEY"]
