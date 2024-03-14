@@ -137,7 +137,6 @@ class GamesController < ApplicationController
 
       anon_user = AnonUser.new
       broadcast_to_guests(anon_gvm(anon_user), anon_user)
-    # TODO improve error handling. remove "uncaught..." from error msg we render in UI
     rescue StandardError => exception
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
@@ -222,7 +221,7 @@ class GamesController < ApplicationController
 
   def check_membership
     if !@user.is_member(@game_model)
-      throw "You are not a member of this game"
+      raise "You are not a member of this game"
     end
   end
 
@@ -239,35 +238,35 @@ class GamesController < ApplicationController
     player_two_id = @game_model.player_two_id
 
     if @user.id == player_one_id || @user.id == player_two_id
-      throw "you already joined this game"
+      raise "you already joined this game"
     end
 
     if player_two_id.nil?
       @game_model.player_two_id = @user.id
       @game_model.current_fsm_state = :waiting_to_start
 
-      if !@game_model.save then throw "failed to join game" end
+      if !@game_model.save then raise "failed to join game" end
     else
-      throw "you're not allowed to join. too many players already"
+      raise "you're not allowed to join. too many players already"
     end
   end
 
   def start_game()
     if @game_model.current_fsm_state.to_sym != :waiting_to_start
-      throw "this game is either not ready to start or has been started already"
+      raise "this game is either not ready to start or has been started already"
     elsif !@user.is_creator(@game_model)
-      throw "Only the game creator can start the game"
+      raise "Only the game creator can start the game"
     end
 
     @game_model.current_fsm_state = :cutting_for_deal
 
-    if !@game_model.save then throw "unable to start game" end
+    if !@game_model.save then raise "unable to start game" end
     @your_play_by_play.concat(["You have started the game", "Cut cards to see who deals first"])
     @their_play_by_play.concat(["#{@user.name} has started the game", "Cut cards to see who deals first"])
   end
 
   def deal()
-    throw "You are not the dealer" unless @user.is_dealer(@game_model) || is_bot_game
+    raise "You are not the dealer" unless @user.is_dealer(@game_model) || is_bot_game
     @game.deal()
     # TODO it's possible the bot was the actual dealer
     @your_play_by_play << "You have dealt the cards"
@@ -299,15 +298,15 @@ class GamesController < ApplicationController
     num_of_cards_to_discard = cards_in_hand.size - 4
 
     if num_of_cards_to_discard <= 0
-      throw "You may not discard any more cards"
+      raise "You may not discard any more cards"
     elsif num_of_cards_to_discard == 1 && cards.size == 0
-      throw "You must select one more card to discard"
+      raise "You must select one more card to discard"
     elsif cards.size == 0
-      throw "You must select one or two cards to discard"
+      raise "You must select one or two cards to discard"
     elsif num_of_cards_to_discard == 1 && cards.size != 1
-      throw "You may only discard one more card"
+      raise "You may only discard one more card"
     elsif cards.size > 2
-      throw "You may only discard two cards"
+      raise "You may only discard two cards"
     end
 
     cards.each { |card_id| @game.discard(@player, card_id) }
@@ -328,7 +327,7 @@ class GamesController < ApplicationController
     card_id = params[:card_to_play]
 
     if card_id.nil? || card_id.empty?
-      throw "you must select a card to play"
+      raise "you must select a card to play"
     end
 
     @game.play_card(@player, card_id)
@@ -377,7 +376,7 @@ class GamesController < ApplicationController
         @game.submit_crib_scores()
       end
     rescue StandardError => exception
-      throw exception unless @game.fsm.game_over?
+      raise exception unless @game.fsm.game_over?
     end
   end
 

@@ -32,8 +32,8 @@ module BotLogic
     end
 
     def get_bot_unstuck
-      throw "This is not a bot game" if !is_bot_game
-      throw "It's not the bot's turn" if !is_bots_turn
+      raise "This is not a bot game" if !is_bot_game
+      raise "It's not the bot's turn" if !is_bots_turn
       if @game.fsm.discarding?
         type_of_update = "discard"
       elsif @game.fsm.playing?

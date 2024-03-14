@@ -53,7 +53,7 @@ class Game < ApplicationRecord
     user_one = User.find_by_id(game_model.player_one_id)
     user_two = User.find_by_id(game_model.player_two_id)
 
-    throw "cannot find user #{game_model.player_one_id}" if user_one.nil?
+    raise "cannot find user #{game_model.player_one_id}" if user_one.nil?
 
     player_one.id = game_model.player_one_id
     player_one.hand = game_model.player_one_cards

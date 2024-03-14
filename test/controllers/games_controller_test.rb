@@ -64,7 +64,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as_barbara()
     patch game_path(Game.last.id), params: {type_of_update: "join_game" }
 
-    assert_equal flash[:error_msg], "uncaught throw \"you already joined this game\""
+    assert_equal flash[:error_msg], "you already joined this game"
     assert_redirected_to game_path(Game.last.id)
   end
 
@@ -75,14 +75,14 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     patch game_path(Game.last.id), params: { type_of_update: "start_game" }
 
-    assert_equal flash[:error_msg], "uncaught throw \"this game is either not ready to start or has been started already\""
+    assert_equal flash[:error_msg], "this game is either not ready to start or has been started already"
   end
 
   test "should block update if user is not a member of the game" do
     sign_in_as(3)
     patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
 
-    assert_equal flash[:error_msg], "uncaught throw \"You are not a member of this game\""
+    assert_equal flash[:error_msg], "You are not a member of this game"
   end
 
   test "should allow user to create a bot game" do

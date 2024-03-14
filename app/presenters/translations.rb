@@ -36,8 +36,8 @@ module Translations
     when "player_crib"
       "This is #{player_name}'s crib"
     else
-      # todo only throw in dev env
-      throw "no translation key #{key}"
+      # todo only raise in dev env
+      raise "no translation key #{key}"
     end
   end
 end
