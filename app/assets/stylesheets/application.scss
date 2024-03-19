@@ -218,3 +218,11 @@ th, td {
 #your_name_field {
   margin-bottom: 1.5rem;
 }
+
+.game_mgmt_buttons {
+  display: flex;
+  margin: 1rem 0;
+  form.button_to {
+    margin-right: 0.5rem;
+  }
+}

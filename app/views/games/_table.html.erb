@@ -1,7 +1,7 @@
 <% gvms.each do |game| %>
   <div>
     <div>Game <%= game.id %></div>
-    <div>Created by <%= game.player_one_name %> on <%= game.created_at.strftime("%m-%d-%Y %T") %></div>
+    <div>Created by <%= game.player_one_name %> on <%= game.created_at.to_fs(:long) %></div>
     <div>Opponent is <%= game.player_two_name %></div>
     <div>Game state: <%= game.current_fsm_state %></div>
     <div class="game_mgmt_buttons">
