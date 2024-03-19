@@ -2,6 +2,8 @@
 @import "../../../node_modules/bulma/bulma.sass";
 @import "./cards";
 
+$layout-breakpoint-small: 480px;
+
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -31,6 +33,12 @@
   background-repeat: no-repeat;
   width: 246px;
   height: 62px;
+}
+
+@media (max-width: $layout-breakpoint-small) {
+  #header_logo {
+    display: none;
+  }
 }
 
 .png_card {
