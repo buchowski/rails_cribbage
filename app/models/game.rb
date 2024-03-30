@@ -16,21 +16,21 @@ class Game < ApplicationRecord
     player_two = game.players[1]
 
     {
-      "player_one_id" => player_one.id,
-      "player_two_id" => player_two.id,
-      "player_one_cards" => player_one.hand,
-      "player_two_cards" => player_two.hand,
-      "player_one_points" => player_one.total_score,
-      "player_two_points" => player_two.total_score,
-      "dealer_id" => self.safely_get_id(game.dealer),
-      "pile_cards" => game.pile,
-      "crib_cards" => game.crib,
-      "cut_card" => game.cut_card,
-      "whose_turn_id" => self.safely_get_id(game.whose_turn),
-      "current_fsm_state" => game.fsm.aasm.current_state,
-      "round" => game.round,
-      "points_to_win" => game.points_to_win,
-      "winner_id" => self.safely_get_id(game.winner)
+      :player_one_id => player_one.id,
+      :player_two_id => player_two.id,
+      :player_one_cards => player_one.hand,
+      :player_two_cards => player_two.hand,
+      :player_one_points => player_one.total_score,
+      :player_two_points => player_two.total_score,
+      :dealer_id => self.safely_get_id(game.dealer),
+      :pile_cards => game.pile,
+      :crib_cards => game.crib,
+      :cut_card => game.cut_card,
+      :whose_turn_id => self.safely_get_id(game.whose_turn),
+      :current_fsm_state => game.fsm.aasm.current_state,
+      :round => game.round,
+      :points_to_win => game.points_to_win,
+      :winner_id => self.safely_get_id(game.winner)
     }
   end
 
@@ -50,10 +50,19 @@ class Game < ApplicationRecord
     game = CribbageGame::Game.new
     player_one = game.players[0]
     player_two = game.players[1]
-    user_one = User.find_by_id(game_model.player_one_id)
-    user_two = User.find_by_id(game_model.player_two_id)
+    user_one = nil
+    user_two = nil
 
-    raise "cannot find user #{game_model.player_one_id}" if user_one.nil?
+    if game_model.player_one_id == 0
+      user_one = AnonUser.new
+    else
+      user_one = User.find_by_id(game_model.player_one_id)
+      raise "cannot find user #{game_model.player_one_id}" if user_one.nil?
+    end
+
+    if  game_model.player_two_id != nil
+      user_two = User.find_by_id(game_model.player_two_id)
+    end
 
     player_one.id = game_model.player_one_id
     player_one.hand = game_model.player_one_cards

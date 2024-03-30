@@ -22,6 +22,7 @@
     </div>
   <% end %>
 </div>
+<%= button_to "Quick GAme", quick_game_path, method: :post, params: { bot_id: bots.first.id }, class: 'button is-primary' %>
 
 <% unless @user.is_anon? %>
   <div class="box highlighted_container">

@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
-  before_action :get_game, except: [:index, :create, :cards, :admin]
-  before_action :require_user_id, except: [:index, :show, :cards, :admin]
+  before_action :get_game, except: [:index, :create, :cards, :admin, :create_quick_game]
+  before_action :require_user_id, except: [:index, :show, :cards, :admin, :create_quick_game]
 
   include BotLogic
   include Broadcast
@@ -76,6 +76,24 @@ class GamesController < ApplicationController
     ensure
       redirect_to games_path
     end
+  end
+
+  def create_quick_game
+    bots = User.where(is_bot: true)
+    cribbage_game = CribbageGame::Game.new
+    adapted_game = Game.adapt_to_active_record(cribbage_game)
+    adapted_game[:player_one_id] = @user.id
+    adapted_game[:player_two_id] = bots.first.id
+    adapted_game[:current_fsm_state] = :cutting_for_deal
+
+    @game_model = Game.new(adapted_game)
+    @game = get_cribbage_game(@game_model)
+
+    @player = @game.players[0]
+    @opponent = @game.players[1]
+    @opponent_user = bots.first
+
+    show()
   end
 
   def update

@@ -4,7 +4,7 @@ class AnonUser
   end
 
   def id
-    "ANON"
+    0
   end
 
   def is_anon?
