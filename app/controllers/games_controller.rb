@@ -8,6 +8,7 @@ class GamesController < ApplicationController
   def initialize
     @your_play_by_play = []
     @their_play_by_play = []
+    @is_quick_game = false
     super()
   end
 
@@ -29,7 +30,7 @@ class GamesController < ApplicationController
   end
 
   def game_view_model()
-    @user.is_member(@game_model) ? your_gvm : anon_gvm(@user)
+    (@is_quick_game || @user.is_member(@game_model)) ? your_gvm : anon_gvm(@user)
   end
 
   def your_gvm
@@ -79,6 +80,7 @@ class GamesController < ApplicationController
   end
 
   def create_quick_game
+    @is_quick_game = true
     bots = User.where(is_bot: true)
     cribbage_game = CribbageGame::Game.new
     adapted_game = Game.adapt_to_active_record(cribbage_game)
@@ -93,7 +95,7 @@ class GamesController < ApplicationController
     @opponent = @game.players[1]
     @opponent_user = bots.first
 
-    show()
+    update
   end
 
   def update
@@ -106,7 +108,7 @@ class GamesController < ApplicationController
         check_membership()
         start_game()
       else
-        check_membership()
+        check_membership() unless @is_quick_game
 
         add_score_to_play_by_play(@player) do
           case type_of_update
@@ -143,18 +145,20 @@ class GamesController < ApplicationController
           score_hands_and_crib()
         end
 
-        @game_model.update(Game.adapt_to_active_record(@game))
+        @game_model.update(Game.adapt_to_active_record(@game)) unless @is_quick_game
       end
 
-      # after we update @game_model, ensure the rest of the instance vars are up to date
-      set_instance_vars()
+      if !@is_quick_game
+        # after we update @game_model, ensure the rest of the instance vars are up to date
+        set_instance_vars()
 
-      if is_broadcast_to_opponent
-        broadcast_to_opponent(opponent_gvm, @opponent_user)
+        if is_broadcast_to_opponent
+          broadcast_to_opponent(opponent_gvm, @opponent_user)
+        end
+
+        anon_user = AnonUser.new
+        broadcast_to_guests(anon_gvm(anon_user), anon_user)
       end
-
-      anon_user = AnonUser.new
-      broadcast_to_guests(anon_gvm(anon_user), anon_user)
     rescue StandardError => exception
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
