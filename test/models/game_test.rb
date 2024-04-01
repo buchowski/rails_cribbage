@@ -14,9 +14,9 @@ class GameTest < ActiveSupport::TestCase
 
     game_hash = Game.adapt_to_active_record(game)
 
-    assert_equal(game_hash["player_one_id"], 123)
-    assert_equal(game_hash["player_two_id"], 456)
-    assert_equal(game_hash["current_fsm_state"], :cutting_for_deal)
+    assert_equal(game_hash[:player_one_id], 123)
+    assert_equal(game_hash[:player_two_id], 456)
+    assert_equal(game_hash[:current_fsm_state], :cutting_for_deal)
   end
 
   test "should convert an ActiveRecord Game model to a CribbageGame::Game instance" do
