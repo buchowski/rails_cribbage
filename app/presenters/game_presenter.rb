@@ -1,7 +1,14 @@
 class GamePresenter < SimpleDelegator
   attr_reader :player_name, :play_by_play
 
-  def initialize(game_model, cribbage_game, user, play_by_play, is_bot_game = false)
+  def initialize(
+    game_model,
+    cribbage_game,
+    user,
+    play_by_play,
+    is_bot_game = false,
+    is_quick_game = false
+  )
     @t = Proc.new do |key, data| Translations.en(key, data) end
     @game = cribbage_game
     @user = user
@@ -9,6 +16,7 @@ class GamePresenter < SimpleDelegator
       msg.class == String ? {text: msg, id: nil} : msg
     end
     @is_bot_game = is_bot_game
+    @is_quick_game = is_quick_game
 
     adapted_game = Game.adapt_to_active_record(cribbage_game)
     # dirty means this model contains data that may not yet be persisted in the database
@@ -29,6 +37,18 @@ class GamePresenter < SimpleDelegator
       suit = card_id.last
       "<span>" + card_id[0..-2].upcase + suit_map[suit] + "</span>"
     end
+  end
+
+  def is_quick_game
+    @is_quick_game
+  end
+
+  def update_path
+    @is_quick_game ? "quick_game" : "/games/#{self.id}"
+  end
+
+  def dom_id
+    @is_quick_game ? "quick_game" : "game_#{self.id}"
   end
 
   def crib_label

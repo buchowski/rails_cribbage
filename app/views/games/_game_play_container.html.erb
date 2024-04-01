@@ -25,7 +25,14 @@
 <% end %>
 
 <% if gvm.update_btn_content[:is_show_update_btn] %>
-  <%= render partial: "games/update_btn", locals: { gvm: gvm, label: gvm.update_btn_content[:label], type_of_update: gvm.update_btn_content[:type_of_update]} %>
+  <%= render(
+    partial: gvm.is_quick_game ? "games/update_quick_game_form" : "games/update_btn",
+    locals: {
+      gvm: gvm,
+      label: gvm.update_btn_content[:label],
+      type_of_update: gvm.update_btn_content[:type_of_update]
+    })
+  %>
 <% end %>
 
 <% if gvm.has_game_started %>

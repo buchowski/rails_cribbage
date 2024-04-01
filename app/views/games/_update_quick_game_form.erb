@@ -1,0 +1,5 @@
+<%= form_with(model: gvm, url: gvm.update_path, method: :patch) do |form| %>
+  <%= render partial: "games/game_state_hidden_fields", locals: { gvm: gvm, form: form } %>
+  <%= form.hidden_field :type_of_update, value: type_of_update %>
+  <%= form.submit label, class: "button is-primary" %>
+<% end %>

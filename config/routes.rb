@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   get "/cards", to: "games#cards"
   get "/admin", to: "games#admin"
   post "/quick_game", to: "games#create_quick_game"
+  patch "/quick_game", to: "games#update_quick_game"
 end

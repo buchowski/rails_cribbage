@@ -1,6 +1,8 @@
 class GamesController < ApplicationController
-  before_action :get_game, except: [:index, :create, :cards, :admin, :create_quick_game]
-  before_action :require_user_id, except: [:index, :show, :cards, :admin, :create_quick_game]
+  before_action :get_game,
+    except: [:index, :create, :cards, :admin, :create_quick_game, :update_quick_game]
+  before_action :require_user_id,
+    except: [:index, :show, :cards, :admin, :create_quick_game, :update_quick_game]
 
   include BotLogic
   include Broadcast
@@ -34,15 +36,21 @@ class GamesController < ApplicationController
   end
 
   def your_gvm
-    GamePresenter.new(@game_model, @game, @user, @your_play_by_play, is_bot_game)
+    GamePresenter.new(
+      @game_model, @game, @user, @your_play_by_play, is_bot_game, @is_quick_game
+    )
   end
 
   def opponent_gvm
-    GamePresenter.new(@game_model, @game, @opponent_user, @their_play_by_play, is_bot_game)
+    GamePresenter.new(
+      @game_model, @game, @opponent_user, @their_play_by_play, is_bot_game
+    )
   end
 
   def anon_gvm(user)
-    AnonGamePresenter.new(@game_model, @game, user, @their_play_by_play, is_bot_game)
+    AnonGamePresenter.new(
+      @game_model, @game, user, @their_play_by_play, is_bot_game
+    )
   end
 
   def show
@@ -96,6 +104,10 @@ class GamesController < ApplicationController
     @opponent_user = bots.first
 
     update
+  end
+
+  def update_quick_game
+    p "bobby", params
   end
 
   def update
