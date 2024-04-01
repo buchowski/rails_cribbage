@@ -183,4 +183,15 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 2, cribbage_game.pile.size
     end
   end
+
+  test "should allow anon user to create quick game that is not saved to DB" do
+    bot = User.where(is_bot: true).first
+
+    assert_no_difference("Game.count") do
+      post "/quick_game", params: { bot_id: bot.id }
+    end
+
+    assert_response 200
+    assert_nil flash[:error_msg]
+  end
 end

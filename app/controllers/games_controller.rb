@@ -188,8 +188,14 @@ class GamesController < ApplicationController
           )
         }
         format.html {
-          redirect_to game_path,
-          flash: { your_play_by_play: @your_play_by_play }
+          if @is_quick_game
+            render "games/show", locals: { gvm: game_view_model, app: @app, user: @user }
+          else
+            redirect_to(
+              game_path,
+              flash: { your_play_by_play: @your_play_by_play }
+            )
+          end
         }
       end
     end
