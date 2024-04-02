@@ -5,8 +5,8 @@
     <div>Opponent is <%= game.player_two_name %></div>
     <div>Game state: <%= game.current_fsm_state %></div>
     <div class="game_mgmt_buttons">
-      <%= button_to "delete", game_path(game), method: :delete, class: 'button is-danger is-small'  %>
-      <%= link_to 'open', game_path(game), class: 'button is-primary is-small' %>
+      <%= button_to "delete", game.update_path, method: :delete, class: 'button is-danger is-small'  %>
+      <%= link_to 'open', game.update_path, class: 'button is-primary is-small' %>
     </div>
   </div>
 <% end %>
