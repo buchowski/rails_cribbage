@@ -98,7 +98,6 @@ class GamesController < ApplicationController
 
     @game_model = Game.new(adapted_game)
     @game = get_cribbage_game(@game_model)
-
     @player = @game.players[0]
     @opponent = @game.players[1]
     @opponent_user = bots.first
@@ -107,7 +106,22 @@ class GamesController < ApplicationController
   end
 
   def update_quick_game
-    p "bobby", params
+    quick_game = params[:game]
+    params[:type_of_update] = quick_game[:type_of_update]
+
+    @is_quick_game = true
+    bots = User.where(is_bot: true)
+
+    @game_model = Game.new()
+    @game_model.attributes.each do |attr, value|
+      @game_model[attr] = quick_game[attr] || value
+    end
+    @game = get_cribbage_game(@game_model)
+    @player = @game.players[0]
+    @opponent = @game.players[1]
+    @opponent_user = bots.first
+
+    update
   end
 
   def update
