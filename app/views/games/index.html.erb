@@ -27,7 +27,10 @@
     "Quick Game",
     quick_game_path,
     method: :post,
-    params: { bot_id: bots.first.id },
+    params: {
+      bot_id: bots.first.id,
+      game: { type_of_update: "create_quick_game"}
+    },
     class: 'button is-primary'
   )%>
 

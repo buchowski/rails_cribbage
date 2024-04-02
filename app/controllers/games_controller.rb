@@ -107,8 +107,6 @@ class GamesController < ApplicationController
 
   def update_quick_game
     quick_game = params[:game]
-    params[:type_of_update] = quick_game[:type_of_update]
-
     @is_quick_game = true
     bots = User.where(is_bot: true)
 
@@ -125,7 +123,7 @@ class GamesController < ApplicationController
   end
 
   def update
-    type_of_update = params[:type_of_update]
+    type_of_update = params[:game][:type_of_update]
 
     begin
       if type_of_update == "join_game"
