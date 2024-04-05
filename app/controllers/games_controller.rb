@@ -108,7 +108,7 @@ class GamesController < ApplicationController
   def update_quick_game
     @is_quick_game = true
     bots = User.where(is_bot: true)
-    game_state = params[:game][:state]
+    game_state = params[:game_state]
     @game_model = Game.new(JSON.parse(game_state))
     @game = get_cribbage_game(@game_model)
     @player = @game.players[0]
@@ -119,7 +119,7 @@ class GamesController < ApplicationController
   end
 
   def update
-    type_of_update = params[:game][:type_of_update]
+    type_of_update = params[:type_of_update]
 
     begin
       if type_of_update == "join_game"
