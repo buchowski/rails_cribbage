@@ -1,4 +1,4 @@
-class AnonUser
+class AnonUser < User
   def name
     "Guest"
   end
