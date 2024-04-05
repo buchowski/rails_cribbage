@@ -179,6 +179,8 @@ class GamesController < ApplicationController
         anon_user = AnonUser.new
         broadcast_to_guests(anon_gvm(anon_user), anon_user)
       end
+    rescue CribbageGame::CardTooLargeError => exception
+      flash[:error_msg] = "Sorry, that card is too large to play"
     rescue StandardError => exception
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
