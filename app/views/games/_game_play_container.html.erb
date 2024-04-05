@@ -4,7 +4,7 @@
     <% if gvm.show_refresh_btn %>
       <div id="refresh_btn">
         <%= render(
-          partial: "games/update_btn",
+          partial: gvm.is_quick_game ? "games/update_quick_game_form" : "games/update_btn",
           locals: { gvm: gvm, label: "Hurry up, Bot!", type_of_update: "hurry_up_bot"}
         )%>
       </div>

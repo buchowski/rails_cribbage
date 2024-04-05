@@ -1,3 +1,5 @@
-  <% gvm.attributes.each do |attr, value| %>
-    <%= form.hidden_field attr, value: value %>
-  <% end %>
+<%= form.hidden_field(
+  "state",
+  value: gvm.to_json
+  )
+%>
