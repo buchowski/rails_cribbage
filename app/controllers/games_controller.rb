@@ -181,6 +181,8 @@ class GamesController < ApplicationController
       end
     rescue CribbageGame::CardTooLargeError => exception
       flash[:error_msg] = "Sorry, that card is too large to play"
+    rescue CribbageGame::NotYourTurnError => exception
+      flash[:error_msg] = "Sorry, it's not your turn"
     rescue StandardError => exception
       # truncate exception.message to prevent cookieoverflow
       flash[:error_msg] = exception.message[0, 100]
