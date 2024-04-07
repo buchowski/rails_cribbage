@@ -29,6 +29,9 @@ class GamesTest < ApplicationSystemTestCase
     cards = find_all "input[type='checkbox']"
     assert_equal 6, cards.size, "should have been dealt 6 cards"
 
+    # normal games should not have a hidden game_state field
+    assert has_no_css? "input[type='hidden'][id='game_state']", visible: false
+
     # discard first card
     check cards.first[:id]
     click_on "Discard"
@@ -51,5 +54,13 @@ class GamesTest < ApplicationSystemTestCase
 
     cards = find_all "input[type='checkbox']"
     assert_equal 0, cards.size, "should have discarded last card and no longer see checkboxes"
+  end
+
+  test "quick game should include a hidden game state input" do
+    visit games_url
+    click_on "Quick Game"
+
+    assert_button "Cut for deal"
+    assert has_css? "input[type='hidden'][id='game_state']", visible: false
   end
 end

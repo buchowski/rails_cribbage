@@ -1,5 +1,7 @@
-<%= form.hidden_field(
-  "game_state",
-  value: gvm.to_json
-  )
-%>
+<% if gvm.is_quick_game %>
+  <%= form.hidden_field(
+    "game_state",
+    value: gvm.to_json
+    )
+  %>
+<% end %>
