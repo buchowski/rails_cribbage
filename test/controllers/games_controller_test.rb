@@ -188,7 +188,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     bot = User.where(is_bot: true).first
 
     assert_no_difference("Game.count") do
-      post "/quick_game", params: { bot_id: bot.id }
+      get "/quick_game", params: { bot_id: bot.id }
     end
 
     assert_response 200

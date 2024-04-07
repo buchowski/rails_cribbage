@@ -1,62 +1,57 @@
-<div id="quick_game" class="relative_game_container">
-  <div class="content box">
-    <h1 class="title">Your games</h1>
-    <% if gvms.empty? %>
-      <% if @user.is_anon? %>
-        <p>
-          Welcome <%= @user.name %>, you must
-          <%= link_to "Login", new_user_session_path %>
-          or
-          <%= link_to "Sign up", new_user_registration_path %>
-          before you can create or join a game
-        </p>
-      <% else %>
-        <p>Hi <%= @user.name %>, you currently don't have any games</p>
-        <ul>
-          <li>Either create a new game below</li>
-          <li>Or join another user's game (Ask them to send you the game invitation link)</li>
-        </ul>
-      <% end %>
+<div class="content box">
+  <h1 class="title">Your games</h1>
+  <% if gvms.empty? %>
+    <% if @user.is_anon? %>
+      <p>
+        Welcome <%= @user.name %>, you must
+        <%= link_to "Login", new_user_session_path %>
+        or
+        <%= link_to "Sign up", new_user_registration_path %>
+        before you can create or join a game
+      </p>
     <% else %>
-      <div id="user_games_table">
-        <%= render partial: "games/table", locals: { gvms: gvms } %>
-      </div>
+      <p>Hi <%= @user.name %>, you currently don't have any games</p>
+      <ul>
+        <li>Either create a new game below</li>
+        <li>Or join another user's game (Ask them to send you the game invitation link)</li>
+      </ul>
     <% end %>
-  </div>
-  <%= button_to(
-    "Quick Game",
-    quick_game_path,
-    method: :post,
-    params: { type_of_update: "create_quick_game" },
-    class: 'button is-primary'
-  )%>
-
-  <% unless @user.is_anon? %>
-    <div class="box highlighted_container">
-      <h1 class="title">New Game</h1>
-      <div class="content">
-        <h2 class="title">Single-Player</h2>
-        <ul>
-          <li>Create a single-player game between you and a bot</li>
-        </ul>
-        <% if !bots.first.blank? %>
-          <%= button_to "New Single-Player Game", games_path, method: :post, params: { bot_id: bots.first.id }, class: 'button is-primary' %>
-        <% else %>
-          <div class="notification is-danger">
-            Oops, we were unable to find any bots to play against
-          </div>
-        <% end %>
-      </div>
-      <div class="content">
-        <h2 class="title">Multi-Player</h2>
-        <ul>
-          <li>Create a two player game</li>
-          <li>This generates an invitation URL you can share with another person</li>
-          <li>Once this person joins, the game will begin</li>
-        </ul>
-        <%= button_to "New Multi-Player Game", games_path, method: :post, class: 'button is-primary' %>
-      </div>
+  <% else %>
+    <div id="user_games_table">
+      <%= render partial: "games/table", locals: { gvms: gvms } %>
     </div>
   <% end %>
-
 </div>
+<%= link_to(
+  "Quick Game",
+  quick_game_path,
+  class: 'button is-primary'
+)%>
+
+<% unless @user.is_anon? %>
+  <div class="box highlighted_container">
+    <h1 class="title">New Game</h1>
+    <div class="content">
+      <h2 class="title">Single-Player</h2>
+      <ul>
+        <li>Create a single-player game between you and a bot</li>
+      </ul>
+      <% if !bots.first.blank? %>
+        <%= button_to "New Single-Player Game", games_path, method: :post, params: { bot_id: bots.first.id }, class: 'button is-primary' %>
+      <% else %>
+        <div class="notification is-danger">
+          Oops, we were unable to find any bots to play against
+        </div>
+      <% end %>
+    </div>
+    <div class="content">
+      <h2 class="title">Multi-Player</h2>
+      <ul>
+        <li>Create a two player game</li>
+        <li>This generates an invitation URL you can share with another person</li>
+        <li>Once this person joins, the game will begin</li>
+      </ul>
+      <%= button_to "New Multi-Player Game", games_path, method: :post, class: 'button is-primary' %>
+    </div>
+  </div>
+<% end %>
