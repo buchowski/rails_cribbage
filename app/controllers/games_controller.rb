@@ -17,8 +17,7 @@ class GamesController < ApplicationController
   def index
     game_models = Game.where(player_one_id: @user.id).or(Game.where(player_two_id: @user.id))
     games = get_game_presenters(game_models)
-    bots = User.where(is_bot: true)
-    render "games/index", locals: { gvms: games, bots: bots }
+    render "games/index", locals: { gvms: games }
   end
 
   def admin
@@ -61,7 +60,7 @@ class GamesController < ApplicationController
 
   def create
     bot_id = params[:bot_id]
-    bot = User.find_by_id(bot_id) if !bot_id.nil?
+    bot = BotUser.new if !bot_id.nil?
 
     begin
       cribbage_game = CribbageGame::Game.new
@@ -89,31 +88,31 @@ class GamesController < ApplicationController
 
   def create_quick_game
     @is_quick_game = true
-    bots = User.where(is_bot: true)
+    bot = BotUser.new
     cribbage_game = CribbageGame::Game.new
     adapted_game = Game.adapt_to_active_record(cribbage_game)
     adapted_game[:player_one_id] = @user.id
-    adapted_game[:player_two_id] = bots.first.id
+    adapted_game[:player_two_id] = bot.id
     adapted_game[:current_fsm_state] = :cutting_for_deal
 
     @game_model = Game.new(adapted_game)
     @game = get_cribbage_game(@game_model)
     @player = @game.players[0]
     @opponent = @game.players[1]
-    @opponent_user = bots.first
+    @opponent_user = bot
 
     update
   end
 
   def update_quick_game
     @is_quick_game = true
-    bots = User.where(is_bot: true)
+    bot = BotUser.new
     game_state = params[:game_state]
     @game_model = Game.new(JSON.parse(game_state))
     @game = get_cribbage_game(@game_model)
     @player = @game.players[0]
     @opponent = @game.players[1]
-    @opponent_user = bots.first
+    @opponent_user = bot
 
     update
   end

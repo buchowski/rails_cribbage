@@ -36,13 +36,7 @@
       <ul>
         <li>Create a single-player game between you and a bot</li>
       </ul>
-      <% if !bots.first.blank? %>
-        <%= button_to "New Single-Player Game", games_path, method: :post, params: { bot_id: bots.first.id }, class: 'button is-primary' %>
-      <% else %>
-        <div class="notification is-danger">
-          Oops, we were unable to find any bots to play against
-        </div>
-      <% end %>
+        <%= button_to "New Single-Player Game", games_path, method: :post, params: { bot_id: "spookey_bot"}, class: 'button is-primary' %>
     </div>
     <div class="content">
       <h2 class="title">Multi-Player</h2>

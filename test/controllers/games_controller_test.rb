@@ -185,7 +185,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should allow anon user to create quick game that is not saved to DB" do
-    bot = User.where(is_bot: true).first
+    bot = BotUser.new
 
     assert_no_difference("Game.count") do
       get "/quick_game", params: { bot_id: bot.id }
