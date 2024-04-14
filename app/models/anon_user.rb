@@ -1,10 +1,14 @@
-class AnonUser < User
+class AnonUser
   def name
     "Guest"
   end
 
+  def self.id
+    "guest"
+  end
+
   def id
-    0
+    AnonUser.id
   end
 
   def is_anon?

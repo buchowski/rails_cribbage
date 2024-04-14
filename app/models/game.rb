@@ -2,7 +2,7 @@ class Game < ApplicationRecord
   validates :player_one_id, presence: true
 
   def get_stream_id_for_user(user)
-    user.is_member(self) ? "#{user.id}-#{self.id}" : "guest-#{self.id}"
+    user.is_member(self) ? "#{user.id}-#{self.id}" : "#{AnonUser.id}-#{self.id}"
   end
 
   private
