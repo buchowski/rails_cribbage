@@ -55,8 +55,8 @@ RSpec.describe "Games", type: :system do
     driven_by(:rack_test)
   end
 
-  first_row = "tbody tr:first-child"
-  last_row = "tbody tr:last-child"
+  first_row = ".game_row:first-child"
+  last_row = ".game_row:last-child"
 
   describe "admin page" do
     fixtures :games, :users
@@ -64,14 +64,14 @@ RSpec.describe "Games", type: :system do
     it "should display all games in the table" do
       access_page_as "cindy", admin_path
 
-      expect(page).to have_selector "tbody tr", count: 3
-      expect(page.find("#{last_row} td:nth-child(2)")).to have_content("Barbara")
-      expect(page.find("#{last_row} td:nth-child(3)").text).to eq("Cindy")
-      expect(page.find("#{last_row} td:nth-child(4)")).to have_content("playing")
+      expect(page).to have_selector ".game_row", count: 3
+      expect(page.find("#{last_row} .creator_name")).to have_content("Barbara")
+      expect(page.find("#{last_row} .opponent_name").text).to have_content("Cindy")
+      expect(page.find("#{last_row} .game_state")).to have_content("playing")
 
-      expect(page.find("#{first_row} td:nth-child(2)")).to have_content("Barbara")
-      expect(page.find("#{first_row} td:nth-child(3)")).to have_content("")
-      expect(page.find("#{first_row} td:nth-child(4)")).to have_content("waiting_for_player_two")
+      expect(page.find("#{first_row} .creator_name")).to have_content("Barbara")
+      expect(page.find("#{first_row} .opponent_name")).to have_content("")
+      expect(page.find("#{first_row} .game_state")).to have_content("waiting_for_player_two")
     end
   end
 
