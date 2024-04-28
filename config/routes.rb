@@ -1,16 +1,15 @@
 Rails.application.routes.draw do
   # disable sign-up, sign-in (devise) for now. focus on quick_game
   if ENV["RAILS_ENV"] == "test"
+    resources :games
+    root "games#index"
     devise_for :users, module: 'users'
     devise_scope :user do
       post 'admin-login', to: "users/sessions#admin_login"
     end
+  else
+    root "games#create_quick_game"
   end
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  resources :games
-
-  # Defines the root path route ("/")
-  root "games#index"
 
   get "/cards", to: "games#cards"
   get "/admin", to: "games#admin"
