@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users, module: 'users'
-  devise_scope :user do
-    post 'admin-login', to: "users/sessions#admin_login"
+  # disable sign-up, sign-in (devise) for now. focus on quick_game
+  if ENV["RAILS_ENV"] == "test"
+    devise_for :users, module: 'users'
+    devise_scope :user do
+      post 'admin-login', to: "users/sessions#admin_login"
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :games

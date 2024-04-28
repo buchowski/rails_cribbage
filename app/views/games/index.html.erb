@@ -1,21 +1,11 @@
 <div class="content box">
   <h1 class="title">Your games</h1>
   <% if gvms.empty? %>
-    <% if @user.is_anon? %>
-      <p>
-        Welcome <%= @user.name %>, you must
-        <%= link_to "Login", new_user_session_path %>
-        or
-        <%= link_to "Sign up", new_user_registration_path %>
-        before you can create or join a game
-      </p>
-    <% else %>
-      <p>Hi <%= @user.name %>, you currently don't have any games</p>
-      <ul>
-        <li>Either create a new game below</li>
-        <li>Or join another user's game (Ask them to send you the game invitation link)</li>
-      </ul>
-    <% end %>
+    <p>Hi <%= @user.name %>, you currently don't have any games</p>
+    <ul>
+      <li>Either create a new game below</li>
+      <li>Or join another user's game (Ask them to send you the game invitation link)</li>
+    </ul>
   <% else %>
     <div id="user_games_table">
       <%= render partial: "games/table", locals: { gvms: gvms } %>
