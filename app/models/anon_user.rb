@@ -26,4 +26,9 @@ class AnonUser
   def is_member(game_model)
     false
   end
+
+  def is_dealer(game_model)
+    # TODO it's possible for an anon user to be a dealer in a quick_game
+    false
+  end
 end
