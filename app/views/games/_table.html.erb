@@ -1,9 +1,9 @@
 <% gvms.each do |game| %>
-  <div>
+  <div class="game_row">
     <div>Game <%= game.id %></div>
-    <div>Created by <%= game.player_one_name %> on <%= game.created_at.to_fs(:long) %></div>
-    <div>Opponent is <%= game.player_two_name %></div>
-    <div>Game state: <%= game.current_fsm_state %></div>
+    <div class="creator_name">Created by <%= game.player_one_name %> on <%= game.created_at.to_fs(:long) %></div>
+    <div class="opponent_name">Opponent is <%= game.player_two_name %></div>
+    <div class="game_state">Game state: <%= game.current_fsm_state %></div>
     <div class="game_mgmt_buttons">
       <%= button_to "delete", game.update_path, method: :delete, class: 'button is-danger is-small'  %>
       <%= link_to 'open', game.update_path, class: 'button is-primary is-small' %>
