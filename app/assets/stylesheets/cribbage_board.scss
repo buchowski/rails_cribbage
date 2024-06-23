@@ -1,0 +1,349 @@
+
+:root {
+  --crib_unit: 6px;
+  --lane_1_color: aqua;
+  --lane_2_color: orangered;
+  --board_bg_color: white;
+  --degree: 14deg;
+  --outer_top_radius: calc(3.5 * 4 * var(--crib_unit));
+  --outer_top_center_x: calc(4 * 4 * var(--crib_unit));
+  --inner_top_radius: calc(2.5 * 4 * var(--crib_unit));
+  --inner_bottom_radius: calc(4 * var(--crib_unit));
+  --outer_bottom_radius: calc(8 * var(--crib_unit));
+  --bottom_arch_start_top: calc(var(--crib_unit) * -1);
+  --bottom_arch_start_left: calc(9 * var(--crib_unit));
+  --top_arch_start_bottom: calc(var(--crib_unit) * -1);
+  --top_arch_start_left: calc(15 * var(--crib_unit));
+}
+
+.crib_section {
+  display: flex;
+  width: calc(4 * var(--crib_unit));
+  padding: var(--crib_unit) 0;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: var(--crib_unit);
+  background-color: var(--board_bg_color);
+
+  &.spacer {
+    .crib_circle {
+      visibility: hidden;
+    }
+  }
+  &.top_border {
+    border-top: 1px solid #000;
+  }
+  &.lane_one {
+    background-color: var(--lane_1_color);
+    border-bottom: 1px solid #000;
+  }
+  &.lane_two {
+    background-color: var(--lane_2_color);
+    border-bottom: 1px solid #000;
+  }
+}
+
+.crib_circle {
+  width: calc(var(--crib_unit) * 1.7);
+  height: calc(var(--crib_unit) * 1.7);
+  border-radius: calc(var(--crib_unit) * 2);
+  border: 1px solid #000;
+  background-color: white;
+}
+
+.crib_circle.selected {
+  background-color: yellowgreen;
+}
+
+.crib_row {
+  display: flex;
+  flex-direction: row;
+}
+
+.crib_board {
+  width: fit-content;
+  display: grid;
+  // grid-template-columns: 10rem 10rem 10rem 10rem 10rem 10rem 10rem 10rem;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "top top top top top top top top"
+    "11 12 13 14 15 16 17 18"
+    "21 22 23 24 25 26 27 28"
+    "31 32 33 34 35 36 37 38"
+    "41 42 43 44 45 46 47 48"
+    "51 52 53 54 55 56 57 58"
+    "61 62 63 64 65 66 67 68"
+    "71 72 73 74 75 76 77 78"
+    "start start gutter bottom bottom bottom bottom bottom"
+  ;
+  &.crib_unit_4 {
+    .finish_text {
+      font-size: 0.9rem;
+    }
+  }
+  &.crib_unit_2 {
+    .finish_text {
+      font-size: 0.7rem;
+    }
+  }
+  &.crib_unit_1 {
+    .finish_text {
+      font-size: 0.4rem;
+    }
+  }
+}
+
+.start_container {
+  grid-area: start;
+}
+
+.crib_top {
+  grid-area: top;
+}
+.crib_bottom {
+  grid-area: bottom;
+}
+
+.top_arch {
+  background-color: var(--lane_1_color);
+  height: calc(8 * 4 * var(--crib_unit) * 0.5);
+  border-top-left-radius: 200px;
+  border-top-right-radius: 200px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.inner_top_arch {
+  background-color: var(--lane_2_color);
+  height: calc(6 * 4 * var(--crib_unit) * 0.5);
+  width: calc(6 * 4 * var(--crib_unit));
+  border-top-left-radius: 200px;
+  border-top-right-radius: 200px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.innermost_top_arch {
+  background-color: var(--board_bg_color);
+  height: calc(4 * 4 * var(--crib_unit) * 0.5);
+  width: calc(4 * 4 * var(--crib_unit));
+  border-top-left-radius: 200px;
+  border-top-right-radius: 200px;
+}
+
+.top_arch_container,
+.bottom_arch_container {
+  position: relative;
+}
+
+.finish_container {
+  width: 100%;
+  position: absolute;
+  bottom: var(--crib_unit);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.start_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .start_circles {
+    display: flex;
+    .crib_section {
+      border-bottom: none;
+    }
+  }
+}
+
+.start_text {
+  max-width: calc(var(--crib_unit) * 8);
+  margin: var(--crib_unit) 0;
+  overflow: hidden;
+}
+
+.top_outer_left {
+  .crib_circle {
+    position: absolute;
+    &:first-child {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 2.6);
+      left: calc(var(--top_arch_start_left) - var(--outer_top_radius) * 1);
+    }
+     &:nth-child(2) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 6.6);
+      left: calc(var(--top_arch_start_left) - var(--outer_top_radius) * 0.9 + 1px);
+    }
+    &:nth-child(3) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 10);
+      left: calc(var(--top_arch_start_left) - var(--outer_top_radius) * 0.7 + 1px);
+    }
+    &:nth-child(4) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 12.5);
+      left: calc(var(--top_arch_start_left) - var(--outer_top_radius) * 0.43);
+    }
+    &:nth-child(5) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 13.8);
+      left: calc(var(--top_arch_start_left) - var(--outer_top_radius) * 0.14);
+    }
+  }
+}
+
+.top_outer_right {
+  .crib_circle {
+    position: absolute;
+    &:first-child {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 2.6);
+      left: calc(var(--top_arch_start_left) + var(--outer_top_radius) * 1);
+    }
+     &:nth-child(2) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 6.6);
+      left: calc(var(--top_arch_start_left) + var(--outer_top_radius) * 0.9);
+    }
+    &:nth-child(3) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 10);
+      left: calc(var(--top_arch_start_left) + var(--outer_top_radius) * 0.7 + 1px);
+    }
+    &:nth-child(4) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 12.5);
+      left: calc(var(--top_arch_start_left) + var(--outer_top_radius) * 0.43);
+    }
+    &:nth-child(5) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 13.8);
+      left: calc(var(--top_arch_start_left) + var(--outer_top_radius) * 0.14);
+    }
+  }
+}
+
+.top_inner_left {
+  .crib_circle {
+    position: absolute;
+    &:first-child {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 1.6);
+      left: calc(var(--top_arch_start_left) - var(--inner_top_radius) * 0.98);
+    }
+     &:nth-child(2) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 4.6);
+      left: calc(var(--top_arch_start_left) - var(--inner_top_radius) * 0.88);
+    }
+    &:nth-child(3) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 7.2);
+      left: calc(var(--top_arch_start_left) - var(--inner_top_radius) * 0.7 + 1px);
+    }
+    &:nth-child(4) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 9);
+      left: calc(var(--top_arch_start_left) - var(--inner_top_radius) * 0.43);
+    }
+    &:nth-child(5) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 10 - 1px);
+      left: calc(var(--top_arch_start_left) - var(--inner_top_radius) * 0.14);
+    }
+  }
+}
+
+.top_inner_right {
+  .crib_circle {
+    position: absolute;
+    &:first-child {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 1.6);
+      left: calc(var(--top_arch_start_left) + var(--inner_top_radius) * 0.98);
+    }
+     &:nth-child(2) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 4.6);
+      left: calc(var(--top_arch_start_left) + var(--inner_top_radius) * 0.88);
+    }
+    &:nth-child(3) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 7.2);
+      left: calc(var(--top_arch_start_left) + var(--inner_top_radius) * 0.7 + 1px);
+    }
+    &:nth-child(4) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 9);
+      left: calc(var(--top_arch_start_left) + var(--inner_top_radius) * 0.43);
+    }
+    &:nth-child(5) {
+      bottom: calc(var(--top_arch_start_bottom) + var(--crib_unit) * 10 - 1px);
+      left: calc(var(--top_arch_start_left) + var(--inner_top_radius) * 0.14);
+    }
+  }
+}
+
+.bottom_arch {
+  background-color: var(--lane_1_color);
+  height: calc(5 * 4 * var(--crib_unit) * 0.5);
+  border-bottom-left-radius: 200px;
+  border-bottom-right-radius: 200px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.inner_bottom_arch {
+  background-color: var(--lane_2_color);
+  height: calc(3 * 4 * var(--crib_unit) * 0.5);
+  width: calc(3 * 4 * var(--crib_unit));
+  border-bottom-left-radius: 200px;
+  border-bottom-right-radius: 200px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.innermost_bottom_arch {
+  background-color: var(--board_bg_color);
+  height: calc(1 * 4 * var(--crib_unit) * 0.5);
+  width: calc(1 * 4 * var(--crib_unit));
+  border-bottom-left-radius: 200px;
+  border-bottom-right-radius: 200px;
+}
+
+.bottom_inner_arch {
+  .crib_circle {
+    position: absolute;
+    &:first-child {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 1.3);
+      left: calc(var(--bottom_arch_start_left) + var(--inner_bottom_radius));
+    }
+     &:nth-child(2) {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 3.2 + 1px);
+      left: calc(var(--bottom_arch_start_left) + var(--inner_bottom_radius) * 0.6);
+    }
+    &:nth-child(3) {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 4);
+      left: var(--bottom_arch_start_left);
+    }
+    &:nth-child(4) {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 3.2 + 1px);
+      left: calc(var(--bottom_arch_start_left) - var(--inner_bottom_radius) * 0.6);
+    }
+    &:nth-child(5) {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 1.3);
+      left: calc(var(--bottom_arch_start_left) - var(--inner_bottom_radius));
+    }
+  }
+}
+
+.bottom_outer_arch {
+  .crib_circle {
+    position: absolute;
+    &:first-child {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 1.3 * 2);
+      left: calc(var(--bottom_arch_start_left) + var(--outer_bottom_radius) - 1px);
+    }
+     &:nth-child(2) {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 3.2 * 2 + 1px);
+      left: calc(var(--bottom_arch_start_left) + var(--outer_bottom_radius) * 0.6);
+    }
+    &:nth-child(3) {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 4 * 2);
+      left: var(--bottom_arch_start_left);
+    }
+    &:nth-child(4) {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 3.2 * 2 + 1px);
+      left: calc(var(--bottom_arch_start_left) - var(--outer_bottom_radius) * 0.6);
+    }
+    &:nth-child(5) {
+      top: calc(var(--bottom_arch_start_top) + var(--crib_unit) * 1.3 * 2);
+      left: calc(var(--bottom_arch_start_left) - var(--outer_bottom_radius) + 2px);
+    }
+  }
+}

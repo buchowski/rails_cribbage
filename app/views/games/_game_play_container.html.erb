@@ -1,66 +1,71 @@
-<% if !gvm.game_play_message.blank? %>
-  <div id="game_play_message_container" class="notification is-primary is-light">
-    <h1 id="game_play_message" class="title"><%= gvm.game_play_message %></h1>
-    <% if gvm.show_refresh_btn %>
-      <div id="refresh_btn">
-        <%= render(
-          partial: gvm.is_quick_game ? "games/update_quick_game_form" : "games/update_btn",
-          locals: { gvm: gvm, label: "Hurry up, Bot!", type_of_update: "hurry_up_bot"}
-        )%>
+<div id="game_play_container">
+  <div>
+    <% if !gvm.game_play_message.blank? %>
+      <div id="game_play_message_container" class="notification is-primary is-light">
+        <h1 id="game_play_message" class="title"><%= gvm.game_play_message %></h1>
+        <% if gvm.show_refresh_btn %>
+          <div id="refresh_btn">
+            <%= render(
+              partial: gvm.is_quick_game ? "games/update_quick_game_form" : "games/update_btn",
+              locals: { gvm: gvm, label: "Hurry up, Bot!", type_of_update: "hurry_up_bot"}
+            )%>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if !gvm.play_by_play.empty? %>
+      <div id="play_by_play_section">
+        <ul>
+          <% for msg in gvm.play_by_play do %>
+            <li id="<%= msg[:id] %>">
+              <%= msg[:text] %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if gvm.update_btn_content[:is_show_update_btn] %>
+      <%= render(
+        partial: gvm.is_quick_game ? "games/update_quick_game_form" : "games/update_btn",
+        locals: {
+          gvm: gvm,
+          label: gvm.update_btn_content[:label],
+          type_of_update: gvm.update_btn_content[:type_of_update]
+        })
+      %>
+    <% end %>
+
+    <% if gvm.has_game_started %>
+      <div>
+        <div id="score_section">
+          <div id="your_score"><%= gvm.player_has_n_points_label %></div>
+          <progress class="progress is-success" value="<%= gvm.player_total_score_percent %>" max="100"><%= gvm.player_total_score_percent %></progress>
+
+          <div id="opponent_score"><%= gvm.labels[:opponent_has_n_points] %></div>
+          <progress class="progress is-danger" value="<%= gvm.opponent_total_score_percent %>" max="100"><%= gvm.opponent_total_score_percent %></progress>
+        </div>
+        <div>
+        <% if gvm.have_cards_been_dealt %>
+          <%= render partial: "games/game_play", locals: { gvm: gvm } %>
+        <% else %>
+          <%= render partial: "games/game_play_placeholder", locals: { gvm: gvm } %>
+        <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if gvm.show_join_link %>
+      <div class="box highlighted_container">
+        <h1 class="title is-5">Invitation URL</h1>
+        <p class="block">
+          Copy the following URL and share it with a friend:
+        </p>
+        <p class="block has-text-weight-bold is-family-monospace"><%= game_url %></p>
+        <p class="block">After accessing the URL, your friend can join your game</p>
       </div>
     <% end %>
   </div>
-<% end %>
-
-<% if !gvm.play_by_play.empty? %>
-  <div id="play_by_play_section">
-    <ul>
-      <% for msg in gvm.play_by_play do %>
-        <li id="<%= msg[:id] %>">
-          <%= msg[:text] %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-
-<% if gvm.update_btn_content[:is_show_update_btn] %>
-  <%= render(
-    partial: gvm.is_quick_game ? "games/update_quick_game_form" : "games/update_btn",
-    locals: {
-      gvm: gvm,
-      label: gvm.update_btn_content[:label],
-      type_of_update: gvm.update_btn_content[:type_of_update]
-    })
-  %>
-<% end %>
-
-<% if gvm.has_game_started %>
-  <div>
-    <div id="score_section">
-      <div id="your_score"><%= gvm.player_has_n_points_label %></div>
-      <progress class="progress is-success" value="<%= gvm.player_total_score_percent %>" max="100"><%= gvm.player_total_score_percent %></progress>
-
-      <div id="opponent_score"><%= gvm.labels[:opponent_has_n_points] %></div>
-      <progress class="progress is-danger" value="<%= gvm.opponent_total_score_percent %>" max="100"><%= gvm.opponent_total_score_percent %></progress>
-    </div>
-    <div>
-    <% if gvm.have_cards_been_dealt %>
-      <%= render partial: "games/game_play", locals: { gvm: gvm } %>
-    <% else %>
-      <%= render partial: "games/game_play_placeholder", locals: { gvm: gvm } %>
-    <% end %>
-    </div>
-  </div>
-<% end %>
-
-<% if gvm.show_join_link %>
-  <div class="box highlighted_container">
-    <h1 class="title is-5">Invitation URL</h1>
-    <p class="block">
-      Copy the following URL and share it with a friend:
-    </p>
-    <p class="block has-text-weight-bold is-family-monospace"><%= game_url %></p>
-    <p class="block">After accessing the URL, your friend can join your game</p>
-  </div>
-<% end %>
+  <%= render partial: "cribbage_board/cribbage_board", locals: { gvm: gvm } %>
+</div>

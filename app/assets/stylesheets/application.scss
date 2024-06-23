@@ -1,6 +1,7 @@
 @charset "utf-8";
 @import "../../../node_modules/bulma/bulma.sass";
 @import "./cards";
+@import "./cribbage_board";
 
 $layout-breakpoint-small: 480px;
 
@@ -12,6 +13,10 @@ $layout-breakpoint-small: 480px;
 .col {
   display: flex;
   flex-direction: column;
+}
+
+#game_play_container {
+  display: flex;
 }
 
 #game_play_message_container {
