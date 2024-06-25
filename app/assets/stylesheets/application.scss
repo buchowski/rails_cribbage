@@ -17,6 +17,7 @@ $layout-breakpoint-small: 480px;
 
 #game_play_container {
   display: flex;
+  justify-content: space-between;
 }
 
 #game_play_message_container {
