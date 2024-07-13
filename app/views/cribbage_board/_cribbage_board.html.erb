@@ -311,11 +311,11 @@
     <div class="start_text">start</div>
     <div class="start_circles">
       <section class="crib_section lane_one">
-        <div id="0_lane_one" class="crib_circle"></div>
+        <%= render partial: "cribbage_board/lane_one", locals: { ids: [0], gvm: gvm } %>
         <div class="crib_circle"></div>
       </section>
       <section class="crib_section lane_two">
-        <div id="0_lane_two" class="crib_circle"></div>
+        <%= render partial: "cribbage_board/lane_two", locals: { ids: [0], gvm: gvm } %>
         <div class="crib_circle"></div>
       </section>
     </div>
