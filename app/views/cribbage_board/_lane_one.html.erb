@@ -1,4 +1,3 @@
 <% ids.each do |id|  %>
-  <% is_selected = false %>
-  <div id="<%= "#{id}_lane_one" %>" class="crib_circle <%= is_selected ? "selected" : "" %>"></div>
+  <div id="<%= "#{id}_lane_one" %>" class="<%= gvm.get_pin_class(id, "player_one") %>"></div>
 <% end %>

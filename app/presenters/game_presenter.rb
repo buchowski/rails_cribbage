@@ -168,6 +168,11 @@ class GamePresenter < SimpleDelegator
     opponent.nil? ? 0 : opponent.total_score
   end
 
+  def get_pin_class(id, player)
+    score = player == 'player_one' ? player_total_score : opponent_total_score
+    id == score ? 'crib_circle selected' : 'crib_circle'
+  end
+
   def player_total_score_percent
     player_total_score.to_f / @game.points_to_win * 100
   end
