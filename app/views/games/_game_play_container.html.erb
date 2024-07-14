@@ -1,7 +1,7 @@
 <div id="game_play_container">
   <div>
     <% if !gvm.game_play_message.blank? %>
-      <div id="game_play_message_container" class="notification is-primary is-light">
+      <div id="game_play_message_container">
         <h1 id="game_play_message" class="title"><%= gvm.game_play_message %></h1>
         <% if gvm.show_refresh_btn %>
           <div id="refresh_btn">

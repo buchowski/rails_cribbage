@@ -227,3 +227,19 @@ th, td {
     margin-right: 0.5rem;
   }
 }
+
+.notification {
+  padding: 1rem;
+  width: fit-content;
+  &.is-danger {
+    color: white;
+    background-color: orangered;
+  }
+  &.is-success {
+    background-color: greenyellow;
+  }
+  &.is-primary {
+    background-color: dimgray;
+    color: white;
+  }
+}
