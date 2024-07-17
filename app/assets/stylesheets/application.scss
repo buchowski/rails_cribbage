@@ -240,6 +240,15 @@ th, td {
   margin-bottom: 1.5rem;
 }
 
+.button.is-primary {
+  background-color: black;
+  color: white;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  margin-top: 0.3rem;
+  cursor: pointer;
+}
+
 .game_mgmt_buttons {
   display: flex;
   margin: 1rem 0;
