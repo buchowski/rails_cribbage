@@ -13,7 +13,7 @@
   </head>
 
   <body>
-    <div class="container section">
+    <div id="main_container">
       <%= render "/header" %>
       <div id="error_msg_container">
         <%= render partial: "/flash_errors", locals: { error_msg: flash[:error_msg] } %>

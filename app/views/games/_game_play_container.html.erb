@@ -58,7 +58,7 @@
       </div>
     <% end %>
   </div>
-  <div>
+  <div id="crib_board_container">
     <div id="your_score"><%= gvm.player_has_n_points_label %></div>
     <div id="opponent_score"><%= gvm.labels[:opponent_has_n_points] %></div>
     <%= render partial: "cribbage_board/cribbage_board", locals: { gvm: gvm } %>

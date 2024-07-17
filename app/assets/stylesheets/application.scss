@@ -3,6 +3,7 @@
 @import "./cribbage_board";
 
 $layout-breakpoint-small: 480px;
+$layout-breakpoint-medium: 1000px;
 
 .row {
   display: flex;
@@ -40,9 +41,29 @@ $layout-breakpoint-small: 480px;
   height: 62px;
 }
 
+#main_container {
+  width: 50%;
+  margin: auto;
+}
+
 @media (max-width: $layout-breakpoint-small) {
   #header_logo {
     display: none;
+  }
+  #crib_board_container {
+    position: absolute;
+    z-index: -1;
+    opacity: 0.4;
+  }
+  p, li, h1 {
+    background-color: white;
+    padding: 2px;
+    border: 1px solid black;
+  }
+}
+@media (max-width: $layout-breakpoint-medium) {
+  #main_container {
+    width: 80%;
   }
 }
 
@@ -56,7 +77,6 @@ $layout-breakpoint-small: 480px;
 .card_red_x {
   background-color: aqua;
   background-blend-mode: screen;
-  opacity: 40%;
 }
 
 #preview_page {
