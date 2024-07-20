@@ -35,10 +35,11 @@ $layout-breakpoint-medium: 1000px;
 }
 
 #header_logo {
-  background-image: url("cribbage_logo.png");
+  background-image: url("cribbage_logo_cropped.png");
   background-repeat: no-repeat;
-  width: 246px;
-  height: 62px;
+  background-size: contain;
+  width: 340px;
+  height: 50px;
 }
 
 #main_container {
