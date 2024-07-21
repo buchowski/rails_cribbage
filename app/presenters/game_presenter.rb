@@ -263,7 +263,7 @@ class GamePresenter < SimpleDelegator
   end
 
   def is_show_crib_section
-    ![:discarding].include? current_state
+    false
   end
 
   def is_show_cut_card_section
