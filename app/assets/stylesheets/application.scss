@@ -47,6 +47,13 @@ $layout-breakpoint-medium: 1000px;
   margin: auto;
 }
 
+#crib_board_scorebox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+}
+
 @media (max-width: $layout-breakpoint-small) {
   #header_logo {
     width: 270px;
