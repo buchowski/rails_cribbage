@@ -254,3 +254,19 @@ th, td {
     color: white;
   }
 }
+
+.opponent_container {
+  h3 {
+    margin-bottom: 4px;
+  }
+  p {
+    margin-top: 4px;
+  }
+}
+
+.spookey_bot_pic {
+  background-image: url("spookey_bot.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 105px;
+}
