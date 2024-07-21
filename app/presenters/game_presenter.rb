@@ -262,6 +262,22 @@ class GamePresenter < SimpleDelegator
     ENV['RAILS_ENV'] == 'test' ? "hide_in_n_seconds_test" : "hide_in_n_seconds"
   end
 
+  def is_show_crib_section
+    ![:discarding].include? current_state
+  end
+
+  def is_show_cut_card_section
+    ![:discarding].include? current_state
+  end
+
+  def is_show_pile_section
+    ![:discarding].include? current_state
+  end
+
+  def is_show_opponent_cards_section
+    ![:discarding].include? current_state
+  end
+
   private
 
   def is_game_over
