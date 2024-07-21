@@ -1,5 +1,5 @@
-<div class="game_grid">
-  <div id="your_cards_section">
+<div>
+  <div>
     <% if gvm.are_you_anonymous %>
       <%= render partial: "cards/card_section_title", locals: { title: gvm.your_cards_section_header } %>
       <% if gvm.player_cards.empty? %>
@@ -26,7 +26,7 @@
     <% end %>
   </div>
 
-  <div id="cut_card_section">
+  <div>
     <%= render partial: "cards/card_section_title", locals: { title: "Cut card"} %>
     <% if !gvm.cut_card.nil? %>
       <%= render partial: "cards/card_png", locals: { card: gvm.cut_card } %>
@@ -35,7 +35,7 @@
     <% end %>
   </div>
 
-  <div id="pile_cards_section">
+  <div>
     <div id="pile_score">
       <%= render partial: "cards/card_section_title", locals: { title: "Pile score: #{gvm.pile_score}" } %>
     </div>
@@ -50,7 +50,7 @@
     <% end %>
   </div>
 
-  <div id="opponent_cards_section">
+  <div>
     <%= render partial: "cards/card_section_title", locals: { title: gvm.opponent_cards_section_header } %>
     <% if gvm.opponent_cards.empty? %>
       <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
@@ -62,7 +62,7 @@
       </div>
     <% end %>
   </div>
-  <div id="crib_cards_section" class="<%= gvm.crib_cards_section_class %>">
+  <div class="<%= gvm.crib_cards_section_class %>">
     <%= render partial: "cards/card_section_title", locals: { title: gvm.crib_label } %>
     <% if gvm.crib_cards.empty? %>
       <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
