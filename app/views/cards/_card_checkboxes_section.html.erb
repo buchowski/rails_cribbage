@@ -1,5 +1,5 @@
 <%= form_with(url: gvm.update_path, method: "patch") do |form| %>
-  <div class="row">
+  <div class="row card_row">
     <% gvm.player_cards.each do |card| %>
       <%= render partial: 'cards/card_checkbox', locals: { card: card } %>
     <% end %>

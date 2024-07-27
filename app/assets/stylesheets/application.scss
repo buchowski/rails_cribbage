@@ -28,12 +28,16 @@ $layout-breakpoint-medium: 1000px;
 }
 
 #game_play_message {
-  margin: 0;
+  margin: 0.5rem 0;
 }
 
 .svg_card {
   width: 90px;
   height: 135px;
+}
+
+#header {
+  display: flex;
 }
 
 #header_logo {
@@ -89,6 +93,12 @@ $layout-breakpoint-medium: 1000px;
     height: calc(96px * 0.8);
     background-size: calc(923px * 0.8) calc(576px * 0.8);
   }
+  .card_row {
+    gap: 2px;
+  }
+  #game_play_message {
+    font-size: 1.5rem;
+  }
 }
 
 @media (min-width: $layout-breakpoint-small) and (max-width: $layout-breakpoint-medium) {
@@ -109,6 +119,9 @@ $layout-breakpoint-medium: 1000px;
     width: 71px;
     height: 96px;
   }
+  .card_row {
+    gap: 4px;
+  }
 }
 
 // there's another rule for .card_red_x in cards.scss
@@ -127,23 +140,16 @@ $layout-breakpoint-medium: 1000px;
   display: flex;
   flex-direction: column;
   flex-flow: column-reverse;
-  margin: 4px;
   input[type="checkbox"], input[type="radio"] {
-    margin: 10px 0;
+    display: none;
     &:checked ~ label .png_card {
       background-color: antiquewhite;
       background-blend-mode: difference;
     }
   }
-}
-
-th, td {
-  border: 1px solid black;
-  padding: 0.5rem;
-}
-
-#header {
-  display: flex;
+  label {
+    cursor: pointer;
+  }
 }
 
 .rotated_cards {
