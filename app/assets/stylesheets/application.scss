@@ -103,6 +103,11 @@ $layout-breakpoint-crib-board: 700px;
   #game_play_message {
     font-size: 1.5rem;
   }
+  .rotated_cards {
+    div[data-role="card"] {
+      margin-left: calc(-56px * 0.8);
+    }
+  }
 }
 
 @media (min-width: $layout-breakpoint-small) and (max-width: $layout-breakpoint-medium) {
@@ -125,6 +130,11 @@ $layout-breakpoint-crib-board: 700px;
   }
   .card_row {
     gap: 4px;
+  }
+  .rotated_cards {
+    div[data-role="card"] {
+      margin-left: calc(-56px * 1);
+    }
   }
 }
 
@@ -157,15 +167,15 @@ $layout-breakpoint-crib-board: 700px;
 }
 
 .rotated_cards {
-  position: relative;
-  height: 135px;
-
+  display: flex;
   div[data-role="card"] {
-    position: absolute;
-    @for $i from 1 through 6 {
-      &:nth-child(#{$i}) {
-        top: ($i - 1) * 7px;
-        left: 42px - $i * 7px;
+    box-shadow: 3px 0px 9px gray;
+    &:first-child {
+      margin-left: 0;
+    }
+    @for $i from 0 through 5 {
+      &:nth-child(#{$i + 1}) {
+        z-index: $i * -1;
       }
     }
   }
