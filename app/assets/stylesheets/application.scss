@@ -1,5 +1,6 @@
 @charset "utf-8";
 @import "./cards";
+@import "./cards_08";
 @import "./cribbage_board";
 
 $layout-breakpoint-small: 480px;
@@ -80,6 +81,16 @@ $layout-breakpoint-medium: 1000px;
     align-items: flex-start;
   }
 }
+
+@media (max-width: $layout-breakpoint-medium) {
+  .png_card {
+    background-image: url("pc_computer_playing_cards.png");
+    width: calc(71px * 0.8);
+    height: calc(96px * 0.8);
+    background-size: calc(923px * 0.8) calc(576px * 0.8);
+  }
+}
+
 @media (min-width: $layout-breakpoint-small) and (max-width: $layout-breakpoint-medium) {
   #main_container {
     width: 80%;
@@ -92,10 +103,12 @@ $layout-breakpoint-medium: 1000px;
   }
 }
 
-.png_card {
-  background-image: url("pc_computer_playing_cards.png");
-  width: 71px;
-  height: 96px;
+@media (min-width: $layout-breakpoint-medium) {
+  .png_card {
+    background-image: url("pc_computer_playing_cards.png");
+    width: 71px;
+    height: 96px;
+  }
 }
 
 // there's another rule for .card_red_x in cards.scss

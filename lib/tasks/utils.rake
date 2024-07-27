@@ -60,8 +60,9 @@ end
 
 desc "create css classes for each card in the png spritesheet"
 task :create_card_classes do
-  width = 71
-  height = 95
+  mult = 0.8
+  width = 71 * mult
+  height = 95 * mult
   x_gap = 0
   y_gap = 0
   card_positions = [
@@ -72,8 +73,10 @@ task :create_card_classes do
     ["x_hatch_1", "x_hatch_2", "fish_1", "fish_2", "vine_1", "vine_2", "robot_1", "robot_2", "robot_3", "rose", "green_circle", "red_x", "x_hatch_green"],
     ["shell", "castle_1", "castle_2", "beach_1", "beach_2", "beach_3", "sleeve_1", "sleeve_2", "sleeve_3"]
   ]
+  # this row_padding is for a mult of 0.8
+  row_padding = [0, -0.3, -0.4, -0.6, -0.8, -1]
 
-  sass_file = File.open("app/assets/stylesheets/cards.scss", "w+")
+  sass_file = File.open("app/assets/stylesheets/cards_#{mult}.scss", "w+")
   preview_cards_file = File.open("app/views/cards/cards_png_preview.html.erb", "w+")
   preview_cards_file.write("<h1>Preview of generated PNG elements</h1>\n<div id='preview_page'>\n")
 
@@ -81,7 +84,7 @@ task :create_card_classes do
     preview_cards_file.write("<div class='row'>\n")
 
     row.each_with_index do |card, j|
-      top = i * height + (i + 1) * y_gap + i
+      top = i * height + (i + 1) * y_gap + i + row_padding[i]
       left = j * width + (j + 1) * x_gap
 
       sass_file.write(".card_#{card} {\n\tbackground-position: -#{left}px -#{top}px;\n}\n")
