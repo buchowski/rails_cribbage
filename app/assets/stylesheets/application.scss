@@ -5,6 +5,7 @@
 
 $layout-breakpoint-small: 480px;
 $layout-breakpoint-medium: 1000px;
+$layout-breakpoint-crib-board: 700px;
 
 .row {
   display: flex;
@@ -65,6 +66,16 @@ $layout-breakpoint-medium: 1000px;
     width: 270px;
     height: 40px;
   }
+  #main_container {
+    width: 100%;
+  }
+  #header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: $layout-breakpoint-crib-board) {
   #crib_board_container {
     --crib_unit: 4px;
     --outer_top_radius: calc(3.5 * 4 * var(--crib_unit));
@@ -76,13 +87,6 @@ $layout-breakpoint-medium: 1000px;
     --bottom_arch_start_left: calc(9 * var(--crib_unit));
     --top_arch_start_bottom: calc(var(--crib_unit) * -1);
     --top_arch_start_left: calc(15 * var(--crib_unit));
-  }
-  #main_container {
-    width: 100%;
-  }
-  #header {
-    flex-direction: column;
-    align-items: flex-start;
   }
 }
 
