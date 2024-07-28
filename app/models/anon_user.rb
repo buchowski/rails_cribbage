@@ -4,7 +4,7 @@ class AnonUser
   end
 
   def self.id
-    "guest"
+    0
   end
 
   def id

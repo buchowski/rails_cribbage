@@ -53,7 +53,7 @@ class Game < ApplicationRecord
     user_one = nil
     user_two = nil
 
-    if game_model.player_one_id == 0
+    if game_model.player_one_id == AnonUser.id
       user_one = AnonUser.new
     else
       user_one = User.find_by_id(game_model.player_one_id)
