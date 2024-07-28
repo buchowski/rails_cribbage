@@ -68,6 +68,9 @@ $layout-breakpoint-crib-board: 700px;
     flex-direction: column;
     align-items: flex-start;
   }
+  #crib_board_scorebox {
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: $layout-breakpoint-crib-board) {
@@ -168,9 +171,9 @@ $layout-breakpoint-crib-board: 700px;
     &:first-child {
       margin-left: 0;
     }
-    @for $i from 0 through 5 {
+    @for $i from 0 through 10 {
       &:nth-child(#{$i + 1}) {
-        z-index: $i * -1;
+        z-index: $i;
       }
     }
   }

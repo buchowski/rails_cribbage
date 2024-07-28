@@ -7,7 +7,7 @@
       <% if gvm.pile_cards_formatted.empty? %>
         <%= render partial: "cards/card_png", locals: { card: "red_x" } %>
       <% else %>
-        <div class="row">
+        <div class="row rotated_cards">
           <% gvm.pile_cards_formatted.each do |card| %>
             <%= render partial: "cards/card_png", locals: { card: card } %>
           <% end %>
