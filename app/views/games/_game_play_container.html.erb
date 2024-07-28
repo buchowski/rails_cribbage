@@ -4,7 +4,7 @@
       <div id="game_play_message_container">
         <h1 id="game_play_message" class="title"><%= gvm.game_play_message %></h1>
         <% if gvm.show_refresh_btn %>
-          <div id="refresh_btn">
+          <div id="refresh_btn" class="mount_in_n_seconds">
             <%= render(
               partial: gvm.is_quick_game ? "games/update_quick_game_form" : "games/update_btn",
               locals: { gvm: gvm, label: "Hurry up, Bot!", type_of_update: "hurry_up_bot"}

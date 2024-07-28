@@ -23,11 +23,6 @@ $layout-breakpoint-crib-board: 700px;
   gap: 1rem;
 }
 
-#game_play_message_container {
-  display: flex;
-  justify-content: space-between;
-}
-
 #game_play_message {
   margin: 0.5rem 0;
 }
@@ -220,6 +215,30 @@ $layout-breakpoint-crib-board: 700px;
   }
   100% {
     visibility: visible;
+  }
+}
+
+#refresh-btn {
+  margin-bottom: 0.5rem;
+}
+
+.mount_in_n_seconds {
+  animation-name: mount_in_n_seconds;
+  animation-fill-mode: forwards;
+  animation-delay: 3.5s;
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
+}
+
+@keyframes mount_in_n_seconds {
+  0% {
+    width: 0px;
+    height: 0px;
+  }
+  100% {
+    width: 100%;
+    height: 100%;
   }
 }
 
