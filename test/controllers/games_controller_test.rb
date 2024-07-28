@@ -107,6 +107,12 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
     cribbage_game = Game.adapt_to_cribbage_game(Game.last)
+    is_barbara_dealer = cribbage_game.dealer.id == cribbage_game.players[0].id
+
+    if is_barbara_dealer
+      patch game_path(Game.last.id), params: { type_of_update: "deal" }
+      cribbage_game = Game.adapt_to_cribbage_game(Game.last)
+    end
 
     assert_equal :discarding, cribbage_game.fsm.aasm.current_state
     assert_equal 6, cribbage_game.players[0].hand.size
@@ -118,8 +124,14 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     start_bot_game_as('Barbara')
 
     patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
-
     cribbage_game = Game.adapt_to_cribbage_game(Game.last)
+    is_barbara_dealer = cribbage_game.dealer.id == cribbage_game.players[0].id
+
+    if is_barbara_dealer
+      patch game_path(Game.last.id), params: { type_of_update: "deal" }
+      cribbage_game = Game.adapt_to_cribbage_game(Game.last)
+    end
+
     cards_to_discard = cribbage_game.players[0].hand.keys[0..1]
 
     patch game_path(Game.last.id), params: { type_of_update: "discard", cards: cards_to_discard }
@@ -135,10 +147,15 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     start_bot_game_as('Barbara')
 
     patch game_path(Game.last.id), params: { type_of_update: "cut_for_deal" }
-
     cribbage_game = Game.adapt_to_cribbage_game(Game.last)
-    cards_to_discard = cribbage_game.players[0].hand.keys[0..1]
     is_barbara_dealer = cribbage_game.dealer.id == cribbage_game.players[0].id
+
+    if is_barbara_dealer
+      patch game_path(Game.last.id), params: { type_of_update: "deal" }
+      cribbage_game = Game.adapt_to_cribbage_game(Game.last)
+    end
+
+    cards_to_discard = cribbage_game.players[0].hand.keys[0..1]
 
     assert_not_equal cribbage_game.dealer.id, cribbage_game.whose_turn.id, "the non-dealer should play first"
 

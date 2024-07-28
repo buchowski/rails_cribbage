@@ -144,7 +144,10 @@ class GamesController < ApplicationController
           end
         end
 
-        if is_bot_game && type_of_update != "hurry_up_bot"
+        are_you_the_dealer = @game.dealer.id == @user.id
+        is_skip_bot_update = (are_you_the_dealer && type_of_update == "cut_for_deal") || type_of_update == "hurry_up_bot"
+
+        if is_bot_game && !is_skip_bot_update
           pre_bot_update_html_string = render_to_string(
             partial: "games/game_play_container",
             locals: {
